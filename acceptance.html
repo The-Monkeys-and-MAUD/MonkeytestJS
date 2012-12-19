@@ -44,7 +44,7 @@
 
 		<script type="text/javascript">
 
-		var pageNumber = 1;
+		var page_number = 1;
 
 		$$('#tests').load(function () {
 			//grab jQuery from inside the document
@@ -62,12 +62,12 @@
 			//console.log($('.ui-tester').html());
 
 			//increase our page counter
-			pageNumber++;
+			page_number++;
 
 			//if we are not on the first page, find what tests to run
-			if(pageNumber > 1) {
+			if(page_number > 1) {
 
-				switch(pageNumber) {
+				switch(page_number) {
 					case 2:
 					$$('#tests').attr('src', location.protocol + '//' + location.hostname + '/example2.html');
 					break;
