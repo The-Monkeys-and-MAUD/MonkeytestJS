@@ -1,4 +1,4 @@
-monkeyTest ('Has Valid HTML',
+registerTest ('Has Valid HTML',
     {
         setup:function () {
 

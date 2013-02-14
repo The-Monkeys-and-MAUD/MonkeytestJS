@@ -1,4 +1,4 @@
-monkeyTest ('Has a UTF-8 meta tag',
+registerTest ('Has a UTF-8 meta tag',
     {
         setup:function () {
 

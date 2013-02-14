@@ -1,4 +1,4 @@
-monkeyTest ('Form Validation test',
+registerTest ('Form Validation test',
     {
         setup:function () {
 

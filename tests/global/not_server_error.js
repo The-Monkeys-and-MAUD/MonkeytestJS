@@ -1,4 +1,4 @@
-monkeyTest ('Is not a server error page',
+registerTest ('Is not a server error page',
     {
         setup:function () {
 

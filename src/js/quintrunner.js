@@ -14,7 +14,7 @@
      * @param name
      * @param test
      */
-    var monkeyTest = function (name, test)
+    var registerTest = function (name, test)
     {
         global.QUnitRunner.registerTest (name, test);
     };
@@ -408,7 +408,7 @@
     // pollute the global namespace
     global.QUnitRunnerPageTest = QUnitRunnerPageTest;
     global.log = log;
-    global.monkeyTest = monkeyTest;
+    global.registerTest = registerTest;
 
     // create our singleton / factory
     global.QUnitRunner = new QUnitRunner ();

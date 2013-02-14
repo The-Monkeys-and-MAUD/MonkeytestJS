@@ -1,4 +1,4 @@
-monkeyTest ('Has Google Analytics',
+registerTest ('Has Google Analytics',
     function ($, container) {
         var scripts = $('script');
 
