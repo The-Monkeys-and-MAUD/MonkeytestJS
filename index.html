@@ -57,7 +57,10 @@
                 workspace:window.frames[0],
                 jQuery:$$
             };
-            QUnitRunner.start (config);
+
+//            var pagesToTest = ['/'];
+            var pagesToTest = null; // test all pages
+            QUnitRunner.start (config, pagesToTest);
 		</script>
     </body>
 </html>

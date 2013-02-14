@@ -1,17 +1,30 @@
 QUnit Acceptance Tests
 ============
 
-Open acceptance.html to see the current tests specification. New pages and tests can be added by editng the QUnitRunner
-options, towards the bottom of acceptance.html.
+Open index.html to see the current tests specification. New pages and tests can be added by editng the QUnitRunner
+config, towards the bottom of index.html.
 
 NOTE: Check the 'No try-catch' option as this is currently causing some tests to fail
 
+QUnitRunner object
+------------------
 
-QUnitRunner options
+QUnitRunner is added to the global namespace (window.QUnitRunner) as a singleton object. Kick of the runner with the
+ following command:
+
+```javascript
+QUnitRunner.start (config, pagesToTest);
+```
+
+config - see QUnitRunner config below.
+
+pagesToTest - an array of the urls of the pages you wish to test, or null for all
+
+QUnitRunner config
 -------------------
 
 ```javascript
-var options = {
+var config = {
     testsDir:'/tests/tests/',
     globalTests :[
         'global/html_validate.js',
@@ -27,13 +40,17 @@ var options = {
             tests:['page/form_validation.js']
         }
     ],
-    workspace:window.frames[0]
+    workspace:window.frames[0],
+    jQuery:window.jQuery
 };
 ```
 
-options.testsDir: String - directory containing tests.
+options.testsDir: String - directory containing tests. - optional
 
 options.workspace - this it the window or iframe the pages to be tested will be loaded into.
+
+options.jQuery - jQuery object, primary used to to load pages via AJAX and to attached event listeners to the
+workspace.
 
 options.globalTests: Array - tests scripts to be run on every page.
 
@@ -53,13 +70,13 @@ Add the path to the test script to either the options.globalTests[] array or for
 array.
 
 Create a test script file at the path entered above. At the most basic the test script should contain a call to the
-monkeyTest (name, spec) function. Where the spec object literal must contain at least a load callback and an optional
+registerTest (name, spec) function. Where the spec object literal must contain at least a load callback and an optional
 setup callback. The load callback is call in the scope of a QUnitRunnerPageTest object which has numerous methods that
 can be chained together to to perform test actions (see QUnitRunnerPageTest methods below). The last chain call should
 be start() - this will start the test:
 
 ```javascript
-monkeyTest ('Hello world test',
+registerTest ('Hello world test',
     {
         setup:function (container) {
             // this is run before the test
@@ -147,7 +164,7 @@ QUnitRunnerPageTest.prototype.alert = function (hello)
 
     // create a chain closure function - REQUIRED
     var chainFn = function () {
-        alert(hello)
+        alert(hello);
 
         // call next to move to next chain action - REQUIRED
         _this._next();
@@ -164,7 +181,7 @@ QUnitRunnerPageTest.prototype.alert = function (hello)
 Custom methods can be chained in exactly the same way:
 
 ```javascript
-monkeyTest ('Alert test',
+registerTest ('Alert test',
     {
         load : function () {
             this
