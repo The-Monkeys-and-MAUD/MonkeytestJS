@@ -1,0 +1,29 @@
+{
+  "name": "quintrunner",
+  "description": "QUnit RunnerAcceptanceTests",
+  "version": "0.1.0",
+  "homepage": "https://github.com/organizations/TheMonkeys",
+  "author": {
+    "name": "The Monkeys",
+    "email": "contact@themonkeys.com.au",
+    "url": "http://www.themonkeys.com.au/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:TheMonkeys/QUnitRunnerAcceptanceTests.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TheMonkeys/QUnitRunnerAcceptanceTests/issues"
+  },
+  "main": "js/Yellow",
+  "engines": {
+    "node": "*"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "devDependencies": {
+    "grunt": "~0.3.17"
+  },
+  "keywords": []
+}
