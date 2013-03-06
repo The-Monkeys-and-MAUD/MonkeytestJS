@@ -292,12 +292,41 @@
     {
         log ('->testPageTest  '+this.page.url + ':'+this.testSpec.name+" _next");
         var fn = this.chain.shift();
-        if (fn){
+        if (fn) {
             fn.call(this);
-        }else {
+        } else  {
             log ('->testPageTest complete '+this.page.url + ' with '+this.testSpec.name);
             this.runner.nextPageTest ();
         }
+    };
+
+    /**
+     * QUnitRunnerPageTest utility methods - these are not chainable!
+     */
+
+    QUnitRunnerPageTest.prototype.env = function ()
+    {
+        var envs = this.runner.config.envs;
+        var env = "notfound";
+        var that = this;
+
+        this.runner.jQuery.each(envs,function(envKey,value){
+            var envTests = envs[envKey];
+
+            that.runner.jQuery.each(envTests,function(key,value){
+                if (that.runner.workspace.location.href.indexOf(value)) {
+                    env = envKey;
+                    return true;
+                }
+            });
+        });
+
+        return env;
+    };
+
+    QUnitRunnerPageTest.prototype.config = function ()
+    {
+        return this.runner.config;
     };
 
     /**

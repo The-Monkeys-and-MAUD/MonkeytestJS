@@ -42,8 +42,23 @@
 		</script>
 		<script type="text/javascript">
             var config = {
+                env:{
+                    production : ['PRODUCTION URL OR PART OF'],
+                    beta : ['BETA URL OR PART OF'],
+                    stage : ['STAGE URL OR PART OF'],
+                    dev : ['DEV URL OR PART OF']
+                },
+                facebook:{
+                    ids : {
+                        production:'XXX',
+                        stage:'XXX',
+                        beta:'XXX',
+                        dev:'XXX'
+                    }
+                },
                 testsDir:'/tests/tests/',
                 globalTests :[
+                    'global/facebook_id.js', // seems to be important that this test is listed first.
                     'global/html_validate.js', // seems to be important that this test is listed first.
                     'global/has_utf8.js',
                     'global/not_server_error.js'

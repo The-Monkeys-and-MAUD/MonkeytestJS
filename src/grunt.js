@@ -75,7 +75,7 @@ module.exports = function(grunt) {
     watch: {
       all: {
           files: ['<config:lint.files>'],
-          tasks: 'lint concat:dev '
+          tasks: 'lint concat:dev'
       },
       js: {
           files: ['<config:lint.files>'],
