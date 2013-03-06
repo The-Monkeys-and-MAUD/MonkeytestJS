@@ -1,5 +1,5 @@
 /*globals QUnit, test, asyncTest
-*/
+ */
 
 (function(global) {
     var log = function (s)
@@ -292,9 +292,9 @@
     {
         log ('->testPageTest  '+this.page.url + ':'+this.testSpec.name+" _next");
         var fn = this.chain.shift();
-        if (fn) {
+        if (fn){
             fn.call(this);
-        } else  {
+        }else {
             log ('->testPageTest complete '+this.page.url + ' with '+this.testSpec.name);
             this.runner.nextPageTest ();
         }
@@ -314,11 +314,15 @@
             var envTests = envs[envKey];
 
             that.runner.jQuery.each(envTests,function(key,value){
-                if (that.runner.workspace.location.href.indexOf(value)) {
+                if (that.runner.workspace.location.href.indexOf(value) >= 0) {
                     env = envKey;
-                    return true;
+                    return false;
                 }
             });
+
+            if (env !== "notfound") {
+                return false;
+            }
         });
 
         return env;
