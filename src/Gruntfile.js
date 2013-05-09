@@ -9,20 +9,7 @@ module.exports = function (grunt) {
         concat:{
             dist:{
                 src:['js/*.js'],
-                dest:'../js/<%= pkg.name %>.min.js',
-                banner: '<%= banner %>',
-                stripBanners: true
-            },
-            dev:{
-                src: '<%= concat.dist.src %>',
                 dest:'../js/<%= pkg.name %>.js',
-                separator:';'
-            }
-        },
-        min:{
-            dist:{
-                src:'<%= concat.dist.src %>',
-                dest:'<%= concat.dist.dest %>',
                 separator:';'
             }
         },
@@ -65,7 +52,16 @@ module.exports = function (grunt) {
                 tasks:'lint concat:dev'
             }
         },
-        uglify:{}
+        uglify: {
+            options: {
+                banner: '<%= banner %>',
+                separtor: ';'
+            },
+            dist: {
+                src: '<%= concat.dist.dest %>',
+                dest:'../js/<%= pkg.name %>.min.js'
+            }
+        }
     });
 
     // These plugins provide necessary tasks.
@@ -83,5 +79,5 @@ module.exports = function (grunt) {
     grunt.registerTask('dev:js', 'watch:js');
 
     // prod task, run on the deployment server
-    grunt.registerTask('default', 'lint', 'concat:dev', 'concat:dist', 'min');
+    grunt.registerTask('default', ['lint', 'concat','min']);
 };
