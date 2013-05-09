@@ -401,6 +401,24 @@
         return this; // chainable
     };
 
+    QUnitRunnerPageTest.prototype.asyncRun = function (runFN)
+    {
+        var _this = this;
+        var fn = function () {
+            // must call this.asyncRunDone() to continue the chain
+            runFN.call(_this, _this.workspace.jQuery);
+        };
+
+        this.chain.push(fn);
+
+        return this; // chainable
+    };
+
+    QUnitRunnerPageTest.prototype.asyncRunDone = function ()
+    {
+        this._next();
+    };
+
     QUnitRunnerPageTest.prototype.test = function (name, testFN)
     {
         var _this = this;

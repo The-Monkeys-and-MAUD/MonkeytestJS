@@ -1,7 +1,4 @@
-/*! quintrunner - v0.1.0 - 2013-03-06
-* https://github.com/organizations/TheMonkeys
-* Copyright (c) 2013 The Monkeys; Licensed  */
-;/*globals QUnit, test, asyncTest
+/*globals QUnit, test, asyncTest
  */
 
 (function(global) {
@@ -402,6 +399,24 @@
         this.chain.push(fn);
 
         return this; // chainable
+    };
+
+    QUnitRunnerPageTest.prototype.asyncRun = function (runFN)
+    {
+        var _this = this;
+        var fn = function () {
+            // must call this.asyncRunDone() to continue the chain
+            runFN.call(_this, _this.workspace.jQuery);
+        };
+
+        this.chain.push(fn);
+
+        return this; // chainable
+    };
+
+    QUnitRunnerPageTest.prototype.asyncRunDone = function ()
+    {
+        this._next();
     };
 
     QUnitRunnerPageTest.prototype.test = function (name, testFN)
