@@ -37,7 +37,9 @@ var config = {
         },
         {
             url:'/entryform/index?gem_id=1',
-            tests:['page/form_validation.js']
+            tests:[
+                'page/form_validation.js'
+            ]
         }
     ],
     workspace:window.frames[0],
