@@ -25,6 +25,12 @@ QUnitRunner config
 
 ```javascript
 var config = {
+    envs:{
+        production : ['PRODUCTION URL OR PART OF'],
+        beta : ['BETA URL OR PART OF'],
+        stage : ['STAGE URL OR PART OF'],
+        dev : ['DEV URL OR PART OF']
+    },
     testsDir:'/tests/tests/',
     globalTests :[
         'global/html_validate.js',
@@ -46,6 +52,8 @@ var config = {
     jQuery:window.jQuery
 };
 ```
+
+options.envs: Array - hash of environments, each has has an array of strings that match the url of the environment
 
 options.testsDir: String - directory containing tests. - optional
 
@@ -125,7 +133,20 @@ QUnitRunner object.
 JQuery object of the page, shortcut to this.workspace.JQuery.
 
 
-QUnitRunnerPageTest methods
+QUnitRunnerPageTest utility methods
+---------------------------
+
+Out of the box QUnitRunnerPageTest comes with the following utility methods. These can be used within a test but are not chainable:
+
+
+### env ()
+Returns the current environment - based on the url of the current page.
+
+
+### config ()
+Returns the config object passed into QUnitRunner.
+
+QUnitRunnerPageTest chain/test methods
 ---------------------------
 
 Out of the box QUnitRunnerPageTest comes with the following methods:

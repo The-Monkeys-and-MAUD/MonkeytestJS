@@ -1,8 +1,5 @@
-/*! quintrunner - v0.1.0 - 2013-02-14
-* https://github.com/organizations/TheMonkeys
-* Copyright (c) 2013 The Monkeys; Licensed  */
-;/*globals QUnit, test, asyncTest
-*/
+/*globals QUnit, test, asyncTest
+ */
 
 (function(global) {
     var log = function (s)
@@ -304,6 +301,39 @@
     };
 
     /**
+     * QUnitRunnerPageTest utility methods - these are not chainable!
+     */
+
+    QUnitRunnerPageTest.prototype.env = function ()
+    {
+        var envs = this.runner.config.envs;
+        var env = "notfound";
+        var that = this;
+
+        this.runner.jQuery.each(envs,function(envKey,value){
+            var envTests = envs[envKey];
+
+            that.runner.jQuery.each(envTests,function(key,value){
+                if (that.runner.workspace.location.href.indexOf(value) >= 0) {
+                    env = envKey;
+                    return false;
+                }
+            });
+
+            if (env !== "notfound") {
+                return false;
+            }
+        });
+
+        return env;
+    };
+
+    QUnitRunnerPageTest.prototype.config = function ()
+    {
+        return this.runner.config;
+    };
+
+    /**
      * QUnitRunnerPageTest methods - these are all chainable
      */
 
@@ -369,6 +399,24 @@
         this.chain.push(fn);
 
         return this; // chainable
+    };
+
+    QUnitRunnerPageTest.prototype.asyncRun = function (runFN)
+    {
+        var _this = this;
+        var fn = function () {
+            // must call this.asyncRunDone() to continue the chain
+            runFN.call(_this, _this.workspace.jQuery);
+        };
+
+        this.chain.push(fn);
+
+        return this; // chainable
+    };
+
+    QUnitRunnerPageTest.prototype.asyncRunDone = function ()
+    {
+        this._next();
     };
 
     QUnitRunnerPageTest.prototype.test = function (name, testFN)
