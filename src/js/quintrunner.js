@@ -435,6 +435,22 @@
         return this; // chainable
     };
 
+    QUnitRunnerPageTest.prototype.wait = function (duration)
+    {
+        var _this = this;
+        duration = duration || 1000;
+
+        var fn = function () {
+            setTimeout(function(){
+                this._next();
+            },duration);
+        };
+
+        this.chain.push(fn);
+
+        return this; // chainable
+    };
+
     QUnitRunnerPageTest.prototype.asyncTest = function (name, testFN)
     {
         var _this = this;

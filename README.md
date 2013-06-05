@@ -169,6 +169,13 @@ action be called.
 ### run (callback ($){})
 Runs arbitrary js code on the page, such as submitting a for, then moves to the next chain action.
 
+### asyncRun (callback ($){})
+Runs an asynchronous task. Must call this.asyncRunDone when the task is complete. Only then will the next chain
+action be called.
+
+### wait (duration = 1000)
+Waits for duration before moving to next chain task
+
 ### waitForPageLoad ()
 Pause the chain until a page load takes place. Should be used to wait if a form is submitted or a link click is
 triggered. Once the page load is complete it'll move to the next chain action.
