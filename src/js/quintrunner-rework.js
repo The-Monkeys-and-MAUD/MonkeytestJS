@@ -2,11 +2,36 @@
  */
 
 (function(global) {
-    var log = function(s) {
-        if (global.console) {
-            console.log(s);
-        }
-    };
+
+
+    var utils = {
+            log: function(s) {
+                if (global.console) {
+                    console.log(s);
+                }
+            },
+            __hasProp: Object.prototype.hasOwnProperty,
+            __extends: function(child, parent) {
+                for (var key in parent) {
+                    if (__hasProp.call(parent, key)) {
+                        child[key] = parent[key];
+                    }
+                }
+
+                function CTor() {
+                    this.constructor = child;
+                }
+                if (parent.prototype) {
+                    CTor.prototype = parent.prototype;
+                    child.prototype = new CTor();
+                    child.__super__ = parent.prototype;
+                }
+                return child;
+            }
+        },
+        log = utils.log,
+        __hasProp = utils.__hasProp,
+        __extends = utils.__extends;
 
     /**
      * Simple wrapper function to register test with the qunitRunner
@@ -16,25 +41,6 @@
     var registerTest = function(name, test) {
         global.QUnitRunner.registerTest(name, test);
     };
-
-    var __hasProp = Object.prototype.hasOwnProperty,
-        __extends = function(child, parent) {
-            for (var key in parent) {
-                if (__hasProp.call(parent, key)) {
-                    child[key] = parent[key];
-                }
-            }
-
-            function CTor() {
-                this.constructor = child;
-            }
-            if (parent.prototype) {
-                CTor.prototype = parent.prototype;
-                child.prototype = new CTor();
-                child.__super__ = parent.prototype;
-            }
-            return child;
-        };
 
     var QUnitRunner = function() {};
 
