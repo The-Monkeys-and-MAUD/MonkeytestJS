@@ -1,7 +1,4 @@
-/*! quintrunner - v0.1.0 - 2013-06-05
-* https://github.com/organizations/TheMonkeys
-* Copyright (c) 2013 The Monkeys; Licensed  */
-;/*globals QUnit, test, asyncTest
+/*globals QUnit, test, asyncTest
  */
 
 (function(global) {

@@ -36,111 +36,97 @@
             return child;
         };
 
-    var QUnitRunner = function() {
+    var QUnitRunner = function() {};
 
-    };
+    QUnitRunner.prototype.setupTests = function() {
+        
+        // global tests
+        var globalTests = this.config.globalTests || [];
 
-    QUnitRunner.prototype.start = function(config, pagesToTest) {
-        config = config || {};
-
-        this.config = {
-            testsDir: '/tests/', // requires leading and trailing slash or just '/' if root of server
-            pageTests: {},
-            globalTests: []
-        };
-
-        __extends(this.config, config);
-
-        this.testsUrl = /^[^\/]+:\/\/[^\/]+\//.exec(location.href)[0] + this.config.testsDir;
-        this.workspace = this.config.workspace;
-        this.jQuery = this.config.jQuery;
-
-        // figure out which pages we are testing
-        // if nothing was passed in assume all
-        var i = 0,
-            j = 0;
-
-        pagesToTest = pagesToTest || [];
-        if (pagesToTest.length === 0) {
-            for (i = 0; i < this.config.pages.length; i++) {
-                pagesToTest.push(this.config.pages[i].url);
-            }
-        }
-        this.pagesToTest = pagesToTest;
+        // pages
+        this.pages = [];
+        this.pagesToTest = [];
 
         // tests scripts
         this.tests = {};
         this.testsToLoad = [];
 
-        i = 0;
-        // page specific test scripts
-
         // load our pages from the config
         // also loads tests and adds them to this.testToLoad
-        this.pages = [];
-        for (i = 0; i < this.config.pages.length; i++) {
-            var page = new QUnitRunnerPage(this.config.pages[i]);
+        for (var i = 0, lenI=this.config.pages.length; i < lenI; i++) {
+
+            var page = new QUnitRunnerPage(this.config.pages[i]),
+                pageTests = this.config.pages[i].tests || [];
+
+            // store runner reference
             page.runner = this;
 
+            // add page to be tested
+            this.pagesToTest.push(this.config.pages[i].url);
+
             // add global tests
-            for (j = 0; j < this.config.globalTests.length; j++) {
-                page.tests.push(this.getTest(this.config.globalTests[j]));
+            for (var j = 0, lenJ=globalTests.length; j<lenJ; j++) {
+                page.tests.push(this.getTest(globalTests[j]));
             }
 
-            // add page specific tests - if there are any
-            if (this.config.pages[i].tests) {
-                for (j = 0; j < this.config.pages[i].tests.length; j++) {
-                    page.tests.push(this.getTest(this.config.pages[i].tests[j]));
-                }
+            // add page specific tests 
+            for (var k=0, lenK=pageTests.length; k<lenK; k++) {
+                page.tests.push(this.getTest(pageTests[k]));
             }
 
+            // add to array of pages
             this.pages.push(page);
         }
 
-        // load our test scripts
-        this.loadNextTest();
+    };
 
-        return this;
+    QUnitRunner.prototype.addTest = function(src) {
+        var test = this.tests[src] = new QUnitRunnerTest({
+            src: src
+        }, this);
+
+        this.testsToLoad.push(test);
+
+        return test;
     };
 
     QUnitRunner.prototype.getTest = function(src) {
-        if (!this.tests.hasOwnProperty(src)) {
-            var test = new QUnitRunnerTest({
-                src: src
-            }, this);
-            this.tests[src] = test;
-            this.testsToLoad.push(test);
-        }
-        return this.tests[src];
+
+        // return test or create one
+        var test = this.tests[src] || this.addTest(src);
+
+        return test;
     };
 
     QUnitRunner.prototype.loadNextTest = function() {
-        this.loadingCurrentTest = this.testsToLoad.shift(); // take from start
-        if (this.loadingCurrentTest) {
-            this.loadingCurrentTest.load();
-        } else {
-            this.loadTestsDone();
-        }
+
+        var self = this, 
+            currentTest = this.loadingCurrentTest = this.testsToLoad.shift(),
+            lookUp = {
+                loadTest: function() {
+                    currentTest.load();
+                },
+                finishTesting: function() {
+                    self.loadTestsDone();
+                }
+            };
+        
+        // load test or finish tests execution
+        lookUp[currentTest ? "loadTest" : "finishTesting"]();
     };
 
     QUnitRunner.prototype.registerTest = function(name, test) {
-        log('->registerTest ' + this.loadingCurrentTest.src + ' ' + name);
-        var testSpec = this.loadingCurrentTest;
         this.loadingCurrentTest.test = test;
         this.loadingCurrentTest.name = name;
-        //this.tests[testSpec.src]=({name:name, test:test, script:testSpec.script, id:testSpec.id, type:testSpec.type, url:testSpec.page});
 
         this.loadNextTest();
     };
 
     QUnitRunner.prototype.loadTestsDone = function() {
-
         this.startTests();
     };
 
     QUnitRunner.prototype.startTests = function() {
-        log('->startTests ');
-        log(this.tests);
 
         QUnit.start();
         this.currentPage = this.pages.shift();
@@ -148,15 +134,11 @@
     };
 
     QUnitRunner.prototype.nextPageTest = function() {
-        if (this.currentPage) {
-            if (!this.currentPage.runNextTest()) {
-                // move to next page and run
-                this.currentPage = this.pages.shift();
-                this.nextPageTest();
-            }
-        } else {
-            log('All test complete');
-        }
+        if (this.currentPage && !this.currentPage.runNextTest()) {
+            // move to next page and run
+            this.currentPage = this.pages.shift();
+            this.nextPageTest();
+        } 
     };
 
 
@@ -170,7 +152,7 @@
         __extends(this, config);
         this.source = "";
         this.tests = [];
-        this.currentTest = -1;
+        this.currentTest = -1; 
         this.runner = runner;
     };
 
@@ -180,32 +162,38 @@
             return;
         }
 
-        var _this = this;
+        var self = this;
         this.runner.jQuery.get(this.url)
-            .success(function(data) {
-            _this.source = data;
+        .success(function(data) {
+            self.source = data;
             callback();
         })
-            .error(function() {
+        .error(function() {
             callback();
         });
     };
 
     QUnitRunnerPage.prototype.runNextTest = function(callback) {
-        var testSpec = this.tests.shift();
+        var testSpec = this.tests.shift(),
+            ret;
 
         if (testSpec) {
             var pageTest = new QUnitRunnerPageTest({}, this.runner);
+
             pageTest.testSpec = testSpec;
             pageTest.runner = this.runner;
             pageTest.page = this;
             pageTest.window = pageTest.workspace = this.runner.workspace;
             pageTest.$ = this.runner.workspace.jQuery;
             pageTest.runTest();
-            return true;
+
+            ret = true;
         } else {
-            return false;
+
+            ret = false;
         }
+
+        return ret;
     };
 
 
@@ -249,16 +237,16 @@
     };
 
     QUnitRunnerPageTest.prototype.runTest = function() {
-        log('->testPageTest starting ' + this.page.url + ' with ' + this.testSpec.name);
+        //log('->testPageTest starting ' + this.page.url + ' with ' + this.testSpec.name);
 
-        var _this = this;
+        var self = this;
 
         QUnit.module('testing ' + this.page.url + ' with ' + this.testSpec.name);
 
         if (this.test.test instanceof Function) {
             // test is run on page load
             this.config.jQuery('#workspace').on('load', function() {
-                _this.testSpec.test.call(_this, _this.workspace.jQuery, 0);
+                self.testSpec.test.call(self, self.workspace.jQuery, 0);
             });
         } else {
             var loadCount = 0;
@@ -266,7 +254,7 @@
                 this.testSpec.test.setup.call(this);
             }
             if (this.testSpec.test.load) {
-                _this.testSpec.test.load.call(_this, _this.workspace.jQuery);
+                self.testSpec.test.load.call(self, self.workspace.jQuery);
             }
         }
 
@@ -279,19 +267,19 @@
 
 
     QUnitRunnerPageTest.prototype.start = function() {
-        log('->testPageTest  ' + this.page.url + ':' + this.testSpec.name + " start " + this.chain.length);
+        //log('->testPageTest  ' + this.page.url + ':' + this.testSpec.name + " start " + this.chain.length);
         this._next();
         return this; // chainable
     };
 
 
     QUnitRunnerPageTest.prototype._next = function() {
-        log('->testPageTest  ' + this.page.url + ':' + this.testSpec.name + " _next");
+        //log('->testPageTest  ' + this.page.url + ':' + this.testSpec.name + " _next");
         var fn = this.chain.shift();
         if (fn) {
             fn.call(this);
         } else {
-            log('->testPageTest complete ' + this.page.url + ' with ' + this.testSpec.name);
+            //log('->testPageTest complete ' + this.page.url + ' with ' + this.testSpec.name);
             this.runner.nextPageTest();
         }
     };
@@ -332,10 +320,10 @@
      */
 
     QUnitRunnerPageTest.prototype.loadPageSource = function() {
-        var _this = this;
+        var self = this;
         var fn = function() {
-            _this.page.loadSource(function() {
-                _this._next();
+            self.page.loadSource(function() {
+                self._next();
             });
         };
 
@@ -347,14 +335,14 @@
     QUnitRunnerPageTest.prototype.loadPage = function(url) {
         url = url || this.page.url;
 
-        var _this = this;
+        var self = this;
         var onloadFn = function() {
-            _this._next();
-            _this.runner.jQuery('#workspace').off('load', onloadFn);
+            self._next();
+            self.runner.jQuery('#workspace').off('load', onloadFn);
         };
         var fn = function() {
-            _this.runner.jQuery('#workspace').on('load', onloadFn);
-            _this.runner.jQuery('#workspace').attr('src', url);
+            self.runner.jQuery('#workspace').on('load', onloadFn);
+            self.runner.jQuery('#workspace').attr('src', url);
         };
 
         this.chain.push(fn);
@@ -363,13 +351,13 @@
     };
 
     QUnitRunnerPageTest.prototype.waitForPageLoad = function() {
-        var _this = this;
+        var self = this;
         var loadFn = function() {
-            _this._next();
-            _this.runner.jQuery('#workspace').off('load', loadFn);
+            self._next();
+            self.runner.jQuery('#workspace').off('load', loadFn);
         };
         var fn = function() {
-            _this.runner.jQuery('#workspace').on('load', loadFn);
+            self.runner.jQuery('#workspace').on('load', loadFn);
 
             // TODO - add timeout ...
         };
@@ -380,10 +368,10 @@
     };
 
     QUnitRunnerPageTest.prototype.run = function(runFN) {
-        var _this = this;
+        var self = this;
         var fn = function() {
-            runFN.call(_this, _this.workspace.jQuery);
-            _this._next();
+            runFN.call(self, self.workspace.jQuery);
+            self._next();
         };
 
         this.chain.push(fn);
@@ -392,10 +380,10 @@
     };
 
     QUnitRunnerPageTest.prototype.asyncRun = function(runFN) {
-        var _this = this;
+        var self = this;
         var fn = function() {
             // must call this.asyncRunDone() to continue the chain
-            runFN.call(_this, _this.workspace.jQuery);
+            runFN.call(self, self.workspace.jQuery);
         };
 
         this.chain.push(fn);
@@ -408,13 +396,13 @@
     };
 
     QUnitRunnerPageTest.prototype.test = function(name, testFN) {
-        var _this = this;
+        var self = this;
         var fn = function() {
             test(name, function() {
-                testFN.call(_this, _this.workspace.jQuery);
+                testFN.call(self, self.workspace.jQuery);
             });
             QUnit.start();
-            _this._next();
+            self._next();
         };
 
         this.chain.push(fn);
@@ -423,7 +411,7 @@
     };
 
     QUnitRunnerPageTest.prototype.wait = function(duration) {
-        var _this = this;
+        var self = this;
         duration = duration || 1000;
 
         var fn = function() {
@@ -438,10 +426,10 @@
     };
 
     QUnitRunnerPageTest.prototype.asyncTest = function(name, testFN) {
-        var _this = this;
+        var self = this;
         var fn = function() {
             asyncTest(name, function() {
-                testFN.call(_this, _this.workspace.jQuery);
+                testFN.call(self, self.workspace.jQuery);
             });
         };
 
@@ -451,9 +439,33 @@
     };
 
     QUnitRunnerPageTest.prototype.asyncTestDone = function() {
-        var _this = this;
+        var self = this;
         QUnit.start();
-        _this._next();
+        self._next();
+    };
+
+    QUnitRunner.prototype.start = function(settings) {
+
+        this.config = {
+            testsDir: '/tests/', // requires leading and trailing slash or just '/' if root of server
+            pageTests: {},
+            globalTests: []
+        };
+
+        __extends(this.config, settings || {});
+
+        // test specs
+        this.testsUrl = /^[^\/]+:\/\/[^\/]+\//.exec(location.href)[0] + this.config.testsDir;
+        this.workspace = this.config.workspace;
+        this.jQuery = this.config.jQuery;
+
+        // setup tests
+        this.setupTests();
+
+        // load our test scripts
+        this.loadNextTest();
+
+        return this;
     };
 
     // pollute the global namespace
