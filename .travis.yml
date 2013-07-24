@@ -4,3 +4,4 @@ node_js:
 before_script:
   - cd core/src/ 
   - npm install -g grunt-cli
+  - npm install
