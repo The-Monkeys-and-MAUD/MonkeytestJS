@@ -409,7 +409,6 @@
             test(name, function() {
                 testFN.call(self, self.workspace.jQuery);
             });
-            QUnit.start();
             self._next();
         };
 
