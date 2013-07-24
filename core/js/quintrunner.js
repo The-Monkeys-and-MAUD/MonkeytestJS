@@ -1,53 +1,78 @@
-/*globals QUnit, test, asyncTest */ 
+/* globals QUnit, test, asyncTest */
+(function (global) {
 
-(function(global) {
-
+    // block QUnit to try autostart without being ready
     global.QUnit.config.autostart = false;
-    
+
+    // jquery no conflict 
     var $$ = global.$$ = global.jQuery.noConflict(true);
 
-    var utils = {
-            log: function(s) {
-                if (global.console) {
-                    console.log(s);
-                }
-            },
-            __hasProp: Object.prototype.hasOwnProperty,
-            __extends: function(child, parent) {
-                for (var key in parent) {
-                    if (__hasProp.call(parent, key)) {
-                        child[key] = parent[key];
-                    }
-                }
-
-                function CTor() {
-                    this.constructor = child;
-                }
-                if (parent.prototype) {
-                    CTor.prototype = parent.prototype;
-                    child.prototype = new CTor();
-                    child.__super__ = parent.prototype;
-                }
-                return child;
+    /**
+     * Utility helpers.
+     *
+     *   * `log` Function - wrapper to allow logs to be output without causing browser error
+     *   * `__hasProp` Function - checking for properties that are not part of prototype
+     *   * `__extends` Function - extending object and adding constructor reference
+     *
+     * @api public
+     */
+    var UTILS = {
+        log: function (s) {
+            if (global.console) {
+                console.log(s);
             }
         },
-        log = utils.log,
-        __hasProp = utils.__hasProp,
-        __extends = utils.__extends;
+        __hasProp: Object.prototype.hasOwnProperty,
+        __extends: function (child, parent) {
+            for (var key in parent) {
+                if (__hasProp.call(parent, key)) {
+                    child[key] = parent[key];
+                }
+            }
+
+            function CTor() {
+                this.constructor = child;
+            }
+            if (parent.prototype) {
+                CTor.prototype = parent.prototype;
+                child.prototype = new CTor();
+                child.__super__ = parent.prototype;
+            }
+            return child;
+        }
+    },
+        log = UTILS.log,
+        __hasProp = UTILS.__hasProp,
+        __extends = UTILS.__extends;
 
     /**
-     * Simple wrapper function to register test with the qunitRunner
-     * @param name
-     * @param test
+     * Simple wrapper helper function to register test with the qunitRunner
+     *
+     * @param {String} name name of the test
+     * @param {Function} test function to be executed as the test
+     * @api public
      */
-    var registerTest = function(name, test) {
+    var registerTest = function (name, test) {
         global.QUnitRunner.registerTest(name, test);
     };
 
-    var QUnitRunner = function() {};
+    /**
+     * Constructor
+     *
+     * @return {Object} QUnitRunner instance.
+     * @api public
+     */
+    var QUnitRunner = function () {};
 
-    QUnitRunner.prototype.setupTests = function() {
-        
+    /**
+     * Prepare tests base on the config.json file on the root of the test folder
+     * it should have the global tests associated to it as well as page specific tests.
+     *
+     * @memberOf QUnitRunner
+     * @api public
+     */
+    QUnitRunner.prototype.setupTests = function () {
+
         // global tests
         var globalTests = this.config.globalTests || [];
 
@@ -61,7 +86,7 @@
 
         // load our pages from the config
         // also loads tests and adds them to this.testToLoad
-        for (var i = 0, lenI=this.config.pages.length; i < lenI; i++) {
+        for (var i = 0, lenI = this.config.pages.length; i < lenI; i++) {
 
             var page = new QUnitRunnerPage(this.config.pages[i]),
                 pageTests = this.config.pages[i].tests || [];
@@ -73,12 +98,12 @@
             this.pagesToTest.push(this.config.pages[i].url);
 
             // add global tests
-            for (var j = 0, lenJ=globalTests.length; j<lenJ; j++) {
+            for (var j = 0, lenJ = globalTests.length; j < lenJ; j++) {
                 page.tests.push(this.getTest(globalTests[j]));
             }
 
             // add page specific tests 
-            for (var k=0, lenK=pageTests.length; k<lenK; k++) {
+            for (var k = 0, lenK = pageTests.length; k < lenK; k++) {
                 page.tests.push(this.getTest(pageTests[k]));
             }
 
@@ -88,7 +113,16 @@
 
     };
 
-    QUnitRunner.prototype.addTest = function(src) {
+    /**
+     * Simple wrapper function to register test with the qunitRunner.
+     * Returns a QUnitRunnerTest instance.
+     *
+     * @memberOf QUnitRunner
+     * @param {String} src path to the test
+     * @return {Object} QUnitRunnerTest instace
+     * @api public
+     */
+    QUnitRunner.prototype.addTest = function (src) {
         var test = this.tests[src] = new QUnitRunnerTest({
             src: src
         }, this);
@@ -98,7 +132,15 @@
         return test;
     };
 
-    QUnitRunner.prototype.getTest = function(src) {
+    /**
+     * Gets the test related to the src or create a new test if it doesnt exist one.
+     *
+     * @memberOf QUnitRunner
+     * @param {String} src path to the test
+     * @return {Object} QUnitRunnerTest instace
+     * @api public
+     */
+    QUnitRunner.prototype.getTest = function (src) {
 
         // return test or create one
         var test = this.tests[src] || this.addTest(src);
@@ -106,65 +148,140 @@
         return test;
     };
 
-    QUnitRunner.prototype.loadNextTest = function() {
+    /**
+     * Loads current test and all its actions or finish testing.
+     *
+     * @memberOf QUnitRunner
+     * @api public
+     */
+    QUnitRunner.prototype.loadNextTest = function () {
 
-        var self = this, 
+        var self = this,
             currentTest = this.loadingCurrentTest = this.testsToLoad.shift(),
             lookUp = {
-                loadTest: function() {
+                loadTest: function () {
                     currentTest.load();
                 },
-                finishTesting: function() {
+                finishTesting: function () {
                     self.loadTestsDone();
                 }
             };
-        
+
         // load test or finish tests execution
         lookUp[currentTest ? "loadTest" : "finishTesting"]();
     };
 
-    QUnitRunner.prototype.registerTest = function(name, test) {
+    /**
+     * Adds name and function to testcase than get next one.
+     *
+     * @param {String} name name of the test
+     * @param {Function} test function to be executed as the test
+     * @memberOf QUnitRunner
+     * @api public
+     */
+    QUnitRunner.prototype.registerTest = function (name, test) {
         this.loadingCurrentTest.test = test;
         this.loadingCurrentTest.name = name;
 
         this.loadNextTest();
     };
 
-    QUnitRunner.prototype.loadTestsDone = function() {
+    /**
+     * When all tests finish loading runner is ready to start.
+     *
+     * @memberOf QUnitRunner
+     * @api public
+     */
+    QUnitRunner.prototype.loadTestsDone = function () {
         this.startTests();
     };
 
-    QUnitRunner.prototype.startTests = function() {
+    /**
+     * Start QUnit than load each test from the beggining, until all is finished.
+     *
+     * @memberOf QUnitRunner
+     * @api public
+     */
+    QUnitRunner.prototype.startTests = function () {
 
         QUnit.start();
         this.currentPage = this.pages.shift();
         this.nextPageTest();
     };
 
-    QUnitRunner.prototype.nextPageTest = function() {
+    /**
+     * Loads next test and assign currentTest to the new loaded test.
+     *
+     * @memberOf QUnitRunner
+     * @api public
+     */
+    QUnitRunner.prototype.nextPageTest = function () {
         if (this.currentPage && !this.currentPage.runNextTest()) {
             // move to next page and run
             this.currentPage = this.pages.shift();
             this.nextPageTest();
-        } 
+        }
     };
 
-
-    /********************************************************************************
-     * QUnitRunnerPage
+    /**
+     * Method to be called by tests running asyncTest once they are finished running.
+     *
+     * @param {Object} settings startup settings passed usually by config.json file
+     * @memberOf QUnitRunner
+     * @return {Object} context for chaining
+     * @api public
      */
+    QUnitRunner.prototype.start = function (settings) {
 
-    var QUnitRunnerPage = function(config, runner) {
+        this.config = {
+            testsDir: '/tests/', // requires leading and trailing slash or just '/' if root of server
+            pageTests: {},
+            globalTests: []
+        };
+
+        __extends(this.config, settings || {});
+
+        // test specs
+        this.testsUrl = /^[^\/]+:\/\/[^\/]+\//.exec(location.href)[0] +
+            this.config.testsDir;
+        this.workspace = this.config.workspace;
+        this.jQuery = this.config.jQuery;
+
+        // setup tests
+        this.setupTests();
+
+        // load our test scripts
+        this.loadNextTest();
+
+        return this;
+    };
+
+    /**
+     * Constructor
+     *
+     * @param {Object} config configuration  to be injected
+     * @param {Object} runner runner reference to be injected
+     * @return {Object} QUnitRunnerPage instance.
+     * @api public
+     */
+    var QUnitRunnerPage = function (config, runner) {
         config = config || {};
 
         __extends(this, config);
         this.source = "";
         this.tests = [];
-        this.currentTest = -1; 
+        this.currentTest = -1;
         this.runner = runner;
     };
 
-    QUnitRunnerPage.prototype.loadSource = function(callback) {
+    /**
+     * Call a callback function after the current page is loaded by the runner.
+     *
+     * @param {Function} callback callback when page is succesfuly loaded
+     * @memberOf QUnitRunnerPage
+     * @api public
+     */
+    QUnitRunnerPage.prototype.loadSource = function (callback) {
         if (this.source !== "") {
             callback();
             return;
@@ -172,16 +289,24 @@
 
         var self = this;
         this.runner.jQuery.get(this.url)
-        .success(function(data) {
-            self.source = data;
-            callback();
-        })
-        .error(function() {
-            callback();
-        });
+            .success(function (data) {
+                self.source = data;
+                callback();
+            })
+            .error(function () {
+                callback();
+            });
     };
 
-    QUnitRunnerPage.prototype.runNextTest = function(callback) {
+    /**
+     * Run following tests and returns a boolen if a test has been runned.
+     *
+     * @param {Function} callback callback when page is succesfuly loaded
+     * @memberOf QUnitRunnerPage
+     * @return {Bool} a test has been run
+     * @api public
+     */
+    QUnitRunnerPage.prototype.runNextTest = function (callback) {
         var testSpec = this.tests.shift(),
             ret;
 
@@ -201,26 +326,45 @@
             ret = false;
         }
 
+        callback(ret);
+
         return ret;
     };
 
-
-    /********************************************************************************
-     * QUnitRunnerTest
+    /**
+     * Constructor
+     *
+     * @param {Object} config configuration  to be injected
+     * @param {Object} runner runner reference to be injected
+     * @return {Object} QUnitRunnerPage instance.
+     * @api public
      */
-
-    var QUnitRunnerTest = function(config, runner) {
+    var QUnitRunnerTest = function (config, runner) {
         config = config || {};
 
         __extends(this, config);
         this.runner = runner;
     };
 
-    QUnitRunnerTest.prototype.load = function(callback) {
+    /**
+     * Load script
+     *
+     * @memberOf QUnitRunnerTest
+     * @api public
+     */
+    QUnitRunnerTest.prototype.load = function () {
         this.addTestScript("", this.src);
     };
 
-    QUnitRunnerTest.prototype.addTestScript = function(id, src) {
+    /**
+     * create a script and add it do the dom if there is not one already with same id.
+     *
+     * @param {Obect} id script id
+     * @param {String} src path to the script be loaded.
+     * @memberOf QUnitRunnerTest
+     * @api public
+     */
+    QUnitRunnerTest.prototype.addTestScript = function (id, src) {
         src = this.runner.testsUrl + src;
         var d = document;
         var js, ref = d.getElementsByTagName('script')[0];
@@ -232,11 +376,14 @@
         ref.parentNode.insertBefore(js, ref);
     };
 
-    /********************************************************************************
-     * QUnitRunnerPage
+    /**
+     * Constructor
+     *
+     * @param {Object} config configuration  to be injected
+     * @return {Object} QUnitRunnerPageTest instance.
+     * @api public
      */
-
-    var QUnitRunnerPageTest = function(config) {
+    var QUnitRunnerPageTest = function (config) {
         config = config || {};
 
         __extends(this, config);
@@ -244,8 +391,13 @@
         this.chain = [];
     };
 
-    QUnitRunnerPageTest.prototype.runTest = function() {
-        //log('->testPageTest starting ' + this.page.url + ' with ' + this.testSpec.name);
+    /**
+     * Run tests for the related page.
+     *
+     * @memberOf QUnitRunnerPageTest
+     * @api public
+     */
+    QUnitRunnerPageTest.prototype.runTest = function () {
 
         var self = this;
 
@@ -253,9 +405,11 @@
 
         if (this.test.test instanceof Function) {
             // test is run on page load
-            this.config.jQuery('#workspace').on('load', function() {
-                self.testSpec.test.call(self, self.workspace.jQuery, 0);
-            });
+            this.config.jQuery('#workspace')
+                .on('load', function () {
+                    self.testSpec.test.call(self, self.workspace.jQuery,
+                        0);
+                });
         } else {
             var loadCount = 0;
             if (this.testSpec.test.setup) {
@@ -268,44 +422,62 @@
 
     };
 
-
     /**
      * QUnitRunnerPageTest chain control methods
+     *
+     * @memberOf QUnitRunnerPageTest
+     * @api public
      */
-
-
-    QUnitRunnerPageTest.prototype.start = function() {
-        //log('->testPageTest  ' + this.page.url + ':' + this.testSpec.name + " start " + this.chain.length);
+    QUnitRunnerPageTest.prototype.start = function () {
         this._next();
         return this; // chainable
     };
 
+    /**
+     * This is the method responsible for handle chaining. It will call all methods for the current page until
+     * there is no more left than it will call the next page.
+     *
+     * @memberOf QUnitRunnerPageTest
+     * @api public
+     */
+    QUnitRunnerPageTest.prototype._next = function () {
 
-    QUnitRunnerPageTest.prototype._next = function() {
-        //log('->testPageTest  ' + this.page.url + ':' + this.testSpec.name + " _next");
-        var fn = this.chain.shift();
-        if (fn) {
-            fn.call(this);
-        } else {
-            //log('->testPageTest complete ' + this.page.url + ' with ' + this.testSpec.name);
-            this.runner.nextPageTest();
-        }
+        var self = this,
+            pageActions = this.chain.shift(),
+            lookUp = {
+                callCurrentPageAction: function () {
+                    pageActions.call(self);
+                },
+                callNextPage: function () {
+                    self.runner.nextPageTest();
+                }
+            };
+
+        lookUp[pageActions ? "callCurrentPageAction" : "callNextPage"]();
     };
 
     /**
-     * QUnitRunnerPageTest utility methods - these are not chainable!
+     * Returns the current environment - based on the url of the current page.
+     *
+     * Example:
+     *          QUnitRunnerPageTest.env();
+     *          // => 'staging'
+     *
+     * @return {String} environment string
+     * @memberOf QUnitRunnerPageTest
+     * @api public
      */
-
-    QUnitRunnerPageTest.prototype.env = function() {
+    QUnitRunnerPageTest.prototype.env = function () {
         var envs = this.runner.config.envs;
         var env = "notfound";
         var that = this;
 
-        this.runner.jQuery.each(envs, function(envKey, value) {
+        this.runner.jQuery.each(envs, function (envKey, value) {
             var envTests = envs[envKey];
 
-            that.runner.jQuery.each(envTests, function(key, value) {
-                if (that.runner.workspace.location.href.indexOf(value) >= 0) {
+            that.runner.jQuery.each(envTests, function (key, value) {
+                if (that.runner.workspace.location.href.indexOf(
+                    value) >= 0) {
                     env = envKey;
                     return false;
                 }
@@ -319,18 +491,29 @@
         return env;
     };
 
-    QUnitRunnerPageTest.prototype.config = function() {
+    /**
+     * Returns the configuration used by the runner.
+     *
+     * @return {Object}
+     * @memberOf QUnitRunnerPageTest
+     * @api public
+     */
+    QUnitRunnerPageTest.prototype.config = function () {
         return this.runner.config;
     };
 
     /**
-     * QUnitRunnerPageTest methods - these are all chainable
+     * Loads the source of a page (via AJAX) into this.page.source. Waits until the source is loaded before moving to the next
+     * chain action. If you are performing test on the page source this will normally be the first call in the test chain.
+     *
+     * @return {Object} context for chaining
+     * @memberOf QUnitRunnerPageTest
+     * @api public
      */
-
-    QUnitRunnerPageTest.prototype.loadPageSource = function() {
+    QUnitRunnerPageTest.prototype.loadPageSource = function () {
         var self = this;
-        var fn = function() {
-            self.page.loadSource(function() {
+        var fn = function () {
+            self.page.loadSource(function () {
                 self._next();
             });
         };
@@ -340,17 +523,29 @@
         return this; // chainable
     };
 
-    QUnitRunnerPageTest.prototype.loadPage = function(url) {
+    /**
+     * Loads a page into the iframe, also waits until page is loaded before moving to the next action in the chain. If you are
+     * performing tests on an actual page, this will normally be the first call in a test chain.
+     *
+     * @return {Object} context for chaining
+     * @param {String} url load content from url on the workspace
+     * @memberOf QUnitRunnerPageTest
+     * @api public
+     */
+    QUnitRunnerPageTest.prototype.loadPage = function (url) {
         url = url || this.page.url;
 
         var self = this;
-        var onloadFn = function() {
+        var onloadFn = function () {
             self._next();
-            self.runner.jQuery('#workspace').off('load', onloadFn);
+            self.runner.jQuery('#workspace')
+                .off('load', onloadFn);
         };
-        var fn = function() {
-            self.runner.jQuery('#workspace').on('load', onloadFn);
-            self.runner.jQuery('#workspace').attr('src', url);
+        var fn = function () {
+            self.runner.jQuery('#workspace')
+                .on('load', onloadFn);
+            self.runner.jQuery('#workspace')
+                .attr('src', url);
         };
 
         this.chain.push(fn);
@@ -358,14 +553,24 @@
         return this; // chainable
     };
 
-    QUnitRunnerPageTest.prototype.waitForPageLoad = function() {
+    /**
+     * Pause the chain until a page load takes place. Should be used to wait if a form is submitted or a link click is
+     * triggered. Once the page load is complete it'll move to the next chain action.
+     *
+     * @return {Object} context for chaining
+     * @memberOf QUnitRunnerPageTest
+     * @api public
+     */
+    QUnitRunnerPageTest.prototype.waitForPageLoad = function () {
         var self = this;
-        var loadFn = function() {
+        var loadFn = function () {
             self._next();
-            self.runner.jQuery('#workspace').off('load', loadFn);
+            self.runner.jQuery('#workspace')
+                .off('load', loadFn);
         };
-        var fn = function() {
-            self.runner.jQuery('#workspace').on('load', loadFn);
+        var fn = function () {
+            self.runner.jQuery('#workspace')
+                .on('load', loadFn);
 
             // TODO - add timeout ...
         };
@@ -375,9 +580,17 @@
         return this; // chainable
     };
 
-    QUnitRunnerPageTest.prototype.run = function(runFN) {
+    /**
+     * Runs arbitrary js code on the page, such as submitting a for, then moves to the next chain action.
+     *
+     * @param {Function} runFN function to that will be called on a certain workspace using 'QUnitRunnerPageTest' as context.
+     * @return {Object} context for chaining
+     * @memberOf QUnitRunnerPageTest
+     * @api public
+     */
+    QUnitRunnerPageTest.prototype.run = function (runFN) {
         var self = this;
-        var fn = function() {
+        var fn = function () {
             runFN.call(self, self.workspace.jQuery);
             self._next();
         };
@@ -387,9 +600,18 @@
         return this; // chainable
     };
 
-    QUnitRunnerPageTest.prototype.asyncRun = function(runFN) {
+    /**
+     * Runs an asynchronous task. Must call this.asyncRunDone when the task is complete. Only then will the next chain
+     * action be called.
+     *
+     * @param {Function} runFN function to that will be called on a certain workspace using 'QUnitRunnerPageTest' as context.
+     * @return {Object} context for chaining
+     * @memberOf QUnitRunnerPageTest
+     * @api public
+     */
+    QUnitRunnerPageTest.prototype.asyncRun = function (runFN) {
         var self = this;
-        var fn = function() {
+        var fn = function () {
             // must call this.asyncRunDone() to continue the chain
             runFN.call(self, self.workspace.jQuery);
         };
@@ -399,14 +621,29 @@
         return this; // chainable
     };
 
-    QUnitRunnerPageTest.prototype.asyncRunDone = function() {
+    /**
+     * Method to be called by tests running asyncRun once they are finished running.
+     *
+     * @memberOf QUnitRunnerPageTest
+     * @api public
+     */
+    QUnitRunnerPageTest.prototype.asyncRunDone = function () {
         this._next();
     };
 
-    QUnitRunnerPageTest.prototype.test = function(name, testFN) {
+    /**
+     * Method to be called by tests running asyncRun once they are finished running.
+     *
+     * @param {String} name name of the test to be run.
+     * @param {Function} testFN function to be tested.
+     * @memberOf QUnitRunnerPageTest
+     * @return {Object} context for chaining
+     * @api public
+     */
+    QUnitRunnerPageTest.prototype.test = function (name, testFN) {
         var self = this;
-        var fn = function() {
-            test(name, function() {
+        var fn = function () {
+            test(name, function () {
                 testFN.call(self, self.workspace.jQuery);
             });
             self._next();
@@ -417,12 +654,20 @@
         return this; // chainable
     };
 
-    QUnitRunnerPageTest.prototype.wait = function(duration) {
+    /**
+     * Pause execution of the next chainable method for duration time.
+     *
+     * @param {Int} duration duration in milliseconds to delay next action execution
+     * @memberOf QUnitRunnerPageTest
+     * @return {Object} context for chaining
+     * @api public
+     */
+    QUnitRunnerPageTest.prototype.wait = function (duration) {
         var self = this;
         duration = duration || 1000;
 
-        var fn = function() {
-            setTimeout(function() {
+        var fn = function () {
+            setTimeout(function () {
                 this._next();
             }, duration);
         };
@@ -432,10 +677,20 @@
         return this; // chainable
     };
 
-    QUnitRunnerPageTest.prototype.asyncTest = function(name, testFN) {
+    /**
+     * Runs an asynchronous QUint test. Must call this.asyncTestDone when the test is complete. Only then will the next chain
+     * action be called.
+     *
+     * @param {String} name name of the test to be run.
+     * @param {Function} testFN function to be tested.
+     * @memberOf QUnitRunnerPageTest
+     * @return {Object} context for chaining
+     * @api public
+     */
+    QUnitRunnerPageTest.prototype.asyncTest = function (name, testFN) {
         var self = this;
-        var fn = function() {
-            asyncTest(name, function() {
+        var fn = function () {
+            asyncTest(name, function () {
                 testFN.call(self, self.workspace.jQuery);
             });
         };
@@ -445,37 +700,20 @@
         return this; // chainable
     };
 
-    QUnitRunnerPageTest.prototype.asyncTestDone = function() {
+    /**
+     * Method to be called by tests running asyncTest once they are finished running.
+     *
+     * @memberOf QUnitRunnerPageTest
+     * @api public
+     */
+    QUnitRunnerPageTest.prototype.asyncTestDone = function () {
         var self = this;
         QUnit.start();
         self._next();
     };
 
-    QUnitRunner.prototype.start = function(settings) {
-
-        this.config = {
-            testsDir: '/tests/', // requires leading and trailing slash or just '/' if root of server
-            pageTests: {},
-            globalTests: []
-        };
-
-        __extends(this.config, settings || {});
-
-        // test specs
-        this.testsUrl = /^[^\/]+:\/\/[^\/]+\//.exec(location.href)[0] + this.config.testsDir;
-        this.workspace = this.config.workspace;
-        this.jQuery = this.config.jQuery;
-
-        // setup tests
-        this.setupTests();
-
-        // load our test scripts
-        this.loadNextTest();
-
-        return this;
-    };
-
     // pollute the global namespace
+    // TODO: do we need to polute the namespace with this things here ??? If not remove this.
     global.QUnitRunnerPageTest = QUnitRunnerPageTest;
     global.log = log;
     global.registerTest = registerTest;
@@ -483,21 +721,24 @@
     // create our singleton / factory
     global.QUnitRunner = new QUnitRunner();
 
-
+    // TODO: create a nicer method to wrap this startup
     // start runner with json config file
-    $$(function() {
+    $$(function () {
 
-      $$.getJSON('config.json', function(data) {
+        // read configuration from a file called 'config.json'
+        $$.getJSON('config.json', function (data) {
 
-        global.QUnitRunner.start($$.extend({}, {
-            workspace:window.frames[0],
-            jQuery:$$
-        }, data));
-      })
-      .fail(function() {
-        global.alert("Failed to load config.json, please make sure this file exist and it is correctly formatted.");
-      });
+            global.QUnitRunner.start($$.extend({}, {
+                workspace: window.frames[0],
+                jQuery: $$
+            }, data));
+        })
+            .fail(function () {
+                global.alert(
+                    "Failed to load config.json, please make sure this file exist and it is correctly formatted."
+                );
+            });
 
-   });
+    });
 
 }(this));

@@ -213,13 +213,19 @@ code {
   margin-right: 6px;
   font-size: 0.7em;
 }
-</style><script srr="http://cdnjs.cloudflare.com/ajax/libs/foundation/4.1.6/js/vendor/custom.modernizr.js"></script></head><body><div class="row"><div class="small-12 columns"><h1 class="page-title">quintrunner<small> js/quintrunner.js</small></h1></div></div><div class="row"><div id="nav" class="large-3 columns"><div data-section="accordian" data-options="" class="section-container accordian"><div class="section active"><p data-section-title class="title"><a href="../../doc/js/quintrunner.js.html"><small>js/</small>quintrunner.js</a></p><div data-section-content class="content"><ul class="side-nav"><li><a href="../../doc/js/quintrunner.js.html#registerTest">registerTest</a></li><li><a href="../../doc/js/quintrunner.js.html#QUnitRunnerPage">QUnitRunnerPage</a></li><li><a href="../../doc/js/quintrunner.js.html#QUnitRunnerTest">QUnitRunnerTest</a></li><li><a href="../../doc/js/quintrunner.js.html#QUnitRunnerPageTest">QUnitRunnerPageTest</a></li><li><a href="../../doc/js/quintrunner.js.html#start">start</a></li><li><a href="../../doc/js/quintrunner.js.html#env">env</a></li><li><a href="../../doc/js/quintrunner.js.html#loadPageSource">loadPageSource</a></li></ul></div></div></div></div><div class="small-12 large-9 columns"><article class="comment"><header></header><ul class="no-bullet tags"></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>lobals QUnit, test, asyncTest</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">(function (global) {
+</style><script srr="http://cdnjs.cloudflare.com/ajax/libs/foundation/4.1.6/js/vendor/custom.modernizr.js"></script></head><body><div class="row"><div class="small-12 columns"><h1 class="page-title">quintrunner<small> js/quintrunner.js</small></h1></div></div><div class="row"><div id="nav" class="large-3 columns"><div data-section="accordian" data-options="" class="section-container accordian"><div class="section active"><p data-section-title class="title"><a href="../../doc/js/quintrunner.js.html"><small>js/</small>quintrunner.js</a></p><div data-section-content class="content"><ul class="side-nav"><li><a href="../../doc/js/quintrunner.js.html#UTILS">UTILS</a></li><li><a href="../../doc/js/quintrunner.js.html#registerTest">registerTest</a></li><li><a href="../../doc/js/quintrunner.js.html#QUnitRunner">QUnitRunner</a></li><li><a href="../../doc/js/quintrunner.js.html#setupTests">setupTests</a></li><li><a href="../../doc/js/quintrunner.js.html#addTest">addTest</a></li><li><a href="../../doc/js/quintrunner.js.html#getTest">getTest</a></li><li><a href="../../doc/js/quintrunner.js.html#loadNextTest">loadNextTest</a></li><li><a href="../../doc/js/quintrunner.js.html#registerTest">registerTest</a></li><li><a href="../../doc/js/quintrunner.js.html#loadTestsDone">loadTestsDone</a></li><li><a href="../../doc/js/quintrunner.js.html#startTests">startTests</a></li><li><a href="../../doc/js/quintrunner.js.html#nextPageTest">nextPageTest</a></li><li><a href="../../doc/js/quintrunner.js.html#start">start</a></li><li><a href="../../doc/js/quintrunner.js.html#QUnitRunnerPage">QUnitRunnerPage</a></li><li><a href="../../doc/js/quintrunner.js.html#loadSource">loadSource</a></li><li><a href="../../doc/js/quintrunner.js.html#runNextTest">runNextTest</a></li><li><a href="../../doc/js/quintrunner.js.html#QUnitRunnerTest">QUnitRunnerTest</a></li><li><a href="../../doc/js/quintrunner.js.html#load">load</a></li><li><a href="../../doc/js/quintrunner.js.html#addTestScript">addTestScript</a></li><li><a href="../../doc/js/quintrunner.js.html#QUnitRunnerPageTest">QUnitRunnerPageTest</a></li><li><a href="../../doc/js/quintrunner.js.html#runTest">runTest</a></li><li><a href="../../doc/js/quintrunner.js.html#start">start</a></li><li><a href="../../doc/js/quintrunner.js.html#_next">_next</a></li><li><a href="../../doc/js/quintrunner.js.html#env">env</a></li><li><a href="../../doc/js/quintrunner.js.html#config">config</a></li><li><a href="../../doc/js/quintrunner.js.html#loadPageSource">loadPageSource</a></li><li><a href="../../doc/js/quintrunner.js.html#loadPage">loadPage</a></li><li><a href="../../doc/js/quintrunner.js.html#waitForPageLoad">waitForPageLoad</a></li><li><a href="../../doc/js/quintrunner.js.html#run">run</a></li><li><a href="../../doc/js/quintrunner.js.html#asyncRun">asyncRun</a></li><li><a href="../../doc/js/quintrunner.js.html#asyncRunDone">asyncRunDone</a></li><li><a href="../../doc/js/quintrunner.js.html#test">test</a></li><li><a href="../../doc/js/quintrunner.js.html#wait">wait</a></li><li><a href="../../doc/js/quintrunner.js.html#asyncTest">asyncTest</a></li><li><a href="../../doc/js/quintrunner.js.html#asyncTestDone">asyncTestDone</a></li></ul></div></div></div></div><div class="small-12 large-9 columns"><article class="comment"><header></header><ul class="no-bullet tags"></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>globals QUnit, test, asyncTest</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">(function (global) {
 
+    // block QUnit to try autostart without being ready
     global.QUnit.config.autostart = false;
 
-    var $$ = global.$$ = global.jQuery.noConflict(true);
+    // jquery no conflict 
+    var $$ = global.$$ = global.jQuery.noConflict(true);</code></pre></div></div></div></article><article class="comment"><header><h1 id="UTILS">UTILS</h1><h5 class="subheader"><div class="label radius ctx-type">declaration</div>UTILS</h5></header><ul class="no-bullet tags"></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Utility helpers.</p>
 
-    var utils = {
+<ul>
+<li><code>log</code> Function - wrapper to allow logs to be output without causing browser error</li>
+<li><code>__hasProp</code> Function - checking for properties that are not part of prototype</li>
+<li><code>__extends</code> Function - extending object and adding constructor reference</li>
+</ul></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">var UTILS = {
         log: function (s) {
             if (global.console) {
                 console.log(s);
@@ -244,15 +250,11 @@ code {
             return child;
         }
     },
-        log = utils.log,
-        __hasProp = utils.__hasProp,
-        __extends = utils.__extends;</code></pre></div></div></div></article><article class="comment"><header><h1 id="registerTest">registerTest</h1><h5 class="subheader"><div class="label radius ctx-type">function</div>registerTest()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{name}</span><span class="name"></span><span class="description"></span></li><li class="tag"><span class="type">@param: </span><span class="types">{test}</span><span class="name"></span><span class="description"></span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Simple wrapper function to register test with the qunitRunner</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">var registerTest = function (name, test) {
+        log = UTILS.log,
+        __hasProp = UTILS.__hasProp,
+        __extends = UTILS.__extends;</code></pre></div></div></div></article><article class="comment"><header><h1 id="registerTest">registerTest</h1><h5 class="subheader"><div class="label radius ctx-type">function</div>registerTest()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{String}</span><span class="name">name</span><span class="description">name of the test</span></li><li class="tag"><span class="type">@param: </span><span class="types">{Function}</span><span class="name">test</span><span class="description">function to be executed as the test</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Simple wrapper helper function to register test with the qunitRunner</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">var registerTest = function (name, test) {
         global.QUnitRunner.registerTest(name, test);
-    };
-
-    var QUnitRunner = function () {};
-
-    QUnitRunner.prototype.setupTests = function () {
+    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="QUnitRunner">QUnitRunner</h1><h5 class="subheader"><div class="label radius ctx-type">function</div>QUnitRunner()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@return: </span><span class="types">{Object}</span><span class="description">QUnitRunner instance.</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Constructor</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">var QUnitRunner = function () {};</code></pre></div></div></div></article><article class="comment"><header><h1 id="setupTests">setupTests</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>QUnitRunner.prototype.setupTests()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@memberOf: </span><span class="parent">QUnitRunner</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Prepare tests base on the config.json file on the root of the test folder<br />it should have the global tests associated to it as well as page specific tests.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">QUnitRunner.prototype.setupTests = function () {
 
         // global tests
         var globalTests = this.config.globalTests || [];
@@ -292,9 +294,7 @@ code {
             this.pages.push(page);
         }
 
-    };
-
-    QUnitRunner.prototype.addTest = function (src) {
+    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="addTest">addTest</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>QUnitRunner.prototype.addTest()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@memberOf: </span><span class="parent">QUnitRunner</span></li><li class="tag"><span class="type">@param: </span><span class="types">{String}</span><span class="name">src</span><span class="description">path to the test</span></li><li class="tag"><span class="type">@return: </span><span class="types">{Object}</span><span class="description">QUnitRunnerTest instace</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Simple wrapper function to register test with the qunitRunner.<br />Returns a QUnitRunnerTest instance.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">QUnitRunner.prototype.addTest = function (src) {
         var test = this.tests[src] = new QUnitRunnerTest({
             src: src
         }, this);
@@ -302,17 +302,13 @@ code {
         this.testsToLoad.push(test);
 
         return test;
-    };
-
-    QUnitRunner.prototype.getTest = function (src) {
+    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="getTest">getTest</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>QUnitRunner.prototype.getTest()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@memberOf: </span><span class="parent">QUnitRunner</span></li><li class="tag"><span class="type">@param: </span><span class="types">{String}</span><span class="name">src</span><span class="description">path to the test</span></li><li class="tag"><span class="type">@return: </span><span class="types">{Object}</span><span class="description">QUnitRunnerTest instace</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Gets the test related to the src or create a new test if it doesnt exist one.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">QUnitRunner.prototype.getTest = function (src) {
 
         // return test or create one
         var test = this.tests[src] || this.addTest(src);
 
         return test;
-    };
-
-    QUnitRunner.prototype.loadNextTest = function () {
+    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="loadNextTest">loadNextTest</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>QUnitRunner.prototype.loadNextTest()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@memberOf: </span><span class="parent">QUnitRunner</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Loads current test and all its actions or finish testing.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">QUnitRunner.prototype.loadNextTest = function () {
 
         var self = this,
             currentTest = this.loadingCurrentTest = this.testsToLoad.shift(),
@@ -327,305 +323,25 @@ code {
 
         // load test or finish tests execution
         lookUp[currentTest ? &quot;loadTest&quot; : &quot;finishTesting&quot;]();
-    };
-
-    QUnitRunner.prototype.registerTest = function (name, test) {
+    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="registerTest">registerTest</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>QUnitRunner.prototype.registerTest()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{String}</span><span class="name">name</span><span class="description">name of the test</span></li><li class="tag"><span class="type">@param: </span><span class="types">{Function}</span><span class="name">test</span><span class="description">function to be executed as the test</span></li><li class="tag"><span class="type">@memberOf: </span><span class="parent">QUnitRunner</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Adds name and function to testcase than get next one.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">QUnitRunner.prototype.registerTest = function (name, test) {
         this.loadingCurrentTest.test = test;
         this.loadingCurrentTest.name = name;
 
         this.loadNextTest();
-    };
-
-    QUnitRunner.prototype.loadTestsDone = function () {
+    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="loadTestsDone">loadTestsDone</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>QUnitRunner.prototype.loadTestsDone()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@memberOf: </span><span class="parent">QUnitRunner</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>When all tests finish loading runner is ready to start.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">QUnitRunner.prototype.loadTestsDone = function () {
         this.startTests();
-    };
-
-    QUnitRunner.prototype.startTests = function () {
+    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="startTests">startTests</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>QUnitRunner.prototype.startTests()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@memberOf: </span><span class="parent">QUnitRunner</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Start QUnit than load each test from the beggining, until all is finished.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">QUnitRunner.prototype.startTests = function () {
 
         QUnit.start();
         this.currentPage = this.pages.shift();
         this.nextPageTest();
-    };
-
-    QUnitRunner.prototype.nextPageTest = function () {
+    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="nextPageTest">nextPageTest</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>QUnitRunner.prototype.nextPageTest()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@memberOf: </span><span class="parent">QUnitRunner</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Loads next test and assign currentTest to the new loaded test.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">QUnitRunner.prototype.nextPageTest = function () {
         if (this.currentPage &amp;&amp; !this.currentPage.runNextTest()) {
             // move to next page and run
             this.currentPage = this.pages.shift();
             this.nextPageTest();
         }
-    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="QUnitRunnerPage">QUnitRunnerPage</h1><h5 class="subheader"><div class="label radius ctx-type">function</div>QUnitRunnerPage()</h5></header><ul class="no-bullet tags"></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><hr />
-
-<p>QUnitRunnerPage</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">var QUnitRunnerPage = function (config, runner) {
-        config = config || {};
-
-        __extends(this, config);
-        this.source = &quot;&quot;;
-        this.tests = [];
-        this.currentTest = -1;
-        this.runner = runner;
-    };
-
-    QUnitRunnerPage.prototype.loadSource = function (callback) {
-        if (this.source !== &quot;&quot;) {
-            callback();
-            return;
-        }
-
-        var self = this;
-        this.runner.jQuery.get(this.url)
-            .success(function (data) {
-                self.source = data;
-                callback();
-            })
-            .error(function () {
-                callback();
-            });
-    };
-
-    QUnitRunnerPage.prototype.runNextTest = function (callback) {
-        var testSpec = this.tests.shift(),
-            ret;
-
-        if (testSpec) {
-            var pageTest = new QUnitRunnerPageTest({}, this.runner);
-
-            pageTest.testSpec = testSpec;
-            pageTest.runner = this.runner;
-            pageTest.page = this;
-            pageTest.window = pageTest.workspace = this.runner.workspace;
-            pageTest.$ = this.runner.workspace.jQuery;
-            pageTest.runTest();
-
-            ret = true;
-        } else {
-
-            ret = false;
-        }
-
-        return ret;
-    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="QUnitRunnerTest">QUnitRunnerTest</h1><h5 class="subheader"><div class="label radius ctx-type">function</div>QUnitRunnerTest()</h5></header><ul class="no-bullet tags"></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><hr />
-
-<p>QUnitRunnerTest</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">var QUnitRunnerTest = function (config, runner) {
-        config = config || {};
-
-        __extends(this, config);
-        this.runner = runner;
-    };
-
-    QUnitRunnerTest.prototype.load = function (callback) {
-        this.addTestScript(&quot;&quot;, this.src);
-    };
-
-    QUnitRunnerTest.prototype.addTestScript = function (id, src) {
-        src = this.runner.testsUrl + src;
-        var d = document;
-        var js, ref = d.getElementsByTagName('script')[0];
-        //if (d.getElementById(id)) {return;}
-        js = d.createElement('script');
-        //js.id = id;
-        js.async = true;
-        js.src = src;
-        ref.parentNode.insertBefore(js, ref);
-    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="QUnitRunnerPageTest">QUnitRunnerPageTest</h1><h5 class="subheader"><div class="label radius ctx-type">function</div>QUnitRunnerPageTest()</h5></header><ul class="no-bullet tags"></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><hr />
-
-<p>QUnitRunnerPage</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">var QUnitRunnerPageTest = function (config) {
-        config = config || {};
-
-        __extends(this, config);
-
-        this.chain = [];
-    };
-
-    QUnitRunnerPageTest.prototype.runTest = function () {
-        //log('-&gt;testPageTest starting ' + this.page.url + ' with ' + this.testSpec.name);
-
-        var self = this;
-
-        QUnit.module('testing ' + this.page.url + ' with ' + this.testSpec.name);
-
-        if (this.test.test instanceof Function) {
-            // test is run on page load
-            this.config.jQuery('#workspace').on('load', function () {
-                self.testSpec.test.call(self, self.workspace.jQuery, 0);
-            });
-        } else {
-            var loadCount = 0;
-            if (this.testSpec.test.setup) {
-                this.testSpec.test.setup.call(this);
-            }
-            if (this.testSpec.test.load) {
-                self.testSpec.test.load.call(self, self.workspace.jQuery);
-            }
-        }
-
-    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="start">start</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>QUnitRunnerPageTest.prototype.start()</h5></header><ul class="no-bullet tags"></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>QUnitRunnerPageTest chain control methods</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">QUnitRunnerPageTest.prototype.start = function () {
-        //log('-&gt;testPageTest  ' + this.page.url + ':' + this.testSpec.name + &quot; start &quot; + this.chain.length);
-        this._next();
-        return this; // chainable
-    };
-
-
-    QUnitRunnerPageTest.prototype._next = function () {
-        //log('-&gt;testPageTest  ' + this.page.url + ':' + this.testSpec.name + &quot; _next&quot;);
-        var fn = this.chain.shift();
-        if (fn) {
-            fn.call(this);
-        } else {
-            //log('-&gt;testPageTest complete ' + this.page.url + ' with ' + this.testSpec.name);
-            this.runner.nextPageTest();
-        }
-    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="env">env</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>QUnitRunnerPageTest.prototype.env()</h5></header><ul class="no-bullet tags"></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>QUnitRunnerPageTest utility methods - these are not chainable!</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">QUnitRunnerPageTest.prototype.env = function () {
-        var envs = this.runner.config.envs;
-        var env = &quot;notfound&quot;;
-        var that = this;
-
-        this.runner.jQuery.each(envs, function (envKey, value) {
-            var envTests = envs[envKey];
-
-            that.runner.jQuery.each(envTests, function (key, value) {
-                if (that.runner.workspace.location.href.indexOf(
-                    value) &gt;= 0) {
-                    env = envKey;
-                    return false;
-                }
-            });
-
-            if (env !== &quot;notfound&quot;) {
-                return false;
-            }
-        });
-
-        return env;
-    };
-
-    QUnitRunnerPageTest.prototype.config = function () {
-        return this.runner.config;
-    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="loadPageSource">loadPageSource</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>QUnitRunnerPageTest.prototype.loadPageSource()</h5></header><ul class="no-bullet tags"></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>QUnitRunnerPageTest methods - these are all chainable</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">QUnitRunnerPageTest.prototype.loadPageSource = function () {
-        var self = this;
-        var fn = function () {
-            self.page.loadSource(function () {
-                self._next();
-            });
-        };
-
-        this.chain.push(fn);
-
-        return this; // chainable
-    };
-
-    QUnitRunnerPageTest.prototype.loadPage = function (url) {
-        url = url || this.page.url;
-
-        var self = this;
-        var onloadFn = function () {
-            self._next();
-            self.runner.jQuery('#workspace').off('load', onloadFn);
-        };
-        var fn = function () {
-            self.runner.jQuery('#workspace').on('load', onloadFn);
-            self.runner.jQuery('#workspace').attr('src', url);
-        };
-
-        this.chain.push(fn);
-
-        return this; // chainable
-    };
-
-    QUnitRunnerPageTest.prototype.waitForPageLoad = function () {
-        var self = this;
-        var loadFn = function () {
-            self._next();
-            self.runner.jQuery('#workspace').off('load', loadFn);
-        };
-        var fn = function () {
-            self.runner.jQuery('#workspace').on('load', loadFn);
-
-            // TODO - add timeout ...
-        };
-
-        this.chain.push(fn);
-
-        return this; // chainable
-    };
-
-    QUnitRunnerPageTest.prototype.run = function (runFN) {
-        var self = this;
-        var fn = function () {
-            runFN.call(self, self.workspace.jQuery);
-            self._next();
-        };
-
-        this.chain.push(fn);
-
-        return this; // chainable
-    };
-
-    QUnitRunnerPageTest.prototype.asyncRun = function (runFN) {
-        var self = this;
-        var fn = function () {
-            // must call this.asyncRunDone() to continue the chain
-            runFN.call(self, self.workspace.jQuery);
-        };
-
-        this.chain.push(fn);
-
-        return this; // chainable
-    };
-
-    QUnitRunnerPageTest.prototype.asyncRunDone = function () {
-        this._next();
-    };
-
-    QUnitRunnerPageTest.prototype.test = function (name, testFN) {
-        var self = this;
-        var fn = function () {
-            test(name, function () {
-                testFN.call(self, self.workspace.jQuery);
-            });
-            QUnit.start();
-            self._next();
-        };
-
-        this.chain.push(fn);
-
-        return this; // chainable
-    };
-
-    QUnitRunnerPageTest.prototype.wait = function (duration) {
-        var self = this;
-        duration = duration || 1000;
-
-        var fn = function () {
-            setTimeout(function () {
-                this._next();
-            }, duration);
-        };
-
-        this.chain.push(fn);
-
-        return this; // chainable
-    };
-
-    QUnitRunnerPageTest.prototype.asyncTest = function (name, testFN) {
-        var self = this;
-        var fn = function () {
-            asyncTest(name, function () {
-                testFN.call(self, self.workspace.jQuery);
-            });
-        };
-
-        this.chain.push(fn);
-
-        return this; // chainable
-    };
-
-    QUnitRunnerPageTest.prototype.asyncTestDone = function () {
-        var self = this;
-        QUnit.start();
-        self._next();
-    };
-
-    QUnitRunner.prototype.start = function (settings) {
+    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="start">start</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>QUnitRunner.prototype.start()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{Object}</span><span class="name">settings</span><span class="description">startup settings passed usually by config.json file</span></li><li class="tag"><span class="type">@memberOf: </span><span class="parent">QUnitRunner</span></li><li class="tag"><span class="type">@return: </span><span class="types">{Object}</span><span class="description">context for chaining</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Method to be called by tests running asyncTest once they are finished running.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">QUnitRunner.prototype.start = function (settings) {
 
         this.config = {
             testsDir: '/tests/', // requires leading and trailing slash or just '/' if root of server
@@ -648,9 +364,254 @@ code {
         this.loadNextTest();
 
         return this;
+    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="QUnitRunnerPage">QUnitRunnerPage</h1><h5 class="subheader"><div class="label radius ctx-type">function</div>QUnitRunnerPage()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{Object}</span><span class="name">config</span><span class="description">configuration to be injected</span></li><li class="tag"><span class="type">@param: </span><span class="types">{Object}</span><span class="name">runner</span><span class="description">runner reference to be injected</span></li><li class="tag"><span class="type">@return: </span><span class="types">{Object}</span><span class="description">QUnitRunnerPage instance.</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Constructor</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">var QUnitRunnerPage = function (config, runner) {
+        config = config || {};
+
+        __extends(this, config);
+        this.source = &quot;&quot;;
+        this.tests = [];
+        this.currentTest = -1;
+        this.runner = runner;
+    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="loadSource">loadSource</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>QUnitRunnerPage.prototype.loadSource()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{Function}</span><span class="name">callback</span><span class="description">callback when page is succesfuly loaded</span></li><li class="tag"><span class="type">@memberOf: </span><span class="parent">QUnitRunnerPage</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Call a callback function after the current page is loaded by the runner.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">QUnitRunnerPage.prototype.loadSource = function (callback) {
+        if (this.source !== &quot;&quot;) {
+            callback();
+            return;
+        }
+
+        var self = this;
+        this.runner.jQuery.get(this.url)
+            .success(function (data) {
+                self.source = data;
+                callback();
+            })
+            .error(function () {
+                callback();
+            });
+    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="runNextTest">runNextTest</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>QUnitRunnerPage.prototype.runNextTest()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{Function}</span><span class="name">callback</span><span class="description">callback when page is succesfuly loaded</span></li><li class="tag"><span class="type">@memberOf: </span><span class="parent">QUnitRunnerPage</span></li><li class="tag"><span class="type">@return: </span><span class="types">{Bool}</span><span class="description">a test has been run</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Run following tests and returns a boolen if a test has been runned.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">QUnitRunnerPage.prototype.runNextTest = function (callback) {
+        var testSpec = this.tests.shift(),
+            ret;
+
+        if (testSpec) {
+            var pageTest = new QUnitRunnerPageTest({}, this.runner);
+
+            pageTest.testSpec = testSpec;
+            pageTest.runner = this.runner;
+            pageTest.page = this;
+            pageTest.window = pageTest.workspace = this.runner.workspace;
+            pageTest.$ = this.runner.workspace.jQuery;
+            pageTest.runTest();
+
+            ret = true;
+        } else {
+
+            ret = false;
+        }
+
+        callback(ret);
+
+        return ret;
+    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="QUnitRunnerTest">QUnitRunnerTest</h1><h5 class="subheader"><div class="label radius ctx-type">function</div>QUnitRunnerTest()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{Object}</span><span class="name">config</span><span class="description">configuration to be injected</span></li><li class="tag"><span class="type">@param: </span><span class="types">{Object}</span><span class="name">runner</span><span class="description">runner reference to be injected</span></li><li class="tag"><span class="type">@return: </span><span class="types">{Object}</span><span class="description">QUnitRunnerPage instance.</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Constructor</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">var QUnitRunnerTest = function (config, runner) {
+        config = config || {};
+
+        __extends(this, config);
+        this.runner = runner;
+    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="load">load</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>QUnitRunnerTest.prototype.load()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@memberOf: </span><span class="parent">QUnitRunnerTest</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Load script</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">QUnitRunnerTest.prototype.load = function () {
+        this.addTestScript(&quot;&quot;, this.src);
+    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="addTestScript">addTestScript</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>QUnitRunnerTest.prototype.addTestScript()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{Obect}</span><span class="name">id</span><span class="description">script id</span></li><li class="tag"><span class="type">@param: </span><span class="types">{String}</span><span class="name">src</span><span class="description">path to the script be loaded.</span></li><li class="tag"><span class="type">@memberOf: </span><span class="parent">QUnitRunnerTest</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>create a script and add it do the dom if there is not one already with same id.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">QUnitRunnerTest.prototype.addTestScript = function (id, src) {
+        src = this.runner.testsUrl + src;
+        var d = document;
+        var js, ref = d.getElementsByTagName('script')[0];
+        //if (d.getElementById(id)) {return;}
+        js = d.createElement('script');
+        //js.id = id;
+        js.async = true;
+        js.src = src;
+        ref.parentNode.insertBefore(js, ref);
+    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="QUnitRunnerPageTest">QUnitRunnerPageTest</h1><h5 class="subheader"><div class="label radius ctx-type">function</div>QUnitRunnerPageTest()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{Object}</span><span class="name">config</span><span class="description">configuration to be injected</span></li><li class="tag"><span class="type">@return: </span><span class="types">{Object}</span><span class="description">QUnitRunnerPageTest instance.</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Constructor</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">var QUnitRunnerPageTest = function (config) {
+        config = config || {};
+
+        __extends(this, config);
+
+        this.chain = [];
+    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="runTest">runTest</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>QUnitRunnerPageTest.prototype.runTest()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@memberOf: </span><span class="parent">QUnitRunnerPageTest</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Run tests for the related page.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">QUnitRunnerPageTest.prototype.runTest = function () {
+
+        var self = this;
+
+        QUnit.module('testing ' + this.page.url + ' with ' + this.testSpec.name);
+
+        if (this.test.test instanceof Function) {
+            // test is run on page load
+            this.config.jQuery('#workspace')
+                .on('load', function () {
+                    self.testSpec.test.call(self, self.workspace.jQuery,
+                        0);
+                });
+        } else {
+            var loadCount = 0;
+            if (this.testSpec.test.setup) {
+                this.testSpec.test.setup.call(this);
+            }
+            if (this.testSpec.test.load) {
+                self.testSpec.test.load.call(self, self.workspace.jQuery);
+            }
+        }
+
+    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="start">start</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>QUnitRunnerPageTest.prototype.start()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@memberOf: </span><span class="parent">QUnitRunnerPageTest</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>QUnitRunnerPageTest chain control methods</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">QUnitRunnerPageTest.prototype.start = function () {
+        this._next();
+        return this; // chainable
+    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="_next">_next</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>QUnitRunnerPageTest.prototype._next()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@memberOf: </span><span class="parent">QUnitRunnerPageTest</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>This is the method responsible for handle chaining. It will call all methods for the current page until<br />there is no more left than it will call the next page.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">QUnitRunnerPageTest.prototype._next = function () {
+
+        var self = this,
+            pageActions = this.chain.shift(),
+            lookUp = {
+                callCurrentPageAction: function () {
+                    pageActions.call(self);
+                },
+                callNextPage: function () {
+                    self.runner.nextPageTest();
+                }
+            };
+
+        lookUp[pageActions ? &quot;callCurrentPageAction&quot; : &quot;callNextPage&quot;]();
+    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="env">env</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>QUnitRunnerPageTest.prototype.env()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@return: </span><span class="types">{String}</span><span class="description">environment string</span></li><li class="tag"><span class="type">@memberOf: </span><span class="parent">QUnitRunnerPageTest</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Returns the current environment - based on the url of the current page.</p>
+
+<p>Example:<br />         QUnitRunnerPageTest.env();<br />         // => 'staging'</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">QUnitRunnerPageTest.prototype.env = function () {
+        var envs = this.runner.config.envs;
+        var env = &quot;notfound&quot;;
+        var that = this;
+
+        this.runner.jQuery.each(envs, function (envKey, value) {
+            var envTests = envs[envKey];
+
+            that.runner.jQuery.each(envTests, function (key, value) {
+                if (that.runner.workspace.location.href.indexOf(
+                    value) &gt;= 0) {
+                    env = envKey;
+                    return false;
+                }
+            });
+
+            if (env !== &quot;notfound&quot;) {
+                return false;
+            }
+        });
+
+        return env;
+    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="config">config</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>QUnitRunnerPageTest.prototype.config()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@return: </span><span class="types">{Object}</span><span class="description"></span></li><li class="tag"><span class="type">@memberOf: </span><span class="parent">QUnitRunnerPageTest</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Returns the configuration used by the runner.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">QUnitRunnerPageTest.prototype.config = function () {
+        return this.runner.config;
+    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="loadPageSource">loadPageSource</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>QUnitRunnerPageTest.prototype.loadPageSource()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@return: </span><span class="types">{Object}</span><span class="description">context for chaining</span></li><li class="tag"><span class="type">@memberOf: </span><span class="parent">QUnitRunnerPageTest</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Loads the source of a page (via AJAX) into this.page.source. Waits until the source is loaded before moving to the next<br />chain action. If you are performing test on the page source this will normally be the first call in the test chain.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">QUnitRunnerPageTest.prototype.loadPageSource = function () {
+        var self = this;
+        var fn = function () {
+            self.page.loadSource(function () {
+                self._next();
+            });
+        };
+
+        this.chain.push(fn);
+
+        return this; // chainable
+    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="loadPage">loadPage</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>QUnitRunnerPageTest.prototype.loadPage()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@return: </span><span class="types">{Object}</span><span class="description">context for chaining</span></li><li class="tag"><span class="type">@param: </span><span class="types">{String}</span><span class="name">url</span><span class="description">load content from url on the workspace</span></li><li class="tag"><span class="type">@memberOf: </span><span class="parent">QUnitRunnerPageTest</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Loads a page into the iframe, also waits until page is loaded before moving to the next action in the chain. If you are<br />performing tests on an actual page, this will normally be the first call in a test chain.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">QUnitRunnerPageTest.prototype.loadPage = function (url) {
+        url = url || this.page.url;
+
+        var self = this;
+        var onloadFn = function () {
+            self._next();
+            self.runner.jQuery('#workspace')
+                .off('load', onloadFn);
+        };
+        var fn = function () {
+            self.runner.jQuery('#workspace')
+                .on('load', onloadFn);
+            self.runner.jQuery('#workspace')
+                .attr('src', url);
+        };
+
+        this.chain.push(fn);
+
+        return this; // chainable
+    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="waitForPageLoad">waitForPageLoad</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>QUnitRunnerPageTest.prototype.waitForPageLoad()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@return: </span><span class="types">{Object}</span><span class="description">context for chaining</span></li><li class="tag"><span class="type">@memberOf: </span><span class="parent">QUnitRunnerPageTest</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Pause the chain until a page load takes place. Should be used to wait if a form is submitted or a link click is<br />triggered. Once the page load is complete it'll move to the next chain action.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">QUnitRunnerPageTest.prototype.waitForPageLoad = function () {
+        var self = this;
+        var loadFn = function () {
+            self._next();
+            self.runner.jQuery('#workspace')
+                .off('load', loadFn);
+        };
+        var fn = function () {
+            self.runner.jQuery('#workspace')
+                .on('load', loadFn);
+
+            // TODO - add timeout ...
+        };
+
+        this.chain.push(fn);
+
+        return this; // chainable
+    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="run">run</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>QUnitRunnerPageTest.prototype.run()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{Function}</span><span class="name">runFN</span><span class="description">function to that will be called on a certain workspace using 'QUnitRunnerPageTest' as context.</span></li><li class="tag"><span class="type">@return: </span><span class="types">{Object}</span><span class="description">context for chaining</span></li><li class="tag"><span class="type">@memberOf: </span><span class="parent">QUnitRunnerPageTest</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Runs arbitrary js code on the page, such as submitting a for, then moves to the next chain action.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">QUnitRunnerPageTest.prototype.run = function (runFN) {
+        var self = this;
+        var fn = function () {
+            runFN.call(self, self.workspace.jQuery);
+            self._next();
+        };
+
+        this.chain.push(fn);
+
+        return this; // chainable
+    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="asyncRun">asyncRun</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>QUnitRunnerPageTest.prototype.asyncRun()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{Function}</span><span class="name">runFN</span><span class="description">function to that will be called on a certain workspace using 'QUnitRunnerPageTest' as context.</span></li><li class="tag"><span class="type">@return: </span><span class="types">{Object}</span><span class="description">context for chaining</span></li><li class="tag"><span class="type">@memberOf: </span><span class="parent">QUnitRunnerPageTest</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Runs an asynchronous task. Must call this.asyncRunDone when the task is complete. Only then will the next chain<br />action be called.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">QUnitRunnerPageTest.prototype.asyncRun = function (runFN) {
+        var self = this;
+        var fn = function () {
+            // must call this.asyncRunDone() to continue the chain
+            runFN.call(self, self.workspace.jQuery);
+        };
+
+        this.chain.push(fn);
+
+        return this; // chainable
+    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="asyncRunDone">asyncRunDone</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>QUnitRunnerPageTest.prototype.asyncRunDone()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@memberOf: </span><span class="parent">QUnitRunnerPageTest</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Method to be called by tests running asyncRun once they are finished running.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">QUnitRunnerPageTest.prototype.asyncRunDone = function () {
+        this._next();
+    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="test">test</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>QUnitRunnerPageTest.prototype.test()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{String}</span><span class="name">name</span><span class="description">name of the test to be run.</span></li><li class="tag"><span class="type">@param: </span><span class="types">{Function}</span><span class="name">testFN</span><span class="description">function to be tested.</span></li><li class="tag"><span class="type">@memberOf: </span><span class="parent">QUnitRunnerPageTest</span></li><li class="tag"><span class="type">@return: </span><span class="types">{Object}</span><span class="description">context for chaining</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Method to be called by tests running asyncRun once they are finished running.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">QUnitRunnerPageTest.prototype.test = function (name, testFN) {
+        var self = this;
+        var fn = function () {
+            test(name, function () {
+                testFN.call(self, self.workspace.jQuery);
+            });
+            self._next();
+        };
+
+        this.chain.push(fn);
+
+        return this; // chainable
+    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="wait">wait</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>QUnitRunnerPageTest.prototype.wait()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{Int}</span><span class="name">duration</span><span class="description">duration in milliseconds to delay next action execution</span></li><li class="tag"><span class="type">@memberOf: </span><span class="parent">QUnitRunnerPageTest</span></li><li class="tag"><span class="type">@return: </span><span class="types">{Object}</span><span class="description">context for chaining</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Pause execution of the next chainable method for duration time.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">QUnitRunnerPageTest.prototype.wait = function (duration) {
+        var self = this;
+        duration = duration || 1000;
+
+        var fn = function () {
+            setTimeout(function () {
+                this._next();
+            }, duration);
+        };
+
+        this.chain.push(fn);
+
+        return this; // chainable
+    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="asyncTest">asyncTest</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>QUnitRunnerPageTest.prototype.asyncTest()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{String}</span><span class="name">name</span><span class="description">name of the test to be run.</span></li><li class="tag"><span class="type">@param: </span><span class="types">{Function}</span><span class="name">testFN</span><span class="description">function to be tested.</span></li><li class="tag"><span class="type">@memberOf: </span><span class="parent">QUnitRunnerPageTest</span></li><li class="tag"><span class="type">@return: </span><span class="types">{Object}</span><span class="description">context for chaining</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Runs an asynchronous QUint test. Must call this.asyncTestDone when the test is complete. Only then will the next chain<br />action be called.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">QUnitRunnerPageTest.prototype.asyncTest = function (name, testFN) {
+        var self = this;
+        var fn = function () {
+            asyncTest(name, function () {
+                testFN.call(self, self.workspace.jQuery);
+            });
+        };
+
+        this.chain.push(fn);
+
+        return this; // chainable
+    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="asyncTestDone">asyncTestDone</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>QUnitRunnerPageTest.prototype.asyncTestDone()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@memberOf: </span><span class="parent">QUnitRunnerPageTest</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Method to be called by tests running asyncTest once they are finished running.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">QUnitRunnerPageTest.prototype.asyncTestDone = function () {
+        var self = this;
+        QUnit.start();
+        self._next();
     };
 
     // pollute the global namespace
+    // TODO: do we need to polute the namespace with this things here ??? If not remove this.
     global.QUnitRunnerPageTest = QUnitRunnerPageTest;
     global.log = log;
     global.registerTest = registerTest;
@@ -658,10 +619,11 @@ code {
     // create our singleton / factory
     global.QUnitRunner = new QUnitRunner();
 
-
+    // TODO: create a nicer method to wrap this startup
     // start runner with json config file
     $$(function () {
 
+        // read configuration from a file called 'config.json'
         $$.getJSON('config.json', function (data) {
 
             global.QUnitRunner.start($$.extend({}, {
