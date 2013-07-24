@@ -1,8 +1,10 @@
-/*globals QUnit, test, asyncTest
- */
+/*globals QUnit, test, asyncTest */ 
 
 (function(global) {
 
+    global.QUnit.config.autostart = false;
+    
+    var $$ = global.$$ = global.jQuery.noConflict(true);
 
     var utils = {
             log: function(s) {
@@ -481,4 +483,22 @@
 
     // create our singleton / factory
     global.QUnitRunner = new QUnitRunner();
+
+
+    // start runner with json config file
+    $$(function() {
+
+      $$.getJSON('config.json', function(data) {
+
+        global.QUnitRunner.start($$.extend({}, {
+            workspace:window.frames[0],
+            jQuery:$$
+        }, data));
+      })
+      .fail(function() {
+        global.alert("Failed to load config.json, please make sure this file exist and it is correctly formatted.");
+      });
+
+   });
+
 }(this));

@@ -23,11 +23,16 @@
     "test": "grunt test"
   },
   "devDependencies": {
-      "grunt-contrib-jshint": "~0.1.1",
-      "grunt-contrib-concat": "~0.1.2",
-      "grunt-contrib-uglify": "~0.1.1",
-      "grunt-contrib-clean": "~0.4.0",
-      "grunt": "~0.4.0"
+    "grunt": "~0.4.1",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-jsbeautifier": "~0.1.10",
+    "grunt-contrib-uglify": "~0.2.2",
+    "grunt-contrib-watch": "~0.5.1",
+    "grunt-contrib-jshint": "~0.6.0",
+    "grunt-dox": "~0.5.0",
+    "grunt-contrib-nodeunit": "~0.2.0",
+    "grunt-bowerful": "~0.3.0",
+    "grunt-reload": "~0.2.0"
   },
   "keywords": []
 }
