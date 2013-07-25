@@ -4,9 +4,9 @@
     /**
      * Utility helpers.
      *
-     *   * `log` Function - wrapper to allow logs to be output without causing browser error
-     *   * `__hasProp` Function - checking for properties that are not part of prototype
      *   * `__extends` Function - extending object and adding constructor reference
+     *   * `log` Function - Wrapper on console.log to avoid undefined errors.
+     *   * `registerTest` Function - wrapper to allow test suites to be created
      *
      * @api public
      */
@@ -43,7 +43,6 @@
 
     // poluting namespace
     // TODO: maybe get rid of this and just add UTILS to
-
     global.log = log;
     global.registerTest = registerTest;
 
