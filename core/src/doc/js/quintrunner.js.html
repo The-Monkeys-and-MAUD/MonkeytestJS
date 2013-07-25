@@ -389,7 +389,8 @@ code {
             });
     };</code></pre></div></div></div></article><article class="comment"><header><h1 id="runNextTest">runNextTest</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>QUnitRunnerPage.prototype.runNextTest()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{Function}</span><span class="name">callback</span><span class="description">callback when page is succesfuly loaded</span></li><li class="tag"><span class="type">@memberOf: </span><span class="parent">QUnitRunnerPage</span></li><li class="tag"><span class="type">@return: </span><span class="types">{Bool}</span><span class="description">a test has been run</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Run following tests and returns a boolen if a test has been runned.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">QUnitRunnerPage.prototype.runNextTest = function (callback) {
         var testSpec = this.tests.shift(),
-            ret;
+            cb = callback || function () {},
+            ret = false;
 
         if (testSpec) {
             var pageTest = new QUnitRunnerPageTest({}, this.runner);
@@ -402,12 +403,9 @@ code {
             pageTest.runTest();
 
             ret = true;
-        } else {
-
-            ret = false;
         }
 
-        callback(ret);
+        cb(ret);
 
         return ret;
     };</code></pre></div></div></div></article><article class="comment"><header><h1 id="QUnitRunnerTest">QUnitRunnerTest</h1><h5 class="subheader"><div class="label radius ctx-type">function</div>QUnitRunnerTest()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{Object}</span><span class="name">config</span><span class="description">configuration to be injected</span></li><li class="tag"><span class="type">@param: </span><span class="types">{Object}</span><span class="name">runner</span><span class="description">runner reference to be injected</span></li><li class="tag"><span class="type">@return: </span><span class="types">{Object}</span><span class="description">QUnitRunnerPage instance.</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Constructor</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">var QUnitRunnerTest = function (config, runner) {

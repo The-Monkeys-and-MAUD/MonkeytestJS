@@ -308,7 +308,8 @@
      */
     QUnitRunnerPage.prototype.runNextTest = function (callback) {
         var testSpec = this.tests.shift(),
-            ret;
+            cb = callback || function () {},
+            ret = false;
 
         if (testSpec) {
             var pageTest = new QUnitRunnerPageTest({}, this.runner);
@@ -321,12 +322,9 @@
             pageTest.runTest();
 
             ret = true;
-        } else {
-
-            ret = false;
         }
 
-        callback(ret);
+        cb(ret);
 
         return ret;
     };
