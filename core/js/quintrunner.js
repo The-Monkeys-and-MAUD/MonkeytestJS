@@ -1,68 +1,13 @@
 /* globals QUnit, test, asyncTest */
 (function (global) {
 
-    // block QUnit to try autostart without being ready
-    global.QUnit.config.autostart = false;
-
-    // jquery no conflict 
-    var $$ = global.$$ = global.jQuery.noConflict(true);
-
-    /**
-     * Utility helpers.
-     *
-     *   * `log` Function - wrapper to allow logs to be output without causing browser error
-     *   * `__hasProp` Function - checking for properties that are not part of prototype
-     *   * `__extends` Function - extending object and adding constructor reference
-     *
-     * @api public
-     */
-    var UTILS = {
-        log: function (s) {
-            if (global.console) {
-                console.log(s);
-            }
-        },
-        __hasProp: Object.prototype.hasOwnProperty,
-        __extends: function (child, parent) {
-            for (var key in parent) {
-                if (__hasProp.call(parent, key)) {
-                    child[key] = parent[key];
-                }
-            }
-
-            function CTor() {
-                this.constructor = child;
-            }
-            if (parent.prototype) {
-                CTor.prototype = parent.prototype;
-                child.prototype = new CTor();
-                child.__super__ = parent.prototype;
-            }
-            return child;
-        }
-    },
-        log = UTILS.log,
-        __hasProp = UTILS.__hasProp,
-        __extends = UTILS.__extends;
-
-    /**
-     * Simple wrapper helper function to register test with the qunitRunner
-     *
-     * @param {String} name name of the test
-     * @param {Function} test function to be executed as the test
-     * @api public
-     */
-    var registerTest = function (name, test) {
-        global.QUnitRunner.registerTest(name, test);
-    };
-
     /**
      * Constructor
      *
      * @return {Object} QUnitRunner instance.
      * @api public
      */
-    var QUnitRunner = function () {};
+    var QUnitRunner = global.QUnitRunnerClass = function () {};
 
     /**
      * Prepare tests base on the config.json file on the root of the test folder
@@ -88,7 +33,7 @@
         // also loads tests and adds them to this.testToLoad
         for (var i = 0, lenI = this.config.pages.length; i < lenI; i++) {
 
-            var page = new QUnitRunnerPage(this.config.pages[i]),
+            var page = new global.QUnitRunnerPage(this.config.pages[i]),
                 pageTests = this.config.pages[i].tests || [];
 
             // store runner reference
@@ -123,7 +68,7 @@
      * @api public
      */
     QUnitRunner.prototype.addTest = function (src) {
-        var test = this.tests[src] = new QUnitRunnerTest({
+        var test = this.tests[src] = new global.QUnitRunnerTest({
             src: src
         }, this);
 
@@ -239,7 +184,7 @@
             globalTests: []
         };
 
-        __extends(this.config, settings || {});
+        global.Utils.__extends(this.config, settings || {});
 
         // test specs
         this.testsUrl = /^[^\/]+:\/\/[^\/]+\//.exec(location.href)[0] +
@@ -256,6 +201,11 @@
         return this;
     };
 
+}(this));
+
+/* globals QUnit, test, asyncTest */
+(function (global) {
+
     /**
      * Constructor
      *
@@ -264,10 +214,10 @@
      * @return {Object} QUnitRunnerPage instance.
      * @api public
      */
-    var QUnitRunnerPage = function (config, runner) {
+    var QUnitRunnerPage = global.QUnitRunnerPage = function (config, runner) {
         config = config || {};
 
-        __extends(this, config);
+        global.Utils.__extends(this, config);
         this.source = "";
         this.tests = [];
         this.currentTest = -1;
@@ -312,7 +262,7 @@
             ret = false;
 
         if (testSpec) {
-            var pageTest = new QUnitRunnerPageTest({}, this.runner);
+            var pageTest = new global.QUnitRunnerPageTest({}, this.runner);
 
             pageTest.testSpec = testSpec;
             pageTest.runner = this.runner;
@@ -329,50 +279,10 @@
         return ret;
     };
 
-    /**
-     * Constructor
-     *
-     * @param {Object} config configuration  to be injected
-     * @param {Object} runner runner reference to be injected
-     * @return {Object} QUnitRunnerPage instance.
-     * @api public
-     */
-    var QUnitRunnerTest = function (config, runner) {
-        config = config || {};
+}(this));
 
-        __extends(this, config);
-        this.runner = runner;
-    };
-
-    /**
-     * Load script
-     *
-     * @memberOf QUnitRunnerTest
-     * @api public
-     */
-    QUnitRunnerTest.prototype.load = function () {
-        this.addTestScript("", this.src);
-    };
-
-    /**
-     * create a script and add it do the dom if there is not one already with same id.
-     *
-     * @param {Obect} id script id
-     * @param {String} src path to the script be loaded.
-     * @memberOf QUnitRunnerTest
-     * @api public
-     */
-    QUnitRunnerTest.prototype.addTestScript = function (id, src) {
-        src = this.runner.testsUrl + src;
-        var d = document;
-        var js, ref = d.getElementsByTagName('script')[0];
-        //if (d.getElementById(id)) {return;}
-        js = d.createElement('script');
-        //js.id = id;
-        js.async = true;
-        js.src = src;
-        ref.parentNode.insertBefore(js, ref);
-    };
+/* globals QUnit, test, asyncTest */
+(function (global) {
 
     /**
      * Constructor
@@ -381,10 +291,10 @@
      * @return {Object} QUnitRunnerPageTest instance.
      * @api public
      */
-    var QUnitRunnerPageTest = function (config) {
+    var QUnitRunnerPageTest = global.QUnitRunnerPageTest = function (config) {
         config = config || {};
 
-        __extends(this, config);
+        global.Utils.__extends(this, config);
 
         this.chain = [];
     };
@@ -710,14 +620,167 @@
         self._next();
     };
 
-    // pollute the global namespace
-    // TODO: do we need to polute the namespace with this things here ??? If not remove this.
-    global.QUnitRunnerPageTest = QUnitRunnerPageTest;
+}(this));
+
+/* globals QUnit, test, asyncTest */
+(function (global) {
+    /**
+     * Constructor
+     *
+     * @param {Object} config configuration  to be injected
+     * @param {Object} runner runner reference to be injected
+     * @return {Object} QUnitRunnerPage instance.
+     * @api public
+     */
+    var QUnitRunnerTest = global.QUnitRunnerTest = function (config, runner) {
+        config = config || {};
+
+        global.Utils.__extends(this, config);
+        this.runner = runner;
+    };
+
+    /**
+     * Load script
+     *
+     * @memberOf QUnitRunnerTest
+     * @api public
+     */
+    QUnitRunnerTest.prototype.load = function () {
+        this.addTestScript("", this.src);
+    };
+
+    /**
+     * create a script and add it do the dom if there is not one already with same id.
+     *
+     * @param {Obect} id script id
+     * @param {String} src path to the script be loaded.
+     * @memberOf QUnitRunnerTest
+     * @api public
+     */
+    QUnitRunnerTest.prototype.addTestScript = function (id, src) {
+        src = this.runner.testsUrl + src;
+        var d = document;
+        var js, ref = d.getElementsByTagName('script')[0];
+        //if (d.getElementById(id)) {return;}
+        js = d.createElement('script');
+        //js.id = id;
+        js.async = true;
+        js.src = src;
+        ref.parentNode.insertBefore(js, ref);
+    };
+
+}(this));
+
+/* globals QUnit, test, asyncTest */
+(function (global) {
+
+    /**
+     * Utility helpers.
+     *
+     *   * `log` Function - wrapper to allow logs to be output without causing browser error
+     *   * `__hasProp` Function - checking for properties that are not part of prototype
+     *   * `__extends` Function - extending object and adding constructor reference
+     *
+     * @api public
+     */
+    var UTILS = global.Utils = {
+        log: function (s) {
+            if (global.console) {
+                console.log(s);
+            }
+        },
+        registerTest: function (name, test) {
+            global.QUnitRunner.registerTest(name, test);
+        },
+        __extends: function (child, parent) {
+            for (var key in parent) {
+                if (Object.prototype.hasOwnProperty.call(parent, key)) {
+                    child[key] = parent[key];
+                }
+            }
+
+            function CTor() {
+                this.constructor = child;
+            }
+            if (parent.prototype) {
+                CTor.prototype = parent.prototype;
+                child.prototype = new CTor();
+                child.__super__ = parent.prototype;
+            }
+            return child;
+        }
+    },
+        log = UTILS.log,
+        registerTest = UTILS.registerTest,
+        __extends = UTILS.__extends;
+
+    // poluting namespace
+    // TODO: maybe get rid of this and just add UTILS to
+
+    global.log = log;
+    global.registerTest = registerTest;
+
+}(this));
+
+/* globals QUnit, test, asyncTest */
+(function (global) {
+
+    // block QUnit to try autostart without being ready
+    global.QUnit.config.autostart = false;
+
+    // jquery no conflict 
+    var $$ = global.$$ = global.jQuery.noConflict(true);
+
+    /**
+     * Utility helpers.
+     *
+     *   * `log` Function - wrapper to allow logs to be output without causing browser error
+     *   * `__hasProp` Function - checking for properties that are not part of prototype
+     *   * `__extends` Function - extending object and adding constructor reference
+     *
+     * @api public
+     */
+    var UTILS = {
+        log: function (s) {
+            if (global.console) {
+                console.log(s);
+            }
+        },
+        registerTest: function (name, test) {
+            global.QUnitRunner.registerTest(name, test);
+        },
+        __hasProp: Object.prototype.hasOwnProperty,
+        __extends: function (child, parent) {
+            for (var key in parent) {
+                if (__hasProp.call(parent, key)) {
+                    child[key] = parent[key];
+                }
+            }
+
+            function CTor() {
+                this.constructor = child;
+            }
+            if (parent.prototype) {
+                CTor.prototype = parent.prototype;
+                child.prototype = new CTor();
+                child.__super__ = parent.prototype;
+            }
+            return child;
+        }
+    },
+        log = UTILS.log,
+        registerTest = UTILS.registerTest,
+        __hasProp = UTILS.__hasProp,
+        __extends = UTILS.__extends;
+
+    // poluting namespace
+    // TODO: maybe get rid of this and just add UTILS to
+
     global.log = log;
     global.registerTest = registerTest;
 
     // create our singleton / factory
-    global.QUnitRunner = new QUnitRunner();
+    global.QUnitRunner = new global.QUnitRunnerClass();
 
     // TODO: create a nicer method to wrap this startup
     // start runner with json config file

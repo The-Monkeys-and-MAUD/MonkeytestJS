@@ -5,7 +5,7 @@ module.exports = function (grunt) {
             '<%= grunt.template.today("yyyy-mm-dd") %> */ \n',
         concat:{
             dist:{
-                src:['js/*.js'],
+                src:['js/**/*.js', 'js/*.js'],
                 dest:'../../core/js/<%= pkg.name %>.js',
                 separator:';'
             }
