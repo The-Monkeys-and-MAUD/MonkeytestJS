@@ -1,8 +1,9 @@
 {
   "name": "quintrunner",
   "description": "QUnit RunnerAcceptanceTests",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "homepage": "https://github.com/organizations/TheMonkeys",
+  "license": "MIT",
   "author": {
     "name": "The Monkeys",
     "email": "contact@themonkeys.com.au",
@@ -20,7 +21,7 @@
     "node": "*"
   },
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
