@@ -6,9 +6,25 @@
   "license": "MIT",
   "author": {
     "name": "The Monkeys",
-    "email": "contact@themonkeys.com.au",
+    "email": "developers@themonkeys.com.au",
     "url": "http://www.themonkeys.com.au/"
   },
+  "contributors": [
+      {
+        "name": "Mitermayer Reis",
+        "email": "mitermayer.reis@gmail.com",
+        "url": "http://job.mitermayer.com/"
+      },
+      {
+        "name": "Peter Feltham",
+        "email": "peterf@themonkeys.com.au"
+      },
+      {
+        "name": "Thomas Garrood",
+        "email": "thomas@sandboxdigital.com.au",
+        "url": "http://sandboxdigital.com.au/"
+      }
+  ],
   "repository": {
     "type": "git",
     "url": "git@github.com:TheMonkeys/QUnitRunnerAcceptanceTests.git"
@@ -16,7 +32,7 @@
   "bugs": {
     "url": "https://github.com/TheMonkeys/QUnitRunnerAcceptanceTests/issues"
   },
-  "main": "js/Yellow",
+  "main": "../js/quintrunner.js",
   "engines": {
     "node": "*"
   },
