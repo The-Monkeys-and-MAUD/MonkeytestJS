@@ -82,6 +82,26 @@ module.exports = function (grunt) {
                 unescape_strings: false
             }   
         },  
+        bowerful: {
+            dist: {
+                store: 'components',
+                dest: '../js/vendor',
+                destfile: 'vendor',
+                packages: {
+                    jquery: "",
+                    qunit: ""
+                },
+                customtarget: {
+                    jquery: '../js/vendor/jquery',
+                    qunit: '../js/vendor/qunit'
+                }
+            }
+        }, 
+        clean: {
+            install: {
+                src: '<%= bowerful.dist.store %>'
+            }
+        },
         uglify: {
             options: {
                 banner: '<%= banner %>',
@@ -100,6 +120,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-nodeunit');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-bowerful');
 
     // reload
@@ -110,6 +131,9 @@ module.exports = function (grunt) {
 
     // documentation generation
     grunt.loadNpmTasks('grunt-dox');
+
+    // install 
+    grunt.registerTask('install', 'Install javascript components defined on Gruntfile',  ['bowerful', 'clean:install']);
 
     // Better naming conventions
     grunt.registerTask('lint', 'Lint javascript files with default validator', 'jshint');

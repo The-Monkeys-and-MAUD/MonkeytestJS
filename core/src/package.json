@@ -10,20 +10,20 @@
     "url": "http://www.themonkeys.com.au/"
   },
   "contributors": [
-      {
-        "name": "Mitermayer Reis",
-        "email": "mitermayer.reis@gmail.com",
-        "url": "http://job.mitermayer.com/"
-      },
-      {
-        "name": "Peter Feltham",
-        "email": "peterf@themonkeys.com.au"
-      },
-      {
-        "name": "Thomas Garrood",
-        "email": "thomas@sandboxdigital.com.au",
-        "url": "http://sandboxdigital.com.au/"
-      }
+    {
+      "name": "Mitermayer Reis",
+      "email": "mitermayer.reis@gmail.com",
+      "url": "http://job.mitermayer.com/"
+    },
+    {
+      "name": "Peter Feltham",
+      "email": "peterf@themonkeys.com.au"
+    },
+    {
+      "name": "Thomas Garrood",
+      "email": "thomas@sandboxdigital.com.au",
+      "url": "http://sandboxdigital.com.au/"
+    }
   ],
   "repository": {
     "type": "git",
@@ -49,7 +49,8 @@
     "grunt-dox": "~0.5.0",
     "grunt-contrib-nodeunit": "~0.2.0",
     "grunt-bowerful": "~0.3.0",
-    "grunt-reload": "~0.2.0"
+    "grunt-reload": "~0.2.0",
+    "grunt-contrib-clean": "~0.5.0"
   },
   "keywords": []
 }
