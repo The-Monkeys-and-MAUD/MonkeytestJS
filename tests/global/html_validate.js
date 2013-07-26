@@ -6,7 +6,7 @@ registerTest ('Has Valid HTML',
         load : function () {
             this
             .loadPageSource ()
-            .asyncTest("Is HTML Valid?",function($) {
+            .asyncTest("Is HTML Valid?",function() {
                 var _this = this;
                 $$.post('/tests/core/proxy.php?url=validator.w3.org/check',{fragment:this.page.source})
                 .success(function(data) {
