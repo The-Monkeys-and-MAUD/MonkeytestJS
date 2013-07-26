@@ -2,7 +2,7 @@
 (function (global) {
 
     // APP namespace
-    var APP = global._MonkeytestJS = global._MonkeytestJS || {};
+    var APP = global._MonkeyTestJS = global._MonkeyTestJS || {};
 
     // block QUnit to try autostart without being ready
     global.QUnit.config.autostart = false;
@@ -11,7 +11,7 @@
     var $$ = global.$$ = global.jQuery.noConflict(true);
 
     // create our singleton / factory
-    var monkeytestjs = global.monkeytestjs = new APP.MonkeytestJS();
+    var monkeytestjs = global.monkeytestjs = new APP.MonkeyTestJS();
 
     // TODO: create a nicer method to wrap this startup
     // start runner with json config file

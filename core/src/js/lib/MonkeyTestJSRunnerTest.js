@@ -2,17 +2,17 @@
 (function (global) {
 
     // APP namespace
-    var APP = global._MonkeytestJS = global._MonkeytestJS || {};
+    var APP = global._MonkeyTestJS = global._MonkeyTestJS || {};
 
     /**
      * Constructor
      *
      * @param {Object} config configuration  to be injected
      * @param {Object} runner runner reference to be injected
-     * @return {Object} MonkeytestJSPage instance.
+     * @return {Object} MonkeyTestJSPage instance.
      * @api public
      */
-    var MonkeytestJSTest = APP.MonkeytestJSTest = function (config, runner) {
+    var MonkeyTestJSTest = APP.MonkeyTestJSTest = function (config, runner) {
         config = config || {};
 
         APP.Utils.__extends(this, config);
@@ -22,10 +22,10 @@
     /**
      * Load script
      *
-     * @memberOf MonkeytestJSTest
+     * @memberOf MonkeyTestJSTest
      * @api public
      */
-    MonkeytestJSTest.prototype.load = function () {
+    MonkeyTestJSTest.prototype.load = function () {
         this.addTestScript("", this.src);
     };
 
@@ -34,10 +34,10 @@
      *
      * @param {Obect} id script id
      * @param {String} src path to the script be loaded.
-     * @memberOf MonkeytestJSTest
+     * @memberOf MonkeyTestJSTest
      * @api public
      */
-    MonkeytestJSTest.prototype.addTestScript = function (id, src) {
+    MonkeyTestJSTest.prototype.addTestScript = function (id, src) {
         src = this.runner.testsUrl + src;
         var d = document;
         var js, ref = d.getElementsByTagName('script')[0];

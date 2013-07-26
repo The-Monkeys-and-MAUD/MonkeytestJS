@@ -2,7 +2,7 @@
 (function (global) {
 
     // APP namespace
-    var APP = global._MonkeytestJS = global._MonkeytestJS || {};
+    var APP = global._MonkeyTestJS = global._MonkeyTestJS || {};
 
     /**
      * Utility helpers.

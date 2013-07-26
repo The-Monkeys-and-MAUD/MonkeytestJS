@@ -2,17 +2,17 @@
 (function (global) {
 
     // APP namespace
-    var APP = global._MonkeytestJS = global._MonkeytestJS || {};
+    var APP = global._MonkeyTestJS = global._MonkeyTestJS || {};
 
     /**
      * Constructor
      *
      * @param {Object} config configuration  to be injected
      * @param {Object} runner runner reference to be injected
-     * @return {Object} MonkeytestJSPage instance.
+     * @return {Object} MonkeyTestJSPage instance.
      * @api public
      */
-    var MonkeytestJSPage = APP.MonkeytestJSPage = function (config, runner) {
+    var MonkeyTestJSPage = APP.MonkeyTestJSPage = function (config, runner) {
         config = config || {};
 
         APP.Utils.__extends(this, config);
@@ -26,10 +26,10 @@
      * Call a callback function after the current page is loaded by the runner.
      *
      * @param {Function} callback callback when page is succesfuly loaded
-     * @memberOf MonkeytestJSPage
+     * @memberOf MonkeyTestJSPage
      * @api public
      */
-    MonkeytestJSPage.prototype.loadSource = function (callback) {
+    MonkeyTestJSPage.prototype.loadSource = function (callback) {
         if (this.source !== "") {
             callback();
             return;
@@ -50,17 +50,17 @@
      * Run following tests and returns a boolen if a test has been runned.
      *
      * @param {Function} callback callback when page is succesfuly loaded
-     * @memberOf MonkeytestJSPage
+     * @memberOf MonkeyTestJSPage
      * @return {Bool} a test has been run
      * @api public
      */
-    MonkeytestJSPage.prototype.runNextTest = function (callback) {
+    MonkeyTestJSPage.prototype.runNextTest = function (callback) {
         var testSpec = this.tests.shift(),
             cb = callback || function () {},
             ret = false;
 
         if (testSpec) {
-            var pageTest = new APP.MonkeytestJSPageTest({}, this.runner);
+            var pageTest = new APP.MonkeyTestJSPageTest({}, this.runner);
 
             pageTest.testSpec = testSpec;
             pageTest.runner = this.runner;
