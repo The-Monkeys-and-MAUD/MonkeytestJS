@@ -15,14 +15,13 @@
     },
     "testsDir": "/tests/tests/",
     "globalTests": [
-        "global/facebook_id.js", 
         "global/html_validate.js",
         "global/has_utf8.js",
         "global/not_server_error.js"
     ],
-    "pages": [{
-            "url": "/",
-            "tests":["page/form_validation.js"]
+    "pages": [
+        {
+            "url": "/tests/core/demo/index.html",
         }
     ]
 }
