@@ -1,6 +1,9 @@
 /* globals QUnit, test, asyncTest */
 (function (global) {
 
+    // APP namespace
+    var APP = global._QUnitRunner = global._QUnitRunner || {};
+
     /**
      * Constructor
      *
@@ -8,10 +11,10 @@
      * @return {Object} QUnitRunnerPageTest instance.
      * @api public
      */
-    var QUnitRunnerPageTest = global.QUnitRunnerPageTest = function (config) {
+    var QUnitRunnerPageTest = APP.QUnitRunnerPageTest = function (config) {
         config = config || {};
 
-        global.Utils.__extends(this, config);
+        APP.Utils.__extends(this, config);
 
         this.chain = [];
     };

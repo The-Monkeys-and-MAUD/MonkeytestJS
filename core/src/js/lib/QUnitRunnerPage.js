@@ -1,6 +1,9 @@
 /* globals QUnit, test, asyncTest */
 (function (global) {
 
+    // APP namespace
+    var APP = global._QUnitRunner = global._QUnitRunner || {};
+
     /**
      * Constructor
      *
@@ -9,10 +12,10 @@
      * @return {Object} QUnitRunnerPage instance.
      * @api public
      */
-    var QUnitRunnerPage = global.QUnitRunnerPage = function (config, runner) {
+    var QUnitRunnerPage = APP.QUnitRunnerPage = function (config, runner) {
         config = config || {};
 
-        global.Utils.__extends(this, config);
+        APP.Utils.__extends(this, config);
         this.source = "";
         this.tests = [];
         this.currentTest = -1;
@@ -57,7 +60,7 @@
             ret = false;
 
         if (testSpec) {
-            var pageTest = new global.QUnitRunnerPageTest({}, this.runner);
+            var pageTest = new APP.QUnitRunnerPageTest({}, this.runner);
 
             pageTest.testSpec = testSpec;
             pageTest.runner = this.runner;

@@ -1,6 +1,9 @@
 /* globals QUnit, test, asyncTest */
 (function (global) {
 
+    // APP namespace
+    var APP = global._QUnitRunner = global._QUnitRunner || {};
+
     /**
      * Utility helpers.
      *
@@ -10,14 +13,14 @@
      *
      * @api public
      */
-    var UTILS = global.Utils = {
+    var UTILS = APP.Utils = {
         log: function (s) {
             if (global.console) {
                 console.log(s);
             }
         },
         registerTest: function (name, test) {
-            global.QUnitRunner.registerTest(name, test);
+            global.qunitrunner.registerTest(name, test);
         },
         __extends: function (child, parent) {
             for (var key in parent) {

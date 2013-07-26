@@ -1,13 +1,16 @@
 /* globals QUnit, test, asyncTest */
 (function (global) {
 
+    // APP namespace
+    var APP = global._QUnitRunner = global._QUnitRunner || {};
+
     /**
      * Constructor
      *
      * @return {Object} QUnitRunner instance.
      * @api public
      */
-    var QUnitRunner = global.QUnitRunnerClass = function () {};
+    var QUnitRunner = APP.QUnitRunner = function () {};
 
     /**
      * Prepare tests base on the config.json file on the root of the test folder
@@ -33,7 +36,7 @@
         // also loads tests and adds them to this.testToLoad
         for (var i = 0, lenI = this.config.pages.length; i < lenI; i++) {
 
-            var page = new global.QUnitRunnerPage(this.config.pages[i]),
+            var page = new APP.QUnitRunnerPage(this.config.pages[i]),
                 pageTests = this.config.pages[i].tests || [];
 
             // store runner reference
@@ -68,7 +71,7 @@
      * @api public
      */
     QUnitRunner.prototype.addTest = function (src) {
-        var test = this.tests[src] = new global.QUnitRunnerTest({
+        var test = this.tests[src] = new APP.QUnitRunnerTest({
             src: src
         }, this);
 
@@ -184,7 +187,7 @@
             globalTests: []
         };
 
-        global.Utils.__extends(this.config, settings || {});
+        APP.Utils.__extends(this.config, settings || {});
 
         // test specs
         this.testsUrl = /^[^\/]+:\/\/[^\/]+\//.exec(location.href)[0] +
@@ -206,6 +209,9 @@
 /* globals QUnit, test, asyncTest */
 (function (global) {
 
+    // APP namespace
+    var APP = global._QUnitRunner = global._QUnitRunner || {};
+
     /**
      * Constructor
      *
@@ -214,10 +220,10 @@
      * @return {Object} QUnitRunnerPage instance.
      * @api public
      */
-    var QUnitRunnerPage = global.QUnitRunnerPage = function (config, runner) {
+    var QUnitRunnerPage = APP.QUnitRunnerPage = function (config, runner) {
         config = config || {};
 
-        global.Utils.__extends(this, config);
+        APP.Utils.__extends(this, config);
         this.source = "";
         this.tests = [];
         this.currentTest = -1;
@@ -262,7 +268,7 @@
             ret = false;
 
         if (testSpec) {
-            var pageTest = new global.QUnitRunnerPageTest({}, this.runner);
+            var pageTest = new APP.QUnitRunnerPageTest({}, this.runner);
 
             pageTest.testSpec = testSpec;
             pageTest.runner = this.runner;
@@ -284,6 +290,9 @@
 /* globals QUnit, test, asyncTest */
 (function (global) {
 
+    // APP namespace
+    var APP = global._QUnitRunner = global._QUnitRunner || {};
+
     /**
      * Constructor
      *
@@ -291,10 +300,10 @@
      * @return {Object} QUnitRunnerPageTest instance.
      * @api public
      */
-    var QUnitRunnerPageTest = global.QUnitRunnerPageTest = function (config) {
+    var QUnitRunnerPageTest = APP.QUnitRunnerPageTest = function (config) {
         config = config || {};
 
-        global.Utils.__extends(this, config);
+        APP.Utils.__extends(this, config);
 
         this.chain = [];
     };
@@ -624,6 +633,10 @@
 
 /* globals QUnit, test, asyncTest */
 (function (global) {
+
+    // APP namespace
+    var APP = global._QUnitRunner = global._QUnitRunner || {};
+
     /**
      * Constructor
      *
@@ -632,10 +645,10 @@
      * @return {Object} QUnitRunnerPage instance.
      * @api public
      */
-    var QUnitRunnerTest = global.QUnitRunnerTest = function (config, runner) {
+    var QUnitRunnerTest = APP.QUnitRunnerTest = function (config, runner) {
         config = config || {};
 
-        global.Utils.__extends(this, config);
+        APP.Utils.__extends(this, config);
         this.runner = runner;
     };
 
@@ -674,6 +687,9 @@
 /* globals QUnit, test, asyncTest */
 (function (global) {
 
+    // APP namespace
+    var APP = global._QUnitRunner = global._QUnitRunner || {};
+
     /**
      * Utility helpers.
      *
@@ -683,14 +699,14 @@
      *
      * @api public
      */
-    var UTILS = global.Utils = {
+    var UTILS = APP.Utils = {
         log: function (s) {
             if (global.console) {
                 console.log(s);
             }
         },
         registerTest: function (name, test) {
-            global.QUnitRunner.registerTest(name, test);
+            global.qunitrunner.registerTest(name, test);
         },
         __extends: function (child, parent) {
             for (var key in parent) {
@@ -724,6 +740,9 @@
 /* globals QUnit, test, asyncTest */
 (function (global) {
 
+    // APP namespace
+    var APP = global._QUnitRunner = global._QUnitRunner || {};
+
     // block QUnit to try autostart without being ready
     global.QUnit.config.autostart = false;
 
@@ -731,7 +750,7 @@
     var $$ = global.$$ = global.jQuery.noConflict(true);
 
     // create our singleton / factory
-    global.QUnitRunner = new global.QUnitRunnerClass();
+    var qunitrunner = global.qunitrunner = new APP.QUnitRunner();
 
     // TODO: create a nicer method to wrap this startup
     // start runner with json config file
@@ -740,7 +759,7 @@
         // read configuration from a file called 'config.json'
         $$.getJSON('config.json', function (data) {
 
-            global.QUnitRunner.start($$.extend({}, {
+            qunitrunner.start($$.extend({}, {
                 workspace: window.frames[0],
                 jQuery: $$
             }, data));

@@ -1,13 +1,16 @@
 /* globals QUnit, test, asyncTest */
 (function (global) {
 
+    // APP namespace
+    var APP = global._QUnitRunner = global._QUnitRunner || {};
+
     /**
      * Constructor
      *
      * @return {Object} QUnitRunner instance.
      * @api public
      */
-    var QUnitRunner = global.QUnitRunnerClass = function () {};
+    var QUnitRunner = APP.QUnitRunner = function () {};
 
     /**
      * Prepare tests base on the config.json file on the root of the test folder
@@ -33,7 +36,7 @@
         // also loads tests and adds them to this.testToLoad
         for (var i = 0, lenI = this.config.pages.length; i < lenI; i++) {
 
-            var page = new global.QUnitRunnerPage(this.config.pages[i]),
+            var page = new APP.QUnitRunnerPage(this.config.pages[i]),
                 pageTests = this.config.pages[i].tests || [];
 
             // store runner reference
@@ -68,7 +71,7 @@
      * @api public
      */
     QUnitRunner.prototype.addTest = function (src) {
-        var test = this.tests[src] = new global.QUnitRunnerTest({
+        var test = this.tests[src] = new APP.QUnitRunnerTest({
             src: src
         }, this);
 
@@ -184,7 +187,7 @@
             globalTests: []
         };
 
-        global.Utils.__extends(this.config, settings || {});
+        APP.Utils.__extends(this.config, settings || {});
 
         // test specs
         this.testsUrl = /^[^\/]+:\/\/[^\/]+\//.exec(location.href)[0] +
