@@ -2,17 +2,17 @@
 (function (global) {
 
     // APP namespace
-    var APP = global._QUnitRunner = global._QUnitRunner || {};
+    var APP = global._MonkeytestJS = global._MonkeytestJS || {};
 
     /**
      * Constructor
      *
      * @param {Object} config configuration  to be injected
      * @param {Object} runner runner reference to be injected
-     * @return {Object} QUnitRunnerPage instance.
+     * @return {Object} MonkeytestJSPage instance.
      * @api public
      */
-    var QUnitRunnerTest = APP.QUnitRunnerTest = function (config, runner) {
+    var MonkeytestJSTest = APP.MonkeytestJSTest = function (config, runner) {
         config = config || {};
 
         APP.Utils.__extends(this, config);
@@ -22,10 +22,10 @@
     /**
      * Load script
      *
-     * @memberOf QUnitRunnerTest
+     * @memberOf MonkeytestJSTest
      * @api public
      */
-    QUnitRunnerTest.prototype.load = function () {
+    MonkeytestJSTest.prototype.load = function () {
         this.addTestScript("", this.src);
     };
 
@@ -34,10 +34,10 @@
      *
      * @param {Obect} id script id
      * @param {String} src path to the script be loaded.
-     * @memberOf QUnitRunnerTest
+     * @memberOf MonkeytestJSTest
      * @api public
      */
-    QUnitRunnerTest.prototype.addTestScript = function (id, src) {
+    MonkeytestJSTest.prototype.addTestScript = function (id, src) {
         src = this.runner.testsUrl + src;
         var d = document;
         var js, ref = d.getElementsByTagName('script')[0];

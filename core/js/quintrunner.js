@@ -2,24 +2,24 @@
 (function (global) {
 
     // APP namespace
-    var APP = global._QUnitRunner = global._QUnitRunner || {};
+    var APP = global._MonkeytestJS = global._MonkeytestJS || {};
 
     /**
      * Constructor
      *
-     * @return {Object} QUnitRunner instance.
+     * @return {Object} MonkeytestJS instance.
      * @api public
      */
-    var QUnitRunner = APP.QUnitRunner = function () {};
+    var MonkeytestJS = APP.MonkeytestJS = function () {};
 
     /**
      * Prepare tests base on the config.json file on the root of the test folder
      * it should have the global tests associated to it as well as page specific tests.
      *
-     * @memberOf QUnitRunner
+     * @memberOf MonkeytestJS
      * @api public
      */
-    QUnitRunner.prototype.setupTests = function () {
+    MonkeytestJS.prototype.setupTests = function () {
 
         // global tests
         var globalTests = this.config.globalTests || [];
@@ -36,7 +36,7 @@
         // also loads tests and adds them to this.testToLoad
         for (var i = 0, lenI = this.config.pages.length; i < lenI; i++) {
 
-            var page = new APP.QUnitRunnerPage(this.config.pages[i]),
+            var page = new APP.MonkeytestJSPage(this.config.pages[i]),
                 pageTests = this.config.pages[i].tests || [];
 
             // store runner reference
@@ -63,15 +63,15 @@
 
     /**
      * Simple wrapper function to register test with the qunitRunner.
-     * Returns a QUnitRunnerTest instance.
+     * Returns a MonkeytestJSTest instance.
      *
-     * @memberOf QUnitRunner
+     * @memberOf MonkeytestJS
      * @param {String} src path to the test
-     * @return {Object} QUnitRunnerTest instace
+     * @return {Object} MonkeytestJSTest instace
      * @api public
      */
-    QUnitRunner.prototype.addTest = function (src) {
-        var test = this.tests[src] = new APP.QUnitRunnerTest({
+    MonkeytestJS.prototype.addTest = function (src) {
+        var test = this.tests[src] = new APP.MonkeytestJSTest({
             src: src
         }, this);
 
@@ -83,12 +83,12 @@
     /**
      * Gets the test related to the src or create a new test if it doesnt exist one.
      *
-     * @memberOf QUnitRunner
+     * @memberOf MonkeytestJS
      * @param {String} src path to the test
-     * @return {Object} QUnitRunnerTest instace
+     * @return {Object} MonkeytestJSTest instace
      * @api public
      */
-    QUnitRunner.prototype.getTest = function (src) {
+    MonkeytestJS.prototype.getTest = function (src) {
 
         // return test or create one
         var test = this.tests[src] || this.addTest(src);
@@ -99,10 +99,10 @@
     /**
      * Loads current test and all its actions or finish testing.
      *
-     * @memberOf QUnitRunner
+     * @memberOf MonkeytestJS
      * @api public
      */
-    QUnitRunner.prototype.loadNextTest = function () {
+    MonkeytestJS.prototype.loadNextTest = function () {
 
         var self = this,
             currentTest = this.loadingCurrentTest = this.testsToLoad.shift(),
@@ -124,10 +124,10 @@
      *
      * @param {String} name name of the test
      * @param {Function} test function to be executed as the test
-     * @memberOf QUnitRunner
+     * @memberOf MonkeytestJS
      * @api public
      */
-    QUnitRunner.prototype.registerTest = function (name, test) {
+    MonkeytestJS.prototype.registerTest = function (name, test) {
         this.loadingCurrentTest.test = test;
         this.loadingCurrentTest.name = name;
 
@@ -137,20 +137,20 @@
     /**
      * When all tests finish loading runner is ready to start.
      *
-     * @memberOf QUnitRunner
+     * @memberOf MonkeytestJS
      * @api public
      */
-    QUnitRunner.prototype.loadTestsDone = function () {
+    MonkeytestJS.prototype.loadTestsDone = function () {
         this.startTests();
     };
 
     /**
      * Start QUnit than load each test from the beggining, until all is finished.
      *
-     * @memberOf QUnitRunner
+     * @memberOf MonkeytestJS
      * @api public
      */
-    QUnitRunner.prototype.startTests = function () {
+    MonkeytestJS.prototype.startTests = function () {
 
         QUnit.start();
         this.currentPage = this.pages.shift();
@@ -160,10 +160,10 @@
     /**
      * Loads next test and assign currentTest to the new loaded test.
      *
-     * @memberOf QUnitRunner
+     * @memberOf MonkeytestJS
      * @api public
      */
-    QUnitRunner.prototype.nextPageTest = function () {
+    MonkeytestJS.prototype.nextPageTest = function () {
         if (this.currentPage && !this.currentPage.runNextTest()) {
             // move to next page and run
             this.currentPage = this.pages.shift();
@@ -175,11 +175,11 @@
      * Method to be called by tests running asyncTest once they are finished running.
      *
      * @param {Object} settings startup settings passed usually by config.json file
-     * @memberOf QUnitRunner
+     * @memberOf MonkeytestJS
      * @return {Object} context for chaining
      * @api public
      */
-    QUnitRunner.prototype.start = function (settings) {
+    MonkeytestJS.prototype.start = function (settings) {
 
         this.config = {
             testsDir: '/tests/', // requires leading and trailing slash or just '/' if root of server
@@ -210,17 +210,17 @@
 (function (global) {
 
     // APP namespace
-    var APP = global._QUnitRunner = global._QUnitRunner || {};
+    var APP = global._MonkeytestJS = global._MonkeytestJS || {};
 
     /**
      * Constructor
      *
      * @param {Object} config configuration  to be injected
      * @param {Object} runner runner reference to be injected
-     * @return {Object} QUnitRunnerPage instance.
+     * @return {Object} MonkeytestJSPage instance.
      * @api public
      */
-    var QUnitRunnerPage = APP.QUnitRunnerPage = function (config, runner) {
+    var MonkeytestJSPage = APP.MonkeytestJSPage = function (config, runner) {
         config = config || {};
 
         APP.Utils.__extends(this, config);
@@ -234,10 +234,10 @@
      * Call a callback function after the current page is loaded by the runner.
      *
      * @param {Function} callback callback when page is succesfuly loaded
-     * @memberOf QUnitRunnerPage
+     * @memberOf MonkeytestJSPage
      * @api public
      */
-    QUnitRunnerPage.prototype.loadSource = function (callback) {
+    MonkeytestJSPage.prototype.loadSource = function (callback) {
         if (this.source !== "") {
             callback();
             return;
@@ -258,17 +258,17 @@
      * Run following tests and returns a boolen if a test has been runned.
      *
      * @param {Function} callback callback when page is succesfuly loaded
-     * @memberOf QUnitRunnerPage
+     * @memberOf MonkeytestJSPage
      * @return {Bool} a test has been run
      * @api public
      */
-    QUnitRunnerPage.prototype.runNextTest = function (callback) {
+    MonkeytestJSPage.prototype.runNextTest = function (callback) {
         var testSpec = this.tests.shift(),
             cb = callback || function () {},
             ret = false;
 
         if (testSpec) {
-            var pageTest = new APP.QUnitRunnerPageTest({}, this.runner);
+            var pageTest = new APP.MonkeytestJSPageTest({}, this.runner);
 
             pageTest.testSpec = testSpec;
             pageTest.runner = this.runner;
@@ -291,16 +291,16 @@
 (function (global) {
 
     // APP namespace
-    var APP = global._QUnitRunner = global._QUnitRunner || {};
+    var APP = global._MonkeytestJS = global._MonkeytestJS || {};
 
     /**
      * Constructor
      *
      * @param {Object} config configuration  to be injected
-     * @return {Object} QUnitRunnerPageTest instance.
+     * @return {Object} MonkeytestJSPageTest instance.
      * @api public
      */
-    var QUnitRunnerPageTest = APP.QUnitRunnerPageTest = function (config) {
+    var MonkeytestJSPageTest = APP.MonkeytestJSPageTest = function (config) {
         config = config || {};
 
         APP.Utils.__extends(this, config);
@@ -311,10 +311,10 @@
     /**
      * Run tests for the related page.
      *
-     * @memberOf QUnitRunnerPageTest
+     * @memberOf MonkeytestJSPageTest
      * @api public
      */
-    QUnitRunnerPageTest.prototype.runTest = function () {
+    MonkeytestJSPageTest.prototype.runTest = function () {
 
         var self = this;
 
@@ -340,12 +340,12 @@
     };
 
     /**
-     * QUnitRunnerPageTest chain control methods
+     * MonkeytestJSPageTest chain control methods
      *
-     * @memberOf QUnitRunnerPageTest
+     * @memberOf MonkeytestJSPageTest
      * @api public
      */
-    QUnitRunnerPageTest.prototype.start = function () {
+    MonkeytestJSPageTest.prototype.start = function () {
         this._next();
         return this; // chainable
     };
@@ -354,10 +354,10 @@
      * This is the method responsible for handle chaining. It will call all methods for the current page until
      * there is no more left than it will call the next page.
      *
-     * @memberOf QUnitRunnerPageTest
+     * @memberOf MonkeytestJSPageTest
      * @api public
      */
-    QUnitRunnerPageTest.prototype._next = function () {
+    MonkeytestJSPageTest.prototype._next = function () {
 
         var self = this,
             pageActions = this.chain.shift(),
@@ -377,14 +377,14 @@
      * Returns the current environment - based on the url of the current page.
      *
      * Example:
-     *          QUnitRunnerPageTest.env();
+     *          MonkeytestJSPageTest.env();
      *          // => 'staging'
      *
      * @return {String} environment string
-     * @memberOf QUnitRunnerPageTest
+     * @memberOf MonkeytestJSPageTest
      * @api public
      */
-    QUnitRunnerPageTest.prototype.env = function () {
+    MonkeytestJSPageTest.prototype.env = function () {
         var envs = this.runner.config.envs;
         var env = "notfound";
         var that = this;
@@ -412,10 +412,10 @@
      * Returns the configuration used by the runner.
      *
      * @return {Object}
-     * @memberOf QUnitRunnerPageTest
+     * @memberOf MonkeytestJSPageTest
      * @api public
      */
-    QUnitRunnerPageTest.prototype.config = function () {
+    MonkeytestJSPageTest.prototype.config = function () {
         return this.runner.config;
     };
 
@@ -424,10 +424,10 @@
      * chain action. If you are performing test on the page source this will normally be the first call in the test chain.
      *
      * @return {Object} context for chaining
-     * @memberOf QUnitRunnerPageTest
+     * @memberOf MonkeytestJSPageTest
      * @api public
      */
-    QUnitRunnerPageTest.prototype.loadPageSource = function () {
+    MonkeytestJSPageTest.prototype.loadPageSource = function () {
         var self = this;
         var fn = function () {
             self.page.loadSource(function () {
@@ -446,10 +446,10 @@
      *
      * @return {Object} context for chaining
      * @param {String} url load content from url on the workspace
-     * @memberOf QUnitRunnerPageTest
+     * @memberOf MonkeytestJSPageTest
      * @api public
      */
-    QUnitRunnerPageTest.prototype.loadPage = function (url) {
+    MonkeytestJSPageTest.prototype.loadPage = function (url) {
         url = url || this.page.url;
 
         var self = this;
@@ -475,10 +475,10 @@
      * triggered. Once the page load is complete it'll move to the next chain action.
      *
      * @return {Object} context for chaining
-     * @memberOf QUnitRunnerPageTest
+     * @memberOf MonkeytestJSPageTest
      * @api public
      */
-    QUnitRunnerPageTest.prototype.waitForPageLoad = function () {
+    MonkeytestJSPageTest.prototype.waitForPageLoad = function () {
         var self = this;
         var loadFn = function () {
             self._next();
@@ -500,12 +500,12 @@
     /**
      * Runs arbitrary js code on the page, such as submitting a for, then moves to the next chain action.
      *
-     * @param {Function} runFN function to that will be called on a certain workspace using 'QUnitRunnerPageTest' as context.
+     * @param {Function} runFN function to that will be called on a certain workspace using 'MonkeytestJSPageTest' as context.
      * @return {Object} context for chaining
-     * @memberOf QUnitRunnerPageTest
+     * @memberOf MonkeytestJSPageTest
      * @api public
      */
-    QUnitRunnerPageTest.prototype.run = function (runFN) {
+    MonkeytestJSPageTest.prototype.run = function (runFN) {
         var self = this;
         var fn = function () {
             runFN.call(self, self.workspace.jQuery);
@@ -521,12 +521,12 @@
      * Runs an asynchronous task. Must call this.asyncRunDone when the task is complete. Only then will the next chain
      * action be called.
      *
-     * @param {Function} runFN function to that will be called on a certain workspace using 'QUnitRunnerPageTest' as context.
+     * @param {Function} runFN function to that will be called on a certain workspace using 'MonkeytestJSPageTest' as context.
      * @return {Object} context for chaining
-     * @memberOf QUnitRunnerPageTest
+     * @memberOf MonkeytestJSPageTest
      * @api public
      */
-    QUnitRunnerPageTest.prototype.asyncRun = function (runFN) {
+    MonkeytestJSPageTest.prototype.asyncRun = function (runFN) {
         var self = this;
         var fn = function () {
             // must call this.asyncRunDone() to continue the chain
@@ -541,10 +541,10 @@
     /**
      * Method to be called by tests running asyncRun once they are finished running.
      *
-     * @memberOf QUnitRunnerPageTest
+     * @memberOf MonkeytestJSPageTest
      * @api public
      */
-    QUnitRunnerPageTest.prototype.asyncRunDone = function () {
+    MonkeytestJSPageTest.prototype.asyncRunDone = function () {
         this._next();
     };
 
@@ -553,11 +553,11 @@
      *
      * @param {String} name name of the test to be run.
      * @param {Function} testFN function to be tested.
-     * @memberOf QUnitRunnerPageTest
+     * @memberOf MonkeytestJSPageTest
      * @return {Object} context for chaining
      * @api public
      */
-    QUnitRunnerPageTest.prototype.test = function (name, testFN) {
+    MonkeytestJSPageTest.prototype.test = function (name, testFN) {
         var self = this;
         var fn = function () {
             test(name, function () {
@@ -575,11 +575,11 @@
      * Pause execution of the next chainable method for duration time.
      *
      * @param {Int} duration duration in milliseconds to delay next action execution
-     * @memberOf QUnitRunnerPageTest
+     * @memberOf MonkeytestJSPageTest
      * @return {Object} context for chaining
      * @api public
      */
-    QUnitRunnerPageTest.prototype.wait = function (duration) {
+    MonkeytestJSPageTest.prototype.wait = function (duration) {
         var self = this;
         duration = duration || 1000;
 
@@ -600,11 +600,11 @@
      *
      * @param {String} name name of the test to be run.
      * @param {Function} testFN function to be tested.
-     * @memberOf QUnitRunnerPageTest
+     * @memberOf MonkeytestJSPageTest
      * @return {Object} context for chaining
      * @api public
      */
-    QUnitRunnerPageTest.prototype.asyncTest = function (name, testFN) {
+    MonkeytestJSPageTest.prototype.asyncTest = function (name, testFN) {
         var self = this;
         var fn = function () {
             asyncTest(name, function () {
@@ -620,10 +620,10 @@
     /**
      * Method to be called by tests running asyncTest once they are finished running.
      *
-     * @memberOf QUnitRunnerPageTest
+     * @memberOf MonkeytestJSPageTest
      * @api public
      */
-    QUnitRunnerPageTest.prototype.asyncTestDone = function () {
+    MonkeytestJSPageTest.prototype.asyncTestDone = function () {
         var self = this;
         QUnit.start();
         self._next();
@@ -635,17 +635,17 @@
 (function (global) {
 
     // APP namespace
-    var APP = global._QUnitRunner = global._QUnitRunner || {};
+    var APP = global._MonkeytestJS = global._MonkeytestJS || {};
 
     /**
      * Constructor
      *
      * @param {Object} config configuration  to be injected
      * @param {Object} runner runner reference to be injected
-     * @return {Object} QUnitRunnerPage instance.
+     * @return {Object} MonkeytestJSPage instance.
      * @api public
      */
-    var QUnitRunnerTest = APP.QUnitRunnerTest = function (config, runner) {
+    var MonkeytestJSTest = APP.MonkeytestJSTest = function (config, runner) {
         config = config || {};
 
         APP.Utils.__extends(this, config);
@@ -655,10 +655,10 @@
     /**
      * Load script
      *
-     * @memberOf QUnitRunnerTest
+     * @memberOf MonkeytestJSTest
      * @api public
      */
-    QUnitRunnerTest.prototype.load = function () {
+    MonkeytestJSTest.prototype.load = function () {
         this.addTestScript("", this.src);
     };
 
@@ -667,10 +667,10 @@
      *
      * @param {Obect} id script id
      * @param {String} src path to the script be loaded.
-     * @memberOf QUnitRunnerTest
+     * @memberOf MonkeytestJSTest
      * @api public
      */
-    QUnitRunnerTest.prototype.addTestScript = function (id, src) {
+    MonkeytestJSTest.prototype.addTestScript = function (id, src) {
         src = this.runner.testsUrl + src;
         var d = document;
         var js, ref = d.getElementsByTagName('script')[0];
@@ -688,7 +688,7 @@
 (function (global) {
 
     // APP namespace
-    var APP = global._QUnitRunner = global._QUnitRunner || {};
+    var APP = global._MonkeytestJS = global._MonkeytestJS || {};
 
     /**
      * Utility helpers.
@@ -706,7 +706,7 @@
             }
         },
         registerTest: function (name, test) {
-            global.qunitrunner.registerTest(name, test);
+            global.monkeytestjs.registerTest(name, test);
         },
         __extends: function (child, parent) {
             for (var key in parent) {
@@ -741,7 +741,7 @@
 (function (global) {
 
     // APP namespace
-    var APP = global._QUnitRunner = global._QUnitRunner || {};
+    var APP = global._MonkeytestJS = global._MonkeytestJS || {};
 
     // block QUnit to try autostart without being ready
     global.QUnit.config.autostart = false;
@@ -750,7 +750,7 @@
     var $$ = global.$$ = global.jQuery.noConflict(true);
 
     // create our singleton / factory
-    var qunitrunner = global.qunitrunner = new APP.QUnitRunner();
+    var monkeytestjs = global.monkeytestjs = new APP.MonkeytestJS();
 
     // TODO: create a nicer method to wrap this startup
     // start runner with json config file
@@ -759,7 +759,7 @@
         // read configuration from a file called 'config.json'
         $$.getJSON('config.json', function (data) {
 
-            qunitrunner.start($$.extend({}, {
+            monkeytestjs.start($$.extend({}, {
                 workspace: window.frames[0],
                 jQuery: $$
             }, data));

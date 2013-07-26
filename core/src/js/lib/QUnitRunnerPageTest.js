@@ -2,16 +2,16 @@
 (function (global) {
 
     // APP namespace
-    var APP = global._QUnitRunner = global._QUnitRunner || {};
+    var APP = global._MonkeytestJS = global._MonkeytestJS || {};
 
     /**
      * Constructor
      *
      * @param {Object} config configuration  to be injected
-     * @return {Object} QUnitRunnerPageTest instance.
+     * @return {Object} MonkeytestJSPageTest instance.
      * @api public
      */
-    var QUnitRunnerPageTest = APP.QUnitRunnerPageTest = function (config) {
+    var MonkeytestJSPageTest = APP.MonkeytestJSPageTest = function (config) {
         config = config || {};
 
         APP.Utils.__extends(this, config);
@@ -22,10 +22,10 @@
     /**
      * Run tests for the related page.
      *
-     * @memberOf QUnitRunnerPageTest
+     * @memberOf MonkeytestJSPageTest
      * @api public
      */
-    QUnitRunnerPageTest.prototype.runTest = function () {
+    MonkeytestJSPageTest.prototype.runTest = function () {
 
         var self = this;
 
@@ -51,12 +51,12 @@
     };
 
     /**
-     * QUnitRunnerPageTest chain control methods
+     * MonkeytestJSPageTest chain control methods
      *
-     * @memberOf QUnitRunnerPageTest
+     * @memberOf MonkeytestJSPageTest
      * @api public
      */
-    QUnitRunnerPageTest.prototype.start = function () {
+    MonkeytestJSPageTest.prototype.start = function () {
         this._next();
         return this; // chainable
     };
@@ -65,10 +65,10 @@
      * This is the method responsible for handle chaining. It will call all methods for the current page until
      * there is no more left than it will call the next page.
      *
-     * @memberOf QUnitRunnerPageTest
+     * @memberOf MonkeytestJSPageTest
      * @api public
      */
-    QUnitRunnerPageTest.prototype._next = function () {
+    MonkeytestJSPageTest.prototype._next = function () {
 
         var self = this,
             pageActions = this.chain.shift(),
@@ -88,14 +88,14 @@
      * Returns the current environment - based on the url of the current page.
      *
      * Example:
-     *          QUnitRunnerPageTest.env();
+     *          MonkeytestJSPageTest.env();
      *          // => 'staging'
      *
      * @return {String} environment string
-     * @memberOf QUnitRunnerPageTest
+     * @memberOf MonkeytestJSPageTest
      * @api public
      */
-    QUnitRunnerPageTest.prototype.env = function () {
+    MonkeytestJSPageTest.prototype.env = function () {
         var envs = this.runner.config.envs;
         var env = "notfound";
         var that = this;
@@ -123,10 +123,10 @@
      * Returns the configuration used by the runner.
      *
      * @return {Object}
-     * @memberOf QUnitRunnerPageTest
+     * @memberOf MonkeytestJSPageTest
      * @api public
      */
-    QUnitRunnerPageTest.prototype.config = function () {
+    MonkeytestJSPageTest.prototype.config = function () {
         return this.runner.config;
     };
 
@@ -135,10 +135,10 @@
      * chain action. If you are performing test on the page source this will normally be the first call in the test chain.
      *
      * @return {Object} context for chaining
-     * @memberOf QUnitRunnerPageTest
+     * @memberOf MonkeytestJSPageTest
      * @api public
      */
-    QUnitRunnerPageTest.prototype.loadPageSource = function () {
+    MonkeytestJSPageTest.prototype.loadPageSource = function () {
         var self = this;
         var fn = function () {
             self.page.loadSource(function () {
@@ -157,10 +157,10 @@
      *
      * @return {Object} context for chaining
      * @param {String} url load content from url on the workspace
-     * @memberOf QUnitRunnerPageTest
+     * @memberOf MonkeytestJSPageTest
      * @api public
      */
-    QUnitRunnerPageTest.prototype.loadPage = function (url) {
+    MonkeytestJSPageTest.prototype.loadPage = function (url) {
         url = url || this.page.url;
 
         var self = this;
@@ -186,10 +186,10 @@
      * triggered. Once the page load is complete it'll move to the next chain action.
      *
      * @return {Object} context for chaining
-     * @memberOf QUnitRunnerPageTest
+     * @memberOf MonkeytestJSPageTest
      * @api public
      */
-    QUnitRunnerPageTest.prototype.waitForPageLoad = function () {
+    MonkeytestJSPageTest.prototype.waitForPageLoad = function () {
         var self = this;
         var loadFn = function () {
             self._next();
@@ -211,12 +211,12 @@
     /**
      * Runs arbitrary js code on the page, such as submitting a for, then moves to the next chain action.
      *
-     * @param {Function} runFN function to that will be called on a certain workspace using 'QUnitRunnerPageTest' as context.
+     * @param {Function} runFN function to that will be called on a certain workspace using 'MonkeytestJSPageTest' as context.
      * @return {Object} context for chaining
-     * @memberOf QUnitRunnerPageTest
+     * @memberOf MonkeytestJSPageTest
      * @api public
      */
-    QUnitRunnerPageTest.prototype.run = function (runFN) {
+    MonkeytestJSPageTest.prototype.run = function (runFN) {
         var self = this;
         var fn = function () {
             runFN.call(self, self.workspace.jQuery);
@@ -232,12 +232,12 @@
      * Runs an asynchronous task. Must call this.asyncRunDone when the task is complete. Only then will the next chain
      * action be called.
      *
-     * @param {Function} runFN function to that will be called on a certain workspace using 'QUnitRunnerPageTest' as context.
+     * @param {Function} runFN function to that will be called on a certain workspace using 'MonkeytestJSPageTest' as context.
      * @return {Object} context for chaining
-     * @memberOf QUnitRunnerPageTest
+     * @memberOf MonkeytestJSPageTest
      * @api public
      */
-    QUnitRunnerPageTest.prototype.asyncRun = function (runFN) {
+    MonkeytestJSPageTest.prototype.asyncRun = function (runFN) {
         var self = this;
         var fn = function () {
             // must call this.asyncRunDone() to continue the chain
@@ -252,10 +252,10 @@
     /**
      * Method to be called by tests running asyncRun once they are finished running.
      *
-     * @memberOf QUnitRunnerPageTest
+     * @memberOf MonkeytestJSPageTest
      * @api public
      */
-    QUnitRunnerPageTest.prototype.asyncRunDone = function () {
+    MonkeytestJSPageTest.prototype.asyncRunDone = function () {
         this._next();
     };
 
@@ -264,11 +264,11 @@
      *
      * @param {String} name name of the test to be run.
      * @param {Function} testFN function to be tested.
-     * @memberOf QUnitRunnerPageTest
+     * @memberOf MonkeytestJSPageTest
      * @return {Object} context for chaining
      * @api public
      */
-    QUnitRunnerPageTest.prototype.test = function (name, testFN) {
+    MonkeytestJSPageTest.prototype.test = function (name, testFN) {
         var self = this;
         var fn = function () {
             test(name, function () {
@@ -286,11 +286,11 @@
      * Pause execution of the next chainable method for duration time.
      *
      * @param {Int} duration duration in milliseconds to delay next action execution
-     * @memberOf QUnitRunnerPageTest
+     * @memberOf MonkeytestJSPageTest
      * @return {Object} context for chaining
      * @api public
      */
-    QUnitRunnerPageTest.prototype.wait = function (duration) {
+    MonkeytestJSPageTest.prototype.wait = function (duration) {
         var self = this;
         duration = duration || 1000;
 
@@ -311,11 +311,11 @@
      *
      * @param {String} name name of the test to be run.
      * @param {Function} testFN function to be tested.
-     * @memberOf QUnitRunnerPageTest
+     * @memberOf MonkeytestJSPageTest
      * @return {Object} context for chaining
      * @api public
      */
-    QUnitRunnerPageTest.prototype.asyncTest = function (name, testFN) {
+    MonkeytestJSPageTest.prototype.asyncTest = function (name, testFN) {
         var self = this;
         var fn = function () {
             asyncTest(name, function () {
@@ -331,10 +331,10 @@
     /**
      * Method to be called by tests running asyncTest once they are finished running.
      *
-     * @memberOf QUnitRunnerPageTest
+     * @memberOf MonkeytestJSPageTest
      * @api public
      */
-    QUnitRunnerPageTest.prototype.asyncTestDone = function () {
+    MonkeytestJSPageTest.prototype.asyncTestDone = function () {
         var self = this;
         QUnit.start();
         self._next();

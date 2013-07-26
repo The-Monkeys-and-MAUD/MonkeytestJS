@@ -2,7 +2,7 @@
 (function (global) {
 
     // APP namespace
-    var APP = global._QUnitRunner = global._QUnitRunner || {};
+    var APP = global._MonkeytestJS = global._MonkeytestJS || {};
 
     // block QUnit to try autostart without being ready
     global.QUnit.config.autostart = false;
@@ -11,7 +11,7 @@
     var $$ = global.$$ = global.jQuery.noConflict(true);
 
     // create our singleton / factory
-    var qunitrunner = global.qunitrunner = new APP.QUnitRunner();
+    var monkeytestjs = global.monkeytestjs = new APP.MonkeytestJS();
 
     // TODO: create a nicer method to wrap this startup
     // start runner with json config file
@@ -20,7 +20,7 @@
         // read configuration from a file called 'config.json'
         $$.getJSON('config.json', function (data) {
 
-            qunitrunner.start($$.extend({}, {
+            monkeytestjs.start($$.extend({}, {
                 workspace: window.frames[0],
                 jQuery: $$
             }, data));

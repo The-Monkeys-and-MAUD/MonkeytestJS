@@ -2,7 +2,7 @@
 (function (global) {
 
     // APP namespace
-    var APP = global._QUnitRunner = global._QUnitRunner || {};
+    var APP = global._MonkeytestJS = global._MonkeytestJS || {};
 
     /**
      * Utility helpers.
@@ -20,7 +20,7 @@
             }
         },
         registerTest: function (name, test) {
-            global.qunitrunner.registerTest(name, test);
+            global.monkeytestjs.registerTest(name, test);
         },
         __extends: function (child, parent) {
             for (var key in parent) {
