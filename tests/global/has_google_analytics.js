@@ -1,35 +1,18 @@
-registerTest ('Has Google Analytics',
-    function ($, container) {
-        var scripts = $('script');
+registerTest ('Has Google Analytics', {
+    setup: function() {
+        this.sourceCode = this.page.source;
+        this.analyticsMatchString = "ga.js";
+        this.analyticsMatchDummyString = "UA-XXXXX-X";
+    },
+    load : function() {
+        this
+        .test('test we have a GA script tag',function($) {
+            notEqual(this.sourceCode.indexOf(this.analyticsMatchString),-1,'We have a google analytics script tag');
 
-        asyncTest( "test we have a GA script tag", function() {
-            var found = false;
-            for(var i=0;i<scripts.length;i++)
-            {
-                var src = $(scripts[i]).attr('src');
-                if (src && src.indexOf('www.google-analytics.com/ga.js')>=0) {
-                   found = true;
-                }
-            }
-
-            equal( found, true, "tag found" );
-            QUnit.start ();
-        });
-
-        // little hacky - tried looking at the container._gat and container._gaq objects to determine the id
-        // but couldn't find anything
-        asyncTest( "test we have a valid GA ID (not UA-XXXXX-X)", function() {
-            var found = false;
-            for(var i=0;i<scripts.length;i++)
-            {
-                var html = $(scripts[i]).html();
-                if (html && html.indexOf("_setAccount','UA-")>=0 && html.indexOf("_setAccount','UA-XXXXX-X")<0) {
-                    found = true;
-                }
-            }
-
-            equal( found, true, "id found" );
-            QUnit.start ();
-        });
+        })
+        .test( 'test we have a valid GA ID (not UA-XXXXX-X)', function() {
+            equal(this.sourceCode.indexOf(this.analyticsMatchDummyString),-1,'We have a google id that is different from dummy "UA-XXXXX-X"');
+        })
+        .start();
     }
-);
+});

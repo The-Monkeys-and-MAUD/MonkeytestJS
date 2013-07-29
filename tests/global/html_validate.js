@@ -1,13 +1,12 @@
-registerTest ('Has a Valid HTML', {
+registerTest ('Has a Valid HTML According To W3C Validator', {
     setup:function () {
-        this.proxyUrl = "/tests/core/proxy.php?url=";
-        this.validatorUrl = "validator.w3.org/check";
-        this.imagesFolder = "core/images/";
+        this.proxyUrl = '/tests/core/proxy.php?url=';
+        this.validatorUrl = 'validator.w3.org/check';
+        this.imagesFolder = 'core/images/';
     },
     load : function () {
         this
-        .loadPageSource() // wait page be loaded on iframe
-        .asyncTest("Is HTML Valid?",function() {
+        .asyncTest('Is HTML Valid?',function() {
 
             var self = this;
 
@@ -27,7 +26,7 @@ registerTest ('Has a Valid HTML', {
                     });
                 } else { // page is valid
 
-                    ok( true, "HTML is valid" );
+                    ok( true, 'HTML is valid' );
                 }
 
                 // needs to be called upon assync tests
@@ -35,7 +34,7 @@ registerTest ('Has a Valid HTML', {
             })
             .error(function() { // validation couldnt be performed.
 
-                ok( false, "Unable to get validation results" );
+                ok( false, 'Unable to get validation results' );
 
                 // needs to be called upon assync tests
                 self.asyncTestDone();

@@ -15,8 +15,9 @@
     },
     "testsDir": "/tests/tests/",
     "globalTests": [
+        "global/has_utf8.js",
         "global/html_validate.js",
-        "global/has_utf8.js"
+        "global/has_google_analytics.js"
     ],
     "pages": [
         {

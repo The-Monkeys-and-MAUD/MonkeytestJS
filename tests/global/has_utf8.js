@@ -1,15 +1,16 @@
 registerTest ('Has a UTF-8 meta tag', {
-    setup:function () {
-
-        // lets store the source code as lowercase in order to validate UTF-8 and utf-8
-        this.sourceCode = this.page.source.toLowerCase();
+    setup: function() {
+        this.utf8MatchString = '<meta charset="utf-8">';
     },
     load : function () {
         this
-        .loadPageSource() // making sure that the dom has finished loading on the iframe
-        .test("Do we have a UTF8 meta tag?", function() {
+        .loadPage() // wait page be loaded on iframe
+        .loadPageSource() // gathers page source so that we can parse it.
+        .test('Do we have a UTF8 meta tag?', function() {
+            var sourceCode = this.page.source.toLowerCase();
+
             // do we have an utf8 metatag ?
-            notEqual(this.sourceCode.indexOf('<meta charset="utf-8">'),-1,"Has UTF-8 meta tag");
+            notEqual(sourceCode.indexOf(this.utf8MatchString),-1,'Has UTF-8 meta tag');
         })
         .start();
     }

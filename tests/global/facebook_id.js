@@ -1,12 +1,9 @@
-registerTest ('Facebook ID',
-    {
+registerTest ('Facebook ID', {
         setup:function () {
 
-        }
-
-        ,load : function () {
+        },
+        load : function () {
             this
-            .loadPage()
             .loadPageSource ()
             .test("Do we have a Facebook ID?", function() {
 
