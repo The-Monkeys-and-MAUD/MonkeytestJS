@@ -4,8 +4,6 @@ registerTest ('Has a UTF-8 meta tag', {
     },
     load : function () {
         this
-        .loadPage() // wait page be loaded on iframe
-        .loadPageSource() // gathers page source so that we can parse it.
         .test('Do we have a UTF8 meta tag?', function() {
             var sourceCode = this.page.source.toLowerCase();
 

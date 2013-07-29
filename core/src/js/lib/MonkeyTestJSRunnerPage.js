@@ -55,7 +55,8 @@
      * @api public
      */
     MonkeyTestJSPage.prototype.runNextTest = function (callback) {
-        var testSpec = this.tests.shift(),
+        var firstTime = this.totalTestsToBeRunned === this.tests.length,
+            testSpec = this.tests.shift(),
             cb = callback || function () {},
             ret = false;
 
@@ -67,7 +68,7 @@
             pageTest.page = this;
             pageTest.window = pageTest.workspace = this.runner.workspace;
             pageTest.$ = this.runner.workspace.jQuery;
-            pageTest.runTest();
+            pageTest.runTest(firstTime);
 
             ret = true;
         }

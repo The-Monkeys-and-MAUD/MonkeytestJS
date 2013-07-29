@@ -25,7 +25,13 @@
      * @memberOf MonkeyTestJSPageTest
      * @api public
      */
-    MonkeyTestJSPageTest.prototype.runTest = function () {
+    MonkeyTestJSPageTest.prototype.runTest = function (firstTime) {
+
+        // When we run the first tet we want to load the page and source code, should not need to load it manually
+        if(firstTime) {
+            this.loadPage();
+            this.loadPageSource();
+        }
 
         var self = this;
 

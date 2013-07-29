@@ -55,6 +55,8 @@
                 page.tests.push(this.getTest(pageTests[k]));
             }
 
+            page.totalTestsToBeRunned = page.tests.length;
+
             // add to array of pages
             this.pages.push(page);
         }
@@ -263,7 +265,8 @@
      * @api public
      */
     MonkeyTestJSPage.prototype.runNextTest = function (callback) {
-        var testSpec = this.tests.shift(),
+        var firstTime = this.totalTestsToBeRunned === this.tests.length,
+            testSpec = this.tests.shift(),
             cb = callback || function () {},
             ret = false;
 
@@ -275,7 +278,7 @@
             pageTest.page = this;
             pageTest.window = pageTest.workspace = this.runner.workspace;
             pageTest.$ = this.runner.workspace.jQuery;
-            pageTest.runTest();
+            pageTest.runTest(firstTime);
 
             ret = true;
         }
@@ -314,7 +317,13 @@
      * @memberOf MonkeyTestJSPageTest
      * @api public
      */
-    MonkeyTestJSPageTest.prototype.runTest = function () {
+    MonkeyTestJSPageTest.prototype.runTest = function (firstTime) {
+
+        // When we run the first tet we want to load the page and source code, should not need to load it manually
+        if(firstTime) {
+            this.loadPage();
+            this.loadPageSource();
+        }
 
         var self = this;
 

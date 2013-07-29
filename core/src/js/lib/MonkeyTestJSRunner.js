@@ -55,6 +55,8 @@
                 page.tests.push(this.getTest(pageTests[k]));
             }
 
+            page.totalTestsToBeRunned = page.tests.length;
+
             // add to array of pages
             this.pages.push(page);
         }
