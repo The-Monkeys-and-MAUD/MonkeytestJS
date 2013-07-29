@@ -1,23 +1,24 @@
 {
     "envs": {
-        "production": ["PRODUCTION URL OR PART OF"],
-        "beta": ["BETA URL OR PART OF"],
+        "dev": ["."],
         "stage": ["STAGE URL OR PART OF"],
-        "dev": ["DEV URL OR PART OF"]
+        "beta": ["BETA URL OR PART OF"],
+        "production": ["PRODUCTION URL OR PART OF"]
     },
     "facebook": {
         "ids": {
-            "production": "XXX",
-            "stage": "XXX",
-            "beta": "XXX",
-            "dev": "XXX"
+            "production": "333333333333333",
+            "stage": "222222222022222",
+            "beta": "111111111111111",
+            "dev": "000000000000000"
         }
     },
     "testsDir": "/tests/tests/",
     "globalTests": [
         "global/has_utf8.js",
         "global/html_validate.js",
-        "global/has_google_analytics.js"
+        "global/has_google_analytics.js",
+        "global/facebook_id.js"
     ],
     "pages": [
         {

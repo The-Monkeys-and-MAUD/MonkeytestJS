@@ -1,27 +1,37 @@
 registerTest ('Facebook ID', {
         setup:function () {
-
+            // Searches for:
+            //   FB.init({
+            //       appId      : '399677190122262'
+            this.facebookMatchPattern = /FB.init\(\{([\s\n])*appId([\s\n])*:([\s\n])*([\'\"])*([0-9])*([\'\"])*/g;
+            this.facebookMatchId =/([0-9])+/g;
+            this.sourceCode = this.page.source;
         },
         load : function () {
             this
-            .loadPageSource ()
             .test("Do we have a Facebook ID?", function() {
 
                 // Searches for:
                 //   FB.init({
                 //       appId      : '399677190122262'
-                var pattern = /FB.init\(\{([\s\n])*appId([\s\n])*:([\s\n])*([\'\"])*([0-9])*([\'\"])*/g;
-                var patternId= /([0-9])+/g;
-                var facebookTag = this.page.source.match(pattern);
+                var facebookTag = this.sourceCode.match(this.facebookMatchPattern);
 
-                if (facebookTag.length<1) {
-                    ok(false,"Facebook ID not found on page");
-                } else {
-                    var id = facebookTag[0].match(patternId);
-                    notEqual(id[0],"","Has Facebook ID");
-                    var env = this.env();
-                    var envFacebookId = this.config().facebook.ids[env];
+                if(facebookTag && facebookTag.length) { // we have a facebook tag
+
+                    var id = facebookTag[0].match(this.facebookMatchId),
+                        env = this.env(),
+                        facebookConfig = this.config().facebook || {ids: {}}, // to avoid errors from broken configs
+                        envFacebookId = facebookConfig.ids[env];
+
+                    // Have we got a facebook id
+                    notEqual(id[0],"","Has A Facebook ID");
+
+                    // Is the facebook id that we have the correct for this environment
                     equal(id[0],envFacebookId,"Facebook ID is "+envFacebookId);
+
+
+                } else { // no facebook tag found
+                    ok(false,"Facebook Tag not found on page");
                 }
             })
             .start();
