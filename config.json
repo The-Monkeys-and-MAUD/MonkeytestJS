@@ -1,16 +1,17 @@
 {
     "envs": {
-        "dev": ["."],
+        "local": ["LOCAL URL OR PART OF"],
         "stage": ["STAGE URL OR PART OF"],
         "beta": ["BETA URL OR PART OF"],
         "production": ["PRODUCTION URL OR PART OF"]
     },
     "facebook": {
         "ids": {
-            "production": "333333333333333",
-            "stage": "222222222022222",
-            "beta": "111111111111111",
-            "dev": "000000000000000"
+            "local": "111111111111111",
+            "stage": "222222222222222",
+            "beta": "333333333333333",
+            "production": "444444444444444",
+            "default": "000000000000000"
         }
     },
     "testsDir": "/tests/tests/",

@@ -394,22 +394,25 @@
      * @api public
      */
     MonkeyTestJSPageTest.prototype.env = function () {
-        var envs = this.runner.config.envs;
-        var env = "notfound";
-        var that = this;
+        var self = this,
+            envs = self.runner.config.envs,
+            _defaultEnv,
+            env;
+
+        env = _defaultEnv = "default";
 
         this.runner.jQuery.each(envs, function (envKey, value) {
             var envTests = envs[envKey];
 
-            that.runner.jQuery.each(envTests, function (key, value) {
-                if (that.runner.workspace.location.href.indexOf(
+            self.runner.jQuery.each(envTests, function (key, value) {
+                if (self.runner.workspace.location.href.indexOf(
                     value) >= 0) {
                     env = envKey;
                     return false;
                 }
             });
 
-            if (env !== "notfound") {
+            if (env !== _defaultEnv) {
                 return false;
             }
         });
