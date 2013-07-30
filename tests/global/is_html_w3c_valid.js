@@ -40,7 +40,6 @@ registerTest ('Has a Valid HTML According To W3C Validator', {
                 self.asyncTestDone();
             });
 
-        })
-        .start();
+        });
     }
 });

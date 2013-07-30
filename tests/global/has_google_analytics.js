@@ -12,7 +12,6 @@ registerTest ('Has Google Analytics', {
         })
         .test( 'test we have a valid GA ID (not UA-XXXXX-X)', function() {
             equal(this.sourceCode.indexOf(this.analyticsMatchDummyString),-1,'We have a google id that is different from dummy "UA-XXXXX-X"');
-        })
-        .start();
+        });
     }
 });

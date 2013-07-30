@@ -321,8 +321,8 @@
 
         // When we run the first tet we want to load the page and source code, should not need to load it manually
         if(firstTime) {
-            this.loadPage();
-            this.loadPageSource();
+            // load page on the iframe and store the source code uppon first test of each page
+            this.loadPage().loadPageSource();
         }
 
         var self = this;
@@ -346,6 +346,7 @@
             }
         }
 
+        this.start();
     };
 
     /**

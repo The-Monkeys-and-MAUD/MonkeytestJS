@@ -33,8 +33,7 @@ registerTest ('Has a Facebook appID', {
                 } else { // no facebook tag found
                     ok(false,"Facebook Tag not found on page");
                 }
-            })
-            .start();
+            });
         }
     }
 );

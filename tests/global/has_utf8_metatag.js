@@ -9,7 +9,6 @@ registerTest ('Has a UTF-8 meta tag', {
 
             // do we have an utf8 metatag ?
             notEqual(sourceCode.indexOf(this.utf8MatchString),-1,'Has UTF-8 meta tag');
-        })
-        .start();
+        });
     }
 });
