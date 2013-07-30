@@ -327,26 +327,27 @@
 
         var self = this;
 
-        QUnit.module('testing ' + this.page.url + ' with ' + this.testSpec.name);
+        QUnit.module('testing ' + self.page.url + ' with ' + self.testSpec.name);
 
-        if (this.test.test instanceof Function) {
+        if (self.test.test instanceof Function) {
             // test is run on page load
-            this.config.jQuery('#workspace')
+            self.config.jQuery('#workspace')
                 .on('load', function () {
                     self.testSpec.test.call(self, self.workspace.jQuery,
                         0);
                 });
+        } else if( typeof self.testSpec.test === "function" ) {
+            self.testSpec.test.call(self, self.workspace.jQuery);
         } else {
-            var loadCount = 0;
-            if (this.testSpec.test.setup) {
-                this.testSpec.test.setup.call(this);
+            if (self.testSpec.test.setup) {
+                self.testSpec.test.setup.call(self);
             }
-            if (this.testSpec.test.load) {
+            if (self.testSpec.test.load) {
                 self.testSpec.test.load.call(self, self.workspace.jQuery);
             }
         }
 
-        this.start();
+        self.start();
     };
 
     /**
