@@ -602,7 +602,7 @@
 
         var fn = function () {
             setTimeout(function () {
-                this._next();
+                self._next();
             }, duration);
         };
 
