@@ -23,7 +23,8 @@
     ],
     "pages": [
         {
-            "url": "/tests/core/demo/index.html"
+            "url": "/tests/core/demo/index.html",
+            "tests": [ "page/demo_page_test.js" ]
         },
         {
             "url": "/tests/core/demo/index.html?pretendIsAnotherPage=true"

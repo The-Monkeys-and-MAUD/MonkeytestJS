@@ -490,23 +490,28 @@
      * @memberOf MonkeyTestJSPageTest
      * @api public
      */
-    MonkeyTestJSPageTest.prototype.waitForPageLoad = function () {
-        var self = this;
-        var loadFn = function () {
-            self._next();
-            self.runner.jQuery('#workspace')
-                .off('load', loadFn);
-        };
-        var fn = function () {
-            self.runner.jQuery('#workspace')
-                .on('load', loadFn);
+    MonkeyTestJSPageTest.prototype.waitForPageLoad = function ( timeout ) {
 
-            // TODO - add timeout ...
-        };
+        var self = this, 
+            _timeout = timeout || 5000,
+            loadFn = function () {
+                self._next();
+                self.runner.jQuery('#workspace')
+                    .off('load', loadFn);
+            },
+            fn = function () {
+                self._waitingTimer = global.setTimeout(loadFn, _timeout);
+                self.runner.jQuery('#workspace')
+                    .on('load', function() { 
+                        global.clearTimeout( self._waitingTimer );
+                        loadFn(); 
+                    });
 
-        this.chain.push(fn);
+            };
 
-        return this; // chainable
+        self.chain.push(fn);
+
+        return self; // chainable
     };
 
     /**
