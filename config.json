@@ -23,6 +23,9 @@
     "pages": [
         {
             "url": "/tests/core/demo/index.html"
+        },
+        {
+            "url": "/tests/core/demo/index.html?pretendIsAnotherPage=true"
         }
     ]
 }

@@ -27,33 +27,31 @@
      */
     MonkeyTestJSPageTest.prototype.runTest = function (firstTime) {
 
-        // When we run the first tet we want to load the page and source code, should not need to load it manually
+        var self = this,
+            callTest = function(f) {
+                if( f && typeof f === "function" ) {
+                    f.call(self, self.workspace.jQuery);
+                }
+            },
+            _test = self.testSpec.test,
+            lookUp = {
+                isFunction: function() {
+                    callTest( _test );
+                },
+                isObject: function() {
+                    callTest( _test.setup ); // call bootstrap for test
+                    callTest( _test.load ); // call the test itself
+                }
+            };
+
         if(firstTime) {
-            // load page on the iframe and store the source code uppon first test of each page
+            // When we run the first tet we want to load the page and source code.
             this.loadPage().loadPageSource();
         }
 
-        var self = this;
+        QUnit.module('Testing ' + self.page.url + ' with ' + _test.name);
 
-        QUnit.module('testing ' + self.page.url + ' with ' + self.testSpec.name);
-
-        if (self.test.test instanceof Function) {
-            // test is run on page load
-            self.config.jQuery('#workspace')
-                .on('load', function () {
-                    self.testSpec.test.call(self, self.workspace.jQuery,
-                        0);
-                });
-        } else if( typeof self.testSpec.test === "function" ) {
-            self.testSpec.test.call(self, self.workspace.jQuery);
-        } else {
-            if (self.testSpec.test.setup) {
-                self.testSpec.test.setup.call(self);
-            }
-            if (self.testSpec.test.load) {
-                self.testSpec.test.load.call(self, self.workspace.jQuery);
-            }
-        }
+        lookUp[ typeof _test === "function" ? "isFunction": "isObject"]();
 
         self.start();
     };
