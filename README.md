@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/TheMonkeys/QUnitRunnerAcceptanceTests.png)](https://travis-ci.org/TheMonkeys/QUnitRunnerAcceptanceTests)
+[![Build Status](https://travis-ci.org/TheMonkeys/MonkeytestJS.png)](https://travis-ci.org/TheMonkeys/MonkeytestJS)
 
 
 QUnit Acceptance Tests
