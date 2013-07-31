@@ -26,27 +26,23 @@
      * @api public
      */
     MonkeyTestJSTest.prototype.load = function () {
-        this.addTestScript("", this.src);
-    };
 
-    /**
-     * create a script and add it do the dom if there is not one already with same id.
-     *
-     * @param {Obect} id script id
-     * @param {String} src path to the script be loaded.
-     * @memberOf MonkeyTestJSTest
-     * @api public
-     */
-    MonkeyTestJSTest.prototype.addTestScript = function (id, src) {
-        src = this.runner.testsUrl + src;
-        var d = document;
-        var js, ref = d.getElementsByTagName('script')[0];
-        //if (d.getElementById(id)) {return;}
-        js = d.createElement('script');
-        //js.id = id;
-        js.async = true;
-        js.src = src;
-        ref.parentNode.insertBefore(js, ref);
+        var self = this,
+            time = new Date();
+
+        global.$$.ajax({
+           url: self.runner.testsUrl + self.src,
+           success: function(data, textStatus) {
+                //global.log("Test ready on ", new Date(), " - loading on (ms): ", new Date() - time);
+           },
+           error: function(error) {
+                //global.log("Request to load " + src + " failed. ", error);
+           },
+           dataType: 'script',
+           async: false
+        });
+
+        return true;
     };
 
 }(this));
