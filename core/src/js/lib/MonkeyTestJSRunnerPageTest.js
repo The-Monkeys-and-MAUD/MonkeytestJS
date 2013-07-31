@@ -51,7 +51,7 @@
 
         lookUp[ typeof _test === "function" ? "isFunction": "isObject"]();
 
-        QUnit.module('Testing ' + self.page.url + ' with ' + _test.name);
+        QUnit.module('Testing ' + self.page.url);
 
         self.start();
     };
