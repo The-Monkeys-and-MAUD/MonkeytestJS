@@ -143,6 +143,7 @@
      * @api public
      */
     MonkeyTestJS.prototype.loadTestsDone = function () {
+        QUnit.start();
         this.startTests();
     };
 
@@ -154,7 +155,6 @@
      */
     MonkeyTestJS.prototype.startTests = function () {
 
-        QUnit.start();
         this.currentPage = this.pages.shift();
         this.nextPageTest();
     };

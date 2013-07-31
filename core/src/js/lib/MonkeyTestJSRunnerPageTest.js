@@ -49,9 +49,9 @@
             this.loadPage().loadPageSource();
         }
 
-        QUnit.module('Testing ' + self.page.url + ' with ' + _test.name);
-
         lookUp[ typeof _test === "function" ? "isFunction": "isObject"]();
+
+        QUnit.module('Testing ' + self.page.url + ' with ' + _test.name);
 
         self.start();
     };

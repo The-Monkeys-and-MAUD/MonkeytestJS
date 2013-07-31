@@ -143,6 +143,7 @@
      * @api public
      */
     MonkeyTestJS.prototype.loadTestsDone = function () {
+        QUnit.start();
         this.startTests();
     };
 
@@ -154,7 +155,6 @@
      */
     MonkeyTestJS.prototype.startTests = function () {
 
-        QUnit.start();
         this.currentPage = this.pages.shift();
         this.nextPageTest();
     };
@@ -341,9 +341,9 @@
             this.loadPage().loadPageSource();
         }
 
-        QUnit.module('Testing ' + self.page.url + ' with ' + _test.name);
-
         lookUp[ typeof _test === "function" ? "isFunction": "isObject"]();
+
+        QUnit.module('Testing ' + self.page.url + ' with ' + _test.name);
 
         self.start();
     };
