@@ -30,7 +30,7 @@ registerTest ('Demo page test', {
             this.workspace.document.getElementsByTagName("body")[0].style.background = self.otherColor;
 
 
-            console.log(this.page.source);
+            //console.log(this.page.source);
 
             // lets setup a global function to receive a jsonp request
             var url = "api.openweathermap.org/data/2.5/weather?q=Sydney,au",

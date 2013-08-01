@@ -29,9 +29,11 @@
      * @memberOf MonkeyTestJSPage
      * @api public
      */
-    MonkeyTestJSPage.prototype.loadSource = function (callback) {
-        var self = this;
-        this.runner.jQuery.get(this.url)
+    MonkeyTestJSPage.prototype.loadSource = function (targetUrl, callback) {
+        var self = this,
+            url = targetUrl || this.url; 
+
+        this.runner.jQuery.get(url)
             .success(function (data) {
                 self.source = data;
                 callback();

@@ -299,9 +299,11 @@
      * @memberOf MonkeyTestJSPage
      * @api public
      */
-    MonkeyTestJSPage.prototype.loadSource = function (callback) {
-        var self = this;
-        this.runner.jQuery.get(this.url)
+    MonkeyTestJSPage.prototype.loadSource = function (targetUrl, callback) {
+        var self = this,
+            url = targetUrl || this.url; 
+
+        this.runner.jQuery.get(url)
             .success(function (data) {
                 self.source = data;
                 callback();
@@ -496,15 +498,16 @@
      * performing tests on an actual page, this will normally be the first call in a test chain.
      *
      * @return {Object} context for chaining
-     * @param {String} url load content from url on the workspace
+     * @param {String} targetUrl load content from url on the workspace
+     * @param {String} timeout how long before we keep execution defaults to 5000
      * @memberOf MonkeyTestJSPageTest
      * @api public
      */
-    MonkeyTestJSPageTest.prototype.loadPage = function (url, timeout) {
-        url = url || this.page.url;
+    MonkeyTestJSPageTest.prototype.loadPage = function (targetUrl, timeout) {
 
         var self = this,
             _timeout = timeout || 5000,
+            url = targetUrl || this.page.url,
             callNext = function() {
                 clearTimeout(self._waitingTimer);
 
@@ -514,7 +517,7 @@
             },
             loadFn = function () {
                 self._waitingTimer = setTimeout(callNext, _timeout);
-                self.page.loadSource(function () {
+                self.page.loadSource(url, function () {
                     callNext();
                 });
             },
