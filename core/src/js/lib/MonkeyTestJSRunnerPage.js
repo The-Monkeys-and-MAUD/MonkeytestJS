@@ -30,11 +30,6 @@
      * @api public
      */
     MonkeyTestJSPage.prototype.loadSource = function (callback) {
-        if (this.source !== "") {
-            callback();
-            return;
-        }
-
         var self = this;
         this.runner.jQuery.get(this.url)
             .success(function (data) {
@@ -42,6 +37,7 @@
                 callback();
             })
             .error(function () {
+                //log("error occured trying to loadSource");
                 callback();
             });
     };

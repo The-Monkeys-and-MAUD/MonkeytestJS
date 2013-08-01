@@ -300,11 +300,6 @@
      * @api public
      */
     MonkeyTestJSPage.prototype.loadSource = function (callback) {
-        if (this.source !== "") {
-            callback();
-            return;
-        }
-
         var self = this;
         this.runner.jQuery.get(this.url)
             .success(function (data) {
@@ -312,6 +307,7 @@
                 callback();
             })
             .error(function () {
+                //log("error occured trying to loadSource");
                 callback();
             });
     };
@@ -399,8 +395,7 @@
 
         if (firstTime) {
             // When we run the first tet we want to load the page and source code.
-            this.loadPage()
-                .loadPageSource();
+            this.loadPage();
         }
 
         lookUp[typeof _test === "function" ? "isFunction" : "isObject"]();
@@ -495,26 +490,6 @@
         return this.runner.config;
     };
 
-    /**
-     * Loads the source of a page (via AJAX) into this.page.source. Waits until the source is loaded before moving to the next
-     * chain action. If you are performing test on the page source this will normally be the first call in the test chain.
-     *
-     * @return {Object} context for chaining
-     * @memberOf MonkeyTestJSPageTest
-     * @api public
-     */
-    MonkeyTestJSPageTest.prototype.loadPageSource = function () {
-        var self = this;
-        var fn = function () {
-            self.page.loadSource(function () {
-                self._next();
-            });
-        };
-
-        this.chain.push(fn);
-
-        return this; // chainable
-    };
 
     /**
      * Loads a page into the iframe, also waits until page is loaded before moving to the next action in the chain. If you are
@@ -525,109 +500,35 @@
      * @memberOf MonkeyTestJSPageTest
      * @api public
      */
-    MonkeyTestJSPageTest.prototype.loadPage = function (url) {
+    MonkeyTestJSPageTest.prototype.loadPage = function (url, timeout) {
         url = url || this.page.url;
-
-        var self = this;
-        var onloadFn = function () {
-            self._next();
-            self.runner.jQuery('#workspace')
-                .off('load', onloadFn);
-        };
-        var fn = function () {
-            self.runner.jQuery('#workspace')
-                .on('load', onloadFn);
-            self.runner.jQuery('#workspace')
-                .attr('src', url);
-        };
-
-        this.chain.push(fn);
-
-        return this; // chainable
-    };
-
-    /**
-     * Pause the chain until a page load takes place. Should be used to wait if a form is submitted or a link click is
-     * triggered. Once the page load is complete it'll move to the next chain action.
-     *
-     * @return {Object} context for chaining
-     * @memberOf MonkeyTestJSPageTest
-     * @api public
-     */
-    MonkeyTestJSPageTest.prototype.waitForPageLoad = function (timeout) {
 
         var self = this,
             _timeout = timeout || 5000,
-            loadFn = function () {
+            callNext = function() {
+                clearTimeout(self._waitingTimer);
+
                 self._next();
                 self.runner.jQuery('#workspace')
                     .off('load', loadFn);
             },
+            loadFn = function () {
+                self._waitingTimer = setTimeout(callNext, _timeout);
+                self.page.loadSource(function () {
+                    callNext();
+                });
+            },
             fn = function () {
-                self._waitingTimer = global.setTimeout(loadFn, _timeout);
                 self.runner.jQuery('#workspace')
-                    .on('load', function () {
-                        global.clearTimeout(self._waitingTimer);
-                        loadFn();
-                    });
-
+                    .on('load', loadFn)
+                    .attr('src', url);
             };
 
-        self.chain.push(fn);
-
-        return self; // chainable
-    };
-
-    /**
-     * Runs arbitrary js code on the page, such as submitting a for, then moves to the next chain action.
-     *
-     * @param {Function} runFN function to that will be called on a certain workspace using 'MonkeyTestJSPageTest' as context.
-     * @return {Object} context for chaining
-     * @memberOf MonkeyTestJSPageTest
-     * @api public
-     */
-    MonkeyTestJSPageTest.prototype.run = function (runFN) {
-        var self = this;
-        var fn = function () {
-            runFN.call(self, self.workspace.jQuery);
-            self._next();
-        };
-
         this.chain.push(fn);
 
         return this; // chainable
     };
 
-    /**
-     * Runs an asynchronous task. Must call this.asyncRunDone when the task is complete. Only then will the next chain
-     * action be called.
-     *
-     * @param {Function} runFN function to that will be called on a certain workspace using 'MonkeyTestJSPageTest' as context.
-     * @return {Object} context for chaining
-     * @memberOf MonkeyTestJSPageTest
-     * @api public
-     */
-    MonkeyTestJSPageTest.prototype.asyncRun = function (runFN) {
-        var self = this;
-        var fn = function () {
-            // must call this.asyncRunDone() to continue the chain
-            runFN.call(self, self.workspace.jQuery);
-        };
-
-        this.chain.push(fn);
-
-        return this; // chainable
-    };
-
-    /**
-     * Method to be called by tests running asyncRun once they are finished running.
-     *
-     * @memberOf MonkeyTestJSPageTest
-     * @api public
-     */
-    MonkeyTestJSPageTest.prototype.asyncRunDone = function () {
-        this._next();
-    };
 
     /**
      * Method to be called by tests running asyncRun once they are finished running.

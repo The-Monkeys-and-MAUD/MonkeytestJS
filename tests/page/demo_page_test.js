@@ -13,41 +13,30 @@ registerTest ('Demo page test', {
             ok(this.containerElement,'An element with the id "container" exists.');
         })
 
-        // run statements are executed before the test happens
-        .run(function(){
-            this.containerElement.style.background = this.otherColor;
-        })
         .test ("Does container have a background color of "+ self.otherColor +" ?",function(){
+            this.containerElement.style.background = this.otherColor;
             equal(this.containerElement.style.background, this.otherColor, 'Container background should now be ' + self.otherColor );
         })
         .wait(1500) // wait 1.5 seconds ( Pause execution of tests per duration )
 
-        // run statements are executed before the test happens
-        .run(function(){
-            this.containerElement.style.background = this.startBackground;
-        })
-        .wait(1500) // wait 1.5 seconds ( Pause execution of tests per duration )
         .test ("Have container background being restored to its previosu value?",function(){
+            this.containerElement.style.background = this.startBackground;
             equal(this.containerElement.style.background, this.startBackground, 'Container background should now be set as its start value');
         })
 
-        .waitForPageLoad() // tells the monkeytestJS that we are going to load a page next and that we should stop chaining execution until that gets loaded
         .loadPage("/tests/core/demo/other.html") // load a different page into the frame
-        .run(function(){
+        .asyncTest ("Can we load some content into the page from openweathermap.org?",function(){
+
             this.workspace.document.getElementsByTagName("body")[0].style.background = self.otherColor;
 
-            // lets inject jquery on that workspace since it doesnt exist in there for this demo.
-            this.workspace.jQuery = $$;
-        })
-        .wait(1500) // wait 1.5 seconds ( Pause execution of tests per duration )
 
-        .asyncTest ("Can we load some content into the page from openweathermap.org?",function($){
+            console.log(this.page.source);
+
             // lets setup a global function to receive a jsonp request
-            var self = this, 
-                url = "api.openweathermap.org/data/2.5/weather?q=Sydney,au",
-                body = $("iframe").contents().find("body");
+            var url = "api.openweathermap.org/data/2.5/weather?q=Sydney,au",
+                body = $$("iframe").contents().find("body");
 
-            $.get(this.proxyUrl + url)
+            $$.get(this.proxyUrl + url)
             .success(function(data) { // we got some validation results
 
                 var cityName = data.contents.name,
@@ -72,6 +61,6 @@ registerTest ('Demo page test', {
                 // needs to be called upon assync tests
                 self.asyncTestDone();
             });
-        })
+        });
     }
 });
