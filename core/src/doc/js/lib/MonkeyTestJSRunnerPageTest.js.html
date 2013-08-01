@@ -339,14 +339,29 @@ code {
         this.chain.push(fn);
 
         return this; // chainable
-    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="wait">wait</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>MonkeyTestJSPageTest.prototype.wait()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{Int}</span><span class="name">duration</span><span class="description">duration in milliseconds to delay next action execution</span></li><li class="tag"><span class="type">@memberOf: </span><span class="parent">MonkeyTestJSPageTest</span></li><li class="tag"><span class="type">@return: </span><span class="types">{Object}</span><span class="description">context for chaining</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Pause execution of the next chainable method for duration time.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">MonkeyTestJSPageTest.prototype.wait = function (duration) {
-        var self = this;
-        duration = duration || 1000;
+    };</code></pre></div></div></div></article><article class="comment"><header><h1 id="wait">wait</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>MonkeyTestJSPageTest.prototype.wait()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{Int}</span><span class="name">conditonalExpression</span><span class="description">this will be called on an interval until evaluates to true</span></li><li class="tag"><span class="type">@param: </span><span class="types">{Int}</span><span class="name">timeout</span><span class="description">timeout in milliseconds when should wait timeout and continue execution</span></li><li class="tag"><span class="type">@param: </span><span class="types">{Int}</span><span class="name">throttle</span><span class="description">how often should we check for conditional func</span></li><li class="tag"><span class="type">@memberOf: </span><span class="parent">MonkeyTestJSPageTest</span></li><li class="tag"><span class="type">@return: </span><span class="types">{Object}</span><span class="description">context for chaining</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>A conditonalExpression can be passed to pause execution until its evaluated to true or timesout.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">MonkeyTestJSPageTest.prototype.wait = function (conditonalExpression,
+        timeout, throttle) {
+        var self = this,
+            func = conditonalExpression || function () {},
+            _timeout = timeout || 5000,
+            _throttle = throttle || 60;
 
         var fn = function () {
-            setTimeout(function () {
-                self._next();
-            }, duration);
+
+            var that = this,
+                start = new Date();
+
+            setTimeout(function checkCondition() {
+                // if we timed out or condition has been met
+                if (func() || new Date() - start &gt;= _timeout) {
+                    clearTimeout(that._throttle);
+                    self._next();
+                } else {
+                    that._throttle = setTimeout(checkCondition,
+                        _throttle);
+                }
+            }, _throttle);
+
         };
 
         this.chain.push(fn);

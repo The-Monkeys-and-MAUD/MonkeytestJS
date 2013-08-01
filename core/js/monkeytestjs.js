@@ -544,22 +544,38 @@
         return this; // chainable
     };
 
-    /**
-     * Pause execution of the next chainable method for duration time.
+    /* A conditonalExpression can be passed to pause execution until its evaluated to true or timesout.
      *
-     * @param {Int} duration duration in milliseconds to delay next action execution
+     * @param {Int} conditonalExpression this will be called on an interval until evaluates to true
+     * @param {Int} timeout timeout in milliseconds when should wait timeout and continue execution
+     * @param {Int} throttle how often should we check for conditional func
      * @memberOf MonkeyTestJSPageTest
      * @return {Object} context for chaining
      * @api public
      */
-    MonkeyTestJSPageTest.prototype.wait = function (duration) {
-        var self = this;
-        duration = duration || 1000;
+    MonkeyTestJSPageTest.prototype.wait = function (conditonalExpression,
+        timeout, throttle) {
+        var self = this,
+            func = conditonalExpression || function () {},
+            _timeout = timeout || 5000,
+            _throttle = throttle || 60;
 
         var fn = function () {
-            setTimeout(function () {
-                self._next();
-            }, duration);
+
+            var that = this,
+                start = new Date();
+
+            setTimeout(function checkCondition() {
+                // if we timed out or condition has been met
+                if (func() || new Date() - start >= _timeout) {
+                    clearTimeout(that._throttle);
+                    self._next();
+                } else {
+                    that._throttle = setTimeout(checkCondition,
+                        _throttle);
+                }
+            }, _throttle);
+
         };
 
         this.chain.push(fn);

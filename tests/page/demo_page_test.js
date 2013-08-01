@@ -17,7 +17,17 @@ registerTest ('Demo page test', {
             this.containerElement.style.background = this.otherColor;
             equal(this.containerElement.style.background, this.otherColor, 'Container background should now be ' + self.otherColor );
         })
-        .wait(1500) // wait 1.5 seconds ( Pause execution of tests per duration )
+        .wait(function() {
+            var that = this;
+
+            setTimeout(function(){
+                // this will cause the wait to exit on 100 milliseconds because it makes expression true before the timeout
+                that.expressionGettingValid = true;
+            },100);
+
+            return this.expressionGettingValid; 
+
+        }, 1500) // wait 1.5 seconds ( Pause execution of tests per duration )
 
         .test ("Have container background being restored to its previosu value?",function(){
             this.containerElement.style.background = this.startBackground;
