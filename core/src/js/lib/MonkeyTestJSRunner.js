@@ -10,7 +10,9 @@
      * @return {Object} MonkeyTestJS instance.
      * @api public
      */
-    var MonkeyTestJS = APP.MonkeyTestJS = function () {};
+    var MonkeyTestJS = APP.MonkeyTestJS = function () {
+        this._onCompleteCallback = [];
+    };
 
     /**
      * Prepare tests base on the config.json file on the root of the test folder
@@ -166,11 +168,33 @@
      * @api public
      */
     MonkeyTestJS.prototype.nextPageTest = function () {
-        if (this.currentPage && !this.currentPage.runNextTest()) {
-            // move to next page and run
-            this.currentPage = this.pages.shift();
-            this.nextPageTest();
+        var self = this;
+
+        if (this.currentPage) {
+
+            this.currentPage.runNextTest(function (response) {
+
+                if (!response) {
+                    self.currentPage = self.pages.shift();
+                    self.nextPageTest();
+                }
+            });
+
+        } else {
+            if (!this.__FINSHEDRUNNING) {
+                this.__FINSHEDRUNNING = true;
+                this.__FINISH();
+            }
         }
+
+        //if (this.currentPage && !this.currentPage.runNextTest()) {
+        //    // move to next page and run
+        //    this.currentPage = this.pages.shift();
+        //    this.nextPageTest();
+        //} else {
+        //    // this should only be called once
+        //    console.log("All tests finished", !!this.currentPage, this.pages.length );
+        //}
     };
 
     /**
@@ -204,6 +228,42 @@
         this.loadNextTest();
 
         return this;
+    };
+
+    /**
+     * Attach a hook event to be called once all tests have finished running;
+     *
+     * @param {Function} callback function to be called when all tests have finished running.
+     * @memberOf MonkeyTestJS
+     * @return {Object} context for chaining
+     * @api public
+     */
+    MonkeyTestJS.prototype.onFinish = function (callback) {
+
+        if (typeof callback === 'function') {
+            this._onCompleteCallback.push(callback);
+        }
+
+        return this;
+    };
+
+    /**
+     * Calls all callbacks that are waiting for the finish event.
+     * Should only be called once all tests are completed.
+     *
+     * @memberOf MonkeyTestJS
+     * @return {Boolean} returns true if all callbacks have been succesfuly called.
+     * @api public
+     */
+    MonkeyTestJS.prototype.__FINISH = function () {
+        var funcArr = this._onCompleteCallback,
+            f, len;
+
+        for (f = 0, len = funcArr.length; f < len; f++) {
+            funcArr[f]();
+        }
+
+        return true;
     };
 
 }(this));

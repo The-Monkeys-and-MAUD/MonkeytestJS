@@ -10,7 +10,9 @@
      * @return {Object} MonkeyTestJS instance.
      * @api public
      */
-    var MonkeyTestJS = APP.MonkeyTestJS = function () {};
+    var MonkeyTestJS = APP.MonkeyTestJS = function () {
+        this._onCompleteCallback = [];
+    };
 
     /**
      * Prepare tests base on the config.json file on the root of the test folder
@@ -166,11 +168,33 @@
      * @api public
      */
     MonkeyTestJS.prototype.nextPageTest = function () {
-        if (this.currentPage && !this.currentPage.runNextTest()) {
-            // move to next page and run
-            this.currentPage = this.pages.shift();
-            this.nextPageTest();
+        var self = this;
+
+        if (this.currentPage) {
+
+            this.currentPage.runNextTest(function (response) {
+
+                if (!response) {
+                    self.currentPage = self.pages.shift();
+                    self.nextPageTest();
+                }
+            });
+
+        } else {
+            if (!this.__FINSHEDRUNNING) {
+                this.__FINSHEDRUNNING = true;
+                this.__FINISH();
+            }
         }
+
+        //if (this.currentPage && !this.currentPage.runNextTest()) {
+        //    // move to next page and run
+        //    this.currentPage = this.pages.shift();
+        //    this.nextPageTest();
+        //} else {
+        //    // this should only be called once
+        //    console.log("All tests finished", !!this.currentPage, this.pages.length );
+        //}
     };
 
     /**
@@ -204,6 +228,42 @@
         this.loadNextTest();
 
         return this;
+    };
+
+    /**
+     * Attach a hook event to be called once all tests have finished running;
+     *
+     * @param {Function} callback function to be called when all tests have finished running.
+     * @memberOf MonkeyTestJS
+     * @return {Object} context for chaining
+     * @api public
+     */
+    MonkeyTestJS.prototype.onFinish = function (callback) {
+
+        if (typeof callback === 'function') {
+            this._onCompleteCallback.push(callback);
+        }
+
+        return this;
+    };
+
+    /**
+     * Calls all callbacks that are waiting for the finish event.
+     * Should only be called once all tests are completed.
+     *
+     * @memberOf MonkeyTestJS
+     * @return {Boolean} returns true if all callbacks have been succesfuly called.
+     * @api public
+     */
+    MonkeyTestJS.prototype.__FINISH = function () {
+        var funcArr = this._onCompleteCallback,
+            f, len;
+
+        for (f = 0, len = funcArr.length; f < len; f++) {
+            funcArr[f]();
+        }
+
+        return true;
     };
 
 }(this));
@@ -257,17 +317,17 @@
     };
 
     /**
-     * Run following tests and returns a boolen if a test has been runned.
+     * Run tests and return a boolean if there are still other tests.
      *
-     * @param {Function} callback callback when page is succesfuly loaded
      * @memberOf MonkeyTestJSPage
-     * @return {Bool} a test has been run
+     * @return {Bool} return information if there is any other tests to be runned.
      * @api public
      */
     MonkeyTestJSPage.prototype.runNextTest = function (callback) {
         var firstTime = this.totalTestsToBeRunned === this.tests.length,
-            testSpec = this.tests.shift(),
+            lastTime = this.tests.length === 1,
             cb = callback || function () {},
+            testSpec = this.tests.shift(),
             ret = false;
 
         if (testSpec) {
@@ -317,35 +377,39 @@
      * @memberOf MonkeyTestJSPageTest
      * @api public
      */
-    MonkeyTestJSPageTest.prototype.runTest = function (firstTime) {
+    MonkeyTestJSPageTest.prototype.runTest = function (firstTime, callback) {
 
         var self = this,
-            callTest = function(f) {
-                if( f && typeof f === "function" ) {
+            cb = callback || function () {},
+            callTest = function (f) {
+                if (f && typeof f === "function") {
                     f.call(self, self.workspace.jQuery);
                 }
             },
             _test = self.testSpec.test,
             lookUp = {
-                isFunction: function() {
-                    callTest( _test );
+                isFunction: function () {
+                    callTest(_test);
                 },
-                isObject: function() {
-                    callTest( _test.setup ); // call bootstrap for test
-                    callTest( _test.load ); // call the test itself
+                isObject: function () {
+                    callTest(_test.setup); // call bootstrap for test
+                    callTest(_test.load); // call the test itself
                 }
             };
 
-        if(firstTime) {
+        if (firstTime) {
             // When we run the first tet we want to load the page and source code.
-            this.loadPage().loadPageSource();
+            this.loadPage()
+                .loadPageSource();
         }
 
-        lookUp[ typeof _test === "function" ? "isFunction": "isObject"]();
+        lookUp[typeof _test === "function" ? "isFunction" : "isObject"]();
 
         QUnit.module('Testing ' + self.page.url);
 
         self.start();
+
+        cb();
     };
 
     /**
@@ -490,9 +554,9 @@
      * @memberOf MonkeyTestJSPageTest
      * @api public
      */
-    MonkeyTestJSPageTest.prototype.waitForPageLoad = function ( timeout ) {
+    MonkeyTestJSPageTest.prototype.waitForPageLoad = function (timeout) {
 
-        var self = this, 
+        var self = this,
             _timeout = timeout || 5000,
             loadFn = function () {
                 self._next();
@@ -502,9 +566,9 @@
             fn = function () {
                 self._waitingTimer = global.setTimeout(loadFn, _timeout);
                 self.runner.jQuery('#workspace')
-                    .on('load', function() { 
-                        global.clearTimeout( self._waitingTimer );
-                        loadFn(); 
+                    .on('load', function () {
+                        global.clearTimeout(self._waitingTimer);
+                        loadFn();
                     });
 
             };
@@ -681,15 +745,15 @@
             time = new Date();
 
         global.$$.ajax({
-           url: self.runner.testsUrl + self.src,
-           success: function(data, textStatus) {
+            url: self.runner.testsUrl + self.src,
+            success: function (data, textStatus) {
                 //global.log("Test ready on ", new Date(), " - loading on (ms): ", new Date() - time);
-           },
-           error: function(error) {
+            },
+            error: function (error) {
                 //global.log("Request to load " + src + " failed. ", error);
-           },
-           dataType: 'script',
-           async: false
+            },
+            dataType: 'script',
+            async: false
         });
 
         return true;
@@ -759,7 +823,7 @@
     var APP = global._MonkeyTestJS = global._MonkeyTestJS || {}, // APP namespace
         $$ = global.$$ = global.jQuery.noConflict(true), // jquery no conflict 
         monkeytestjs = global.monkeytestjs = new APP.MonkeyTestJS(), // create our singleton
-        START = function() {
+        START = function () {
             // read configuration from a file called 'config.json'
             $$.getJSON('config.json', function (data) {
 

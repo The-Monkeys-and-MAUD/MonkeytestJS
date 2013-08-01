@@ -7,7 +7,7 @@
     var APP = global._MonkeyTestJS = global._MonkeyTestJS || {}, // APP namespace
         $$ = global.$$ = global.jQuery.noConflict(true), // jquery no conflict 
         monkeytestjs = global.monkeytestjs = new APP.MonkeyTestJS(), // create our singleton
-        START = function() {
+        START = function () {
             // read configuration from a file called 'config.json'
             $$.getJSON('config.json', function (data) {
 

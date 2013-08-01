@@ -31,15 +31,15 @@
             time = new Date();
 
         global.$$.ajax({
-           url: self.runner.testsUrl + self.src,
-           success: function(data, textStatus) {
+            url: self.runner.testsUrl + self.src,
+            success: function (data, textStatus) {
                 //global.log("Test ready on ", new Date(), " - loading on (ms): ", new Date() - time);
-           },
-           error: function(error) {
+            },
+            error: function (error) {
                 //global.log("Request to load " + src + " failed. ", error);
-           },
-           dataType: 'script',
-           async: false
+            },
+            dataType: 'script',
+            async: false
         });
 
         return true;

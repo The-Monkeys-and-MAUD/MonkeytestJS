@@ -25,35 +25,39 @@
      * @memberOf MonkeyTestJSPageTest
      * @api public
      */
-    MonkeyTestJSPageTest.prototype.runTest = function (firstTime) {
+    MonkeyTestJSPageTest.prototype.runTest = function (firstTime, callback) {
 
         var self = this,
-            callTest = function(f) {
-                if( f && typeof f === "function" ) {
+            cb = callback || function () {},
+            callTest = function (f) {
+                if (f && typeof f === "function") {
                     f.call(self, self.workspace.jQuery);
                 }
             },
             _test = self.testSpec.test,
             lookUp = {
-                isFunction: function() {
-                    callTest( _test );
+                isFunction: function () {
+                    callTest(_test);
                 },
-                isObject: function() {
-                    callTest( _test.setup ); // call bootstrap for test
-                    callTest( _test.load ); // call the test itself
+                isObject: function () {
+                    callTest(_test.setup); // call bootstrap for test
+                    callTest(_test.load); // call the test itself
                 }
             };
 
-        if(firstTime) {
+        if (firstTime) {
             // When we run the first tet we want to load the page and source code.
-            this.loadPage().loadPageSource();
+            this.loadPage()
+                .loadPageSource();
         }
 
-        lookUp[ typeof _test === "function" ? "isFunction": "isObject"]();
+        lookUp[typeof _test === "function" ? "isFunction" : "isObject"]();
 
         QUnit.module('Testing ' + self.page.url);
 
         self.start();
+
+        cb();
     };
 
     /**
@@ -198,9 +202,9 @@
      * @memberOf MonkeyTestJSPageTest
      * @api public
      */
-    MonkeyTestJSPageTest.prototype.waitForPageLoad = function ( timeout ) {
+    MonkeyTestJSPageTest.prototype.waitForPageLoad = function (timeout) {
 
-        var self = this, 
+        var self = this,
             _timeout = timeout || 5000,
             loadFn = function () {
                 self._next();
@@ -210,9 +214,9 @@
             fn = function () {
                 self._waitingTimer = global.setTimeout(loadFn, _timeout);
                 self.runner.jQuery('#workspace')
-                    .on('load', function() { 
-                        global.clearTimeout( self._waitingTimer );
-                        loadFn(); 
+                    .on('load', function () {
+                        global.clearTimeout(self._waitingTimer);
+                        loadFn();
                     });
 
             };

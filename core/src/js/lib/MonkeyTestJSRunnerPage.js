@@ -47,17 +47,17 @@
     };
 
     /**
-     * Run following tests and returns a boolen if a test has been runned.
+     * Run tests and return a boolean if there are still other tests.
      *
-     * @param {Function} callback callback when page is succesfuly loaded
      * @memberOf MonkeyTestJSPage
-     * @return {Bool} a test has been run
+     * @return {Bool} return information if there is any other tests to be runned.
      * @api public
      */
     MonkeyTestJSPage.prototype.runNextTest = function (callback) {
         var firstTime = this.totalTestsToBeRunned === this.tests.length,
-            testSpec = this.tests.shift(),
+            lastTime = this.tests.length === 1,
             cb = callback || function () {},
+            testSpec = this.tests.shift(),
             ret = false;
 
         if (testSpec) {
