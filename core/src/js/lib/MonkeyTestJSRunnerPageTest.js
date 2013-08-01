@@ -31,7 +31,7 @@
             cb = callback || function () {},
             callTest = function (f) {
                 if (f && typeof f === "function") {
-                    f.call(self, self.workspace.jQuery);
+                    f.call(self, self.$);
                 }
             },
             _test = self.testSpec.test,
@@ -194,7 +194,7 @@
         var self = this;
         var fn = function () {
             test(name, function () {
-                testFN.call(self, self.workspace.jQuery);
+                testFN.call(self, self.$);
             });
             self._next();
         };
@@ -241,7 +241,7 @@
         var self = this;
         var fn = function () {
             asyncTest(name, function () {
-                testFN.call(self, self.workspace.jQuery);
+                testFN.call(self, self.$);
             });
         };
 

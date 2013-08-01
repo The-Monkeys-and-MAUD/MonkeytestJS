@@ -65,7 +65,7 @@
             pageTest.runner = this.runner;
             pageTest.page = this;
             pageTest.window = pageTest.workspace = this.runner.workspace;
-            pageTest.$ = this.runner.workspace.jQuery;
+            pageTest.$ = this.runner.workspace.jQuery || this.runner.jQuery;
             pageTest.runTest(firstTime);
 
             ret = true;

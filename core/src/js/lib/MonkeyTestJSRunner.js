@@ -180,21 +180,11 @@
                 }
             });
 
-        } else {
-            if (!this.__FINSHEDRUNNING) {
-                this.__FINSHEDRUNNING = true;
-                this.__FINISH();
-            }
+        } else if (!this.__FINSHEDRUNNING) {
+            this.__FINSHEDRUNNING = true;
+            this.__FINISH();
         }
 
-        //if (this.currentPage && !this.currentPage.runNextTest()) {
-        //    // move to next page and run
-        //    this.currentPage = this.pages.shift();
-        //    this.nextPageTest();
-        //} else {
-        //    // this should only be called once
-        //    console.log("All tests finished", !!this.currentPage, this.pages.length );
-        //}
     };
 
     /**

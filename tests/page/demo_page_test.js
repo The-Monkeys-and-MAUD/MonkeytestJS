@@ -25,7 +25,7 @@ registerTest ('Demo page test', {
         })
 
         .loadPage("/tests/core/demo/other.html") // load a different page into the frame
-        .asyncTest ("Can we load some content into the page from openweathermap.org?",function(){
+        .asyncTest ("Can we load some content into the page from openweathermap.org?",function($){
 
             this.workspace.document.getElementsByTagName("body")[0].style.background = self.otherColor;
 
@@ -34,9 +34,9 @@ registerTest ('Demo page test', {
 
             // lets setup a global function to receive a jsonp request
             var url = "api.openweathermap.org/data/2.5/weather?q=Sydney,au",
-                body = $$("iframe").contents().find("body");
+                body = $("iframe").contents().find("body");
 
-            $$.get(this.proxyUrl + url)
+            $.get(this.proxyUrl + url)
             .success(function(data) { // we got some validation results
 
                 var cityName = data.contents.name,

@@ -180,21 +180,11 @@
                 }
             });
 
-        } else {
-            if (!this.__FINSHEDRUNNING) {
-                this.__FINSHEDRUNNING = true;
-                this.__FINISH();
-            }
+        } else if (!this.__FINSHEDRUNNING) {
+            this.__FINSHEDRUNNING = true;
+            this.__FINISH();
         }
 
-        //if (this.currentPage && !this.currentPage.runNextTest()) {
-        //    // move to next page and run
-        //    this.currentPage = this.pages.shift();
-        //    this.nextPageTest();
-        //} else {
-        //    // this should only be called once
-        //    console.log("All tests finished", !!this.currentPage, this.pages.length );
-        //}
     };
 
     /**
@@ -335,7 +325,7 @@
             pageTest.runner = this.runner;
             pageTest.page = this;
             pageTest.window = pageTest.workspace = this.runner.workspace;
-            pageTest.$ = this.runner.workspace.jQuery;
+            pageTest.$ = this.runner.workspace.jQuery || this.runner.jQuery;
             pageTest.runTest(firstTime);
 
             ret = true;
@@ -381,7 +371,7 @@
             cb = callback || function () {},
             callTest = function (f) {
                 if (f && typeof f === "function") {
-                    f.call(self, self.workspace.jQuery);
+                    f.call(self, self.$);
                 }
             },
             _test = self.testSpec.test,
@@ -544,7 +534,7 @@
         var self = this;
         var fn = function () {
             test(name, function () {
-                testFN.call(self, self.workspace.jQuery);
+                testFN.call(self, self.$);
             });
             self._next();
         };
@@ -591,7 +581,7 @@
         var self = this;
         var fn = function () {
             asyncTest(name, function () {
-                testFN.call(self, self.workspace.jQuery);
+                testFN.call(self, self.$);
             });
         };
 
