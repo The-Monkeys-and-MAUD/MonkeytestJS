@@ -31,7 +31,7 @@
      */
     MonkeyTestJSPage.prototype.loadSource = function (targetUrl, callback) {
         var self = this,
-            url = targetUrl || this.url; 
+            url = targetUrl || this.url;
 
         this.runner.jQuery.get(url)
             .success(function (data) {

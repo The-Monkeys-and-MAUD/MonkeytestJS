@@ -43,8 +43,6 @@ registerTest ('Demo page test', {
                     weather = data.contents.weather[0].description;
 
                 ok( true, 'We got a response from wheather website using an assyncTest.' );
-                ok( cityName, 'We got the city name from the json response.' );
-                ok( weather, 'We got the weather description from the json response.' );
 
                 // update the page just for the sake of displaying some visual info
                 body

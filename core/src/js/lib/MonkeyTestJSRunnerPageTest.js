@@ -142,7 +142,6 @@
         return this.runner.config;
     };
 
-
     /**
      * Loads a page into the iframe, also waits until page is loaded before moving to the next action in the chain. If you are
      * performing tests on an actual page, this will normally be the first call in a test chain.
@@ -158,7 +157,7 @@
         var self = this,
             _timeout = timeout || 5000,
             url = targetUrl || this.page.url,
-            callNext = function() {
+            callNext = function () {
                 clearTimeout(self._waitingTimer);
 
                 self._next();
@@ -181,7 +180,6 @@
 
         return this; // chainable
     };
-
 
     /**
      * Method to be called by tests running asyncRun once they are finished running.
