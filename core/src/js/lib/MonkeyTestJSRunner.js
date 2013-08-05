@@ -207,7 +207,7 @@
 
         // test specs
         this.testsUrl = /^[^\/]+:\/\/[^\/]+\//.exec(location.href)[0] +
-            this.config.testsDir;
+            this.config.testsDir + '/tests/';
         this.workspace = this.config.workspace;
         this.jQuery = this.config.jQuery;
 
