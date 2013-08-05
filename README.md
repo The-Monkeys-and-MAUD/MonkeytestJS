@@ -4,7 +4,6 @@ MonkeytestJS
 ============
 
 
-
 Getting Started
 ---------------
 
