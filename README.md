@@ -1,6 +1,5 @@
 [![Build Status](https://travis-ci.org/TheMonkeys/MonkeytestJS.png)](https://travis-ci.org/TheMonkeys/MonkeytestJS)
 
-
 QUnit Acceptance Tests
 ============
 
