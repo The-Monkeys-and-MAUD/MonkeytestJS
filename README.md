@@ -26,7 +26,7 @@ The file `config.json` include the **options** for the runner:
             "default": "000000000000000"
         }
     },
-    "testsDir": "/tests/tests/",
+    "testsDir": "tests",
     "globalTests": [
         "global/is_html_w3c_valid.js",
         "global/has_utf8_metatag.js",
