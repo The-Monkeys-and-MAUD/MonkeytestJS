@@ -1,26 +1,73 @@
-html {
-    height: 100%;
-}
-body {
-    margin:0;
-    padding:0;
-    font-family: Arial;
-    height: 100%;
-    min-height: 100%;
-}
-#container {
-    width: 100%;
-}
-.box {
-    width: 50%; 
-    float: left;
-}
-#workspace {
-    width: 100%;
-    height: 100%;
-    min-height: 100%;
-}
-h1 {
-    margin: 0;
-    padding: 1em;
-}
+/** => MonkeytestJS  2013
+ *
+ * MonkeytestJS uses QUnit styles as base.
+ *
+ * QUnit v1.12.0 - A JavaScript Unit Testing Framework
+ * http://qunitjs.com
+ * http://jquery.org/license
+ */
+
+
+/** => Main Structure <=
+ * ====================== */
+
+* { -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin:0; padding:0; font-family: Tahoma, Geneva, sans-serif; height: 100%; min-height: 100%; background: #fcfcfc; }
+div.box { float: left; }
+h1 { margin: 0; padding: 1em; font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif; font-style: italic; background: #fcfcfc; font-weight: normal; color: #0d0d0d; font-size: 2em; }
+#container { width: 100%; }
+#viewport { width: 35%; }
+#testResults { width: 65%; }
+#workspace { margin: 0; padding: 0; border: 0; width: 100%; height: 90%; min-height: 95%; background: #47423f; padding: 5px; }
+#header { padding: 40px 0px 0px; background: #2b2b2b; } 
+#logo { display: block; margin: 0 0 40px 40px; } 
+
+/** => Header <=
+ * ============== */
+
+#qunit-banner { background-color: #fcfcfc; }
+#qunit-tests, #qunit-header, #qunit-userAgent, #qunit-testresult, #qunit-modulefilter, #qunit-testrunner-toolbar{ margin: 0 40px; max-width: 960px; }
+
+/** => Tests Pass/Fail <=
+ * ======================= */
+
+#qunit-testrunner-toolbar{ background-color: transparent; padding: 25px 0; border-top: 1px solid #dcdcdc; border-bottom: 1px solid #dcdcdc; color: #0d0d0d; font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif; font-style: italic; font-size: 1.2em; }
+#qunit-testrunner-toolbar label{ margin-right: 45px; } #qunit-testrunner-toolbar label:last-child { margin-right: 0; }
+#qunit-userAgent { margin-top: 40px; margin-bottom: 40px; padding: 20px 30px; background: #2b2b2b; color: #ededed; font-size: 0.9em; border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+#qunit-tests { margin-top: 40px; background-color: transparent; color: #6e6e6e; overflow: hidden; }
+#qunit-tests li  { font-size: 1.1em; border: none; padding-left: 0; position: relative; }
+#qunit-tests li strong { width: 100%; display: block; padding-right: 140px; }
+#qunit-tests li a { float: right; margin-left: 5px; padding: 6px 10px; background-color: #ebebeb; color: #000; text-decoration: underline; position: relative; font-size: 0.8em; font-weight: bold; -moz-border-radius: 4px; border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; position: absolute; top: 0; right: 10px; }
+#qunit-tests li a:hover { background-color: #d3d3d3;    }
+#qunit-tests li.fail, #qunit-tests li.pass  { background-color: transparent; }
+#qunit-tests li.fail li, #qunit-tests li.pass li { font-size: 1em; padding: 15px 30px; color: #ffffff; background-color: transparent; border: 0; } 
+#qunit-tests li .runtime { position: absolute; top: 6px; right: 75px; width: 65px; text-align: right; white-space: pre; white-space: pre-wrap; white-space: pre-line; white-space: -pre-wrap; white-space: -o-pre-wrap; white-space: -moz-pre-wrap; white-space: -hp-pre-wrap; word-wrap: break-word; color: #6e6e6e; }
+#qunit-tests li.fail .test-name, #qunit-tests li.pass .test-name { color: #6e6e6e; }
+#qunit-tests .module-name { color: #0d0d0d; }
+#qunit-tests .qunit-assert-list { background: transparent; }
+
+
+/** => Passing Styles <=
+ * ====================== */
+
+#qunit-tests li.pass .module-name { color: #009999; }
+#qunit-tests li.pass  { color: #009999; }
+#qunit-tests li.pass .qunit-assert-list { background: #009999; }
+
+/** => Failing Styles <=
+ * ====================== */
+
+#qunit-tests li.fail { color: #ee5757; } 
+#qunit-tests li.fail .module-name { color: #ee5757; }
+#qunit-tests li.fail .test-expected { color: #0d0d0d; }
+#qunit-tests li.fail li { }
+#qunit-tests li.fail .qunit-assert-list { background: #ee5757; }
+
+/** => Result <=
+ * ============== */
+
+#qunit-testresult { padding: 0; color: #0d0d0d; background-color: transparent; font-size: 1.3em; border: 0; }   
+#qunit-testresult .module-name { font-weight: normal; }
+#qunit-tests del { font-weight: bold; background-color: #fff; border: 2px solid #009999; color: black; padding: 0 20px; }
+#qunit-tests ins { font-weight: bold; background-color: #fff; border: 2px solid red; color: black; padding: 0 20px; }
