@@ -37,7 +37,7 @@
     "**/*.txt"
   ],
   "dependencies": {
-    "qunit": "~1.1.12",
+    "qunit": "~1.12.0",
     "jquery": "~1.9.1"
   },
   "devDependencies": {
