@@ -12,7 +12,7 @@
  * ====================== */
 
 * { -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
-html, body { height: 100%; }
+html, body, #container, #viewport { height: 100%; min-height: 100%; }
 body { margin:0; padding:0; font-family: Tahoma, Geneva, sans-serif; height: 100%; min-height: 100%; background: #fcfcfc; }
 div.box { float: left; }
 h1 { margin: 0; padding: 1em; font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif; font-style: italic; background: #fcfcfc; font-weight: normal; color: #0d0d0d; font-size: 2em; }
