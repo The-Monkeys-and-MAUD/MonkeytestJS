@@ -294,12 +294,14 @@
             url = targetUrl || this.url;
 
         this.runner.jQuery.get(url)
-            .success(function (data) {
+            .success(function (data, textStatus, jqXHR) {
+                self.status = jqXHR.status;
                 self.source = data;
                 callback();
             })
-            .error(function () {
-                //log("error occured trying to loadSource");
+            .error(function (jqXHR) {
+                self.status = jqXHR.status;
+                self.source = jqXHR.responseText;
                 callback();
             });
     };

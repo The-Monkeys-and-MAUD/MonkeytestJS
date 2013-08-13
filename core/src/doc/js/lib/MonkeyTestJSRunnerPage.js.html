@@ -229,12 +229,14 @@ code {
             url = targetUrl || this.url;
 
         this.runner.jQuery.get(url)
-            .success(function (data) {
+            .success(function (data, textStatus, jqXHR) {
+                self.status = jqXHR.status;
                 self.source = data;
                 callback();
             })
-            .error(function () {
-                //log(&quot;error occured trying to loadSource&quot;);
+            .error(function (jqXHR) {
+                self.status = jqXHR.status;
+                self.source = jqXHR.responseText;
                 callback();
             });
     };</code></pre></div></div></div></article><article class="comment"><header><h1 id="runNextTest">runNextTest</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>MonkeyTestJSPage.prototype.runNextTest()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@memberOf: </span><span class="parent">MonkeyTestJSPage</span></li><li class="tag"><span class="type">@return: </span><span class="types">{Bool}</span><span class="description">return information if there is any other tests to be runned.</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Run tests and return a boolean if there are still other tests.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">MonkeyTestJSPage.prototype.runNextTest = function (callback) {

@@ -16,6 +16,7 @@
     },
     "testsDir": "tests",
     "globalTests": [
+        "global/not_server_error.js",
         "global/is_html_w3c_valid.js",
         "global/has_utf8_metatag.js",
         "global/has_facebook_appid.js",
