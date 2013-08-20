@@ -194,7 +194,7 @@
         var self = this;
         var fn = function () {
             test(name, function () {
-                testFN.call(self, self.$);
+                testFN.call(self, self.workspace.window.$);
             });
             self._next();
         };
