@@ -5,29 +5,23 @@ MonkeytestJS
 
 ***Automated regression testing for front end web developers***
 
-There are plenty of tools around for writing automated browser based tests but normal people don't use them. By "normal people" we mean front end developers.
+There are plenty of tools around for writing automated browser based tests (like [Selenium](#), [Sahi](http://sahi.co.in/w/), [eValid](http://www.e-valid.com/), [Watir](http://wtr.rubyforge.org/) and [Canoo](http://webtest.canoo.com/webtest/manual/WebTestHome.html)) but normal people don't use them. By "normal people" we mean front end developers.
 
-Tools for automating browser tests, like [Selenium](#), [Sahi](http://sahi.co.in/w/), [eValid](http://www.e-valid.com/), [Watir](http://wtr.rubyforge.org/), [Canoo](http://webtest.canoo.com/webtest/manual/WebTestHome.html) have an overhead and most of them require the kind of development environment that front end developers often aren't using.
+You might be writing unit tests ("might"), but unless a project is large enough to warrant a dedicated test team, the chances are that there won't be any automated top level testing of the interface. That's a shame because when something goes wrong, it's you they'll be looking at harshly.
 
-Developers might be writing unit tests, but unless a project is large enough to warrant a dedicated test team, the chances are that there won't be any automated top level testing of the interface. That's a shame because if something goes wrong, it's the developers who get blamed.
+MonkeyTestJS is great for building up a suite of regression tests while you're building the functionality of your project. You can write tests quickly using plain old client side javascript and then run them in a browser. 
 
-Wth MonkeyTestJS, front end developers can write high level automated tests quickly using javascript and then run them in a browser. Built on top of [QUnit](http://qunitjs.com/), the unit testing framework used by [JQuery](https://jquery.org/), MonkeyTestJS pulls whole web pages into an ifame and tests the DOM directly.
-
-MonkeyTestJS is great for building up a suite of regression tests while you're building the functionality of your project.
+MonkeyTestJS is built on top of [QUnit](http://qunitjs.com/), the unit testing framework used by [JQuery](https://jquery.org/). However, instead of just testing javascript functions, MonkeyTestJS pulls whole web pages into an ifame and tests the DOM of the page. You write events to simulate user interaction and then check the DOM for the expected result.
 
 Don't take our word for it, have a look:
 
 http://monkeytestjs.io/tests
 
-Because the test suite is run from a URL, it can be run in:
+Because the test suite is run from a URL, it can be run in a browser tab while you're working. Or in a headless browser like [PhantomJS](http://phantomjs.org/) as part of coninuous integration (see [grunt-MonkeytestJS](https://github.com/TheMonkeys/grunt-MonkeytestJS)). Or across a suite of browsers using a service like [BrowserStack](http://www.browserstack.com/).
 
-* a browser tab while you're working
-* a headless browser like [PhantomJS](http://phantomjs.org/) as part of coninuous integration (see [grunt-MonkeytestJS](https://github.com/TheMonkeys/grunt-MonkeytestJS))
-* a suite of browsers using a service like [BrowserStack](http://www.browserstack.com/).
+Tests can be asynchronous so it's good for AJAX and dynamically generated markup. MonkeyTestJS also comes with a  proxy (a PHP proxy and a NodeJS proxy actually) which seamlessly handles cross domain requests.
 
-Tests can be completely asynchronous so it's good for AJAX and dynamically generated markup. MonkeyTestJS also comes with a PHP proxy and a NodeJS proxy which seamlessly handle cross domain requests (one of the limitations of client side javascript)
-
-Custom tests are quick to write, but it's also easy to re-use tests across pages of your site. For example, just by adding a page to the test suite, you can automatically test things like HTML validation, Google Analytics, character encoding etc. Check out the /core/demo pages for some global tests you can use out of the box.
+Custom tests are quick to write, but it's also easy to re-use tests across pages. For example, just by adding a page to the test suite, you can automatically test things like HTML validation, Google Analytics, character encoding etc. without writing a test. Check out the /core/demo pages for some global tests you can apply out of the box.
 
 
 
