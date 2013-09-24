@@ -75,7 +75,8 @@ for the Home page of your app, so that the `pages` section looks like this:
             "url": "/tests/core/demo/index.html?pretendIsAnotherPage=true",
             "tests": [ "page/demo_page_test.js" ]
         }
-    ]```
+    ]
+```
 
 If you go to http://your-web-app.com/MonkeyTestJS now, you'll see some global tests being run on your Home page as
 well as the demo pages.
