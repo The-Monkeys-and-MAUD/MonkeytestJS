@@ -325,7 +325,7 @@ Parameters:
 
 Returns:
 
-    An instance of ```MonkeyTestJSPageTest```, suitable for chaining JQuery stylee.
+An instance of ```MonkeyTestJSPageTest```, suitable for chaining JQuery stylee.
 
 Example:
 
