@@ -26,11 +26,15 @@
     ],
     "pages": [
         {
-            "url": "/core/demo/index.html"
+            "url": "../"
         },
         {
-            "url": "/core/demo/index.html?pretendIsAnotherPage=true",
+            "url": "core/demo/index.html"
+        },
+        {
+            "url": "core/demo/index.html?pretendIsAnotherPage=true",
             "tests": [ "page/demo_page_test.js" ]
         }
-    ]
+    ],
+    "proxyUrl": "core/proxy.php?url="
 }

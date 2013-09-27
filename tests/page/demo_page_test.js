@@ -1,6 +1,5 @@
 registerTest ('Demo page test', {
     setup: function() {
-        this.proxyUrl = '/tests/core/proxy.php?url=';
         this.containerElement = this.workspace.document.getElementById("container");
         this.startBackground = this.containerElement.style.background; 
         this.otherColor = "red";
@@ -46,7 +45,7 @@ registerTest ('Demo page test', {
             var url = "api.openweathermap.org/data/2.5/weather?q=Sydney,au",
                 body = $("iframe").contents().find("body");
 
-            $.get(this.proxyUrl + url)
+            $.get(this.config.proxyUrl + url)
             .success(function(data) { // we got some validation results
 
                 var cityName = data.contents.name,

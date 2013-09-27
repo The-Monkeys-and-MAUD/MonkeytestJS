@@ -143,9 +143,14 @@ pre[class*="language-"] {
 #nav .section .title:hover {
   background: #ddd;
 }
+#nav ul.solo {
+  border-top: 1px solid #ccc;
+  padding: 0.875em;
+}
 code {
   background: transparent;
   line-height: 1.3em;
+  font-weight: normal;
 }
 .comment {
   position: relative;
@@ -213,7 +218,7 @@ code {
   margin-right: 6px;
   font-size: 0.7em;
 }
-</style><script srr="http://cdnjs.cloudflare.com/ajax/libs/foundation/4.1.6/js/vendor/custom.modernizr.js"></script></head><body><div class="row"><div class="small-12 columns"><h1 class="page-title">monkeytestjs<small> js/lib/MonkeyTestJSRunner.js</small></h1></div></div><div class="row"><div id="nav" class="large-3 columns"><div data-section="accordian" data-options="" class="section-container accordian"><div class="section active"><p data-section-title class="title"><a href="../../../doc/js/lib/MonkeyTestJSRunner.js.html"><small>js/lib/</small>MonkeyTestJSRunner.js</a></p><div data-section-content class="content"><ul class="side-nav"><li><a href="../../../doc/js/lib/MonkeyTestJSRunner.js.html#MonkeyTestJS">MonkeyTestJS</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunner.js.html#setupTests">setupTests</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunner.js.html#addTest">addTest</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunner.js.html#getTest">getTest</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunner.js.html#loadNextTest">loadNextTest</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunner.js.html#registerTest">registerTest</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunner.js.html#loadTestsDone">loadTestsDone</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunner.js.html#startTests">startTests</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunner.js.html#nextPageTest">nextPageTest</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunner.js.html#start">start</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunner.js.html#onFinish">onFinish</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunner.js.html#__FINISH">__FINISH</a></li></ul></div></div><div class="section"><p data-section-title class="title"><a href="../../../doc/js/lib/MonkeyTestJSRunnerPage.js.html"><small>js/lib/</small>MonkeyTestJSRunnerPage.js</a></p><div data-section-content class="content"><ul class="side-nav"><li><a href="../../../doc/js/lib/MonkeyTestJSRunnerPage.js.html#MonkeyTestJSPage">MonkeyTestJSPage</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunnerPage.js.html#loadSource">loadSource</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunnerPage.js.html#runNextTest">runNextTest</a></li></ul></div></div><div class="section"><p data-section-title class="title"><a href="../../../doc/js/lib/MonkeyTestJSRunnerPageTest.js.html"><small>js/lib/</small>MonkeyTestJSRunnerPageTest.js</a></p><div data-section-content class="content"><ul class="side-nav"><li><a href="../../../doc/js/lib/MonkeyTestJSRunnerPageTest.js.html#MonkeyTestJSPageTest">MonkeyTestJSPageTest</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunnerPageTest.js.html#runTest">runTest</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunnerPageTest.js.html#start">start</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunnerPageTest.js.html#_next">_next</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunnerPageTest.js.html#env">env</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunnerPageTest.js.html#config">config</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunnerPageTest.js.html#loadPage">loadPage</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunnerPageTest.js.html#test">test</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunnerPageTest.js.html#wait">wait</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunnerPageTest.js.html#asyncTest">asyncTest</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunnerPageTest.js.html#asyncTestDone">asyncTestDone</a></li></ul></div></div><div class="section"><p data-section-title class="title"><a href="../../../doc/js/lib/MonkeyTestJSRunnerTest.js.html"><small>js/lib/</small>MonkeyTestJSRunnerTest.js</a></p><div data-section-content class="content"><ul class="side-nav"><li><a href="../../../doc/js/lib/MonkeyTestJSRunnerTest.js.html#MonkeyTestJSTest">MonkeyTestJSTest</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunnerTest.js.html#load">load</a></li></ul></div></div><div class="section"><p data-section-title class="title"><a href="../../../doc/js/lib/UTILS.js.html"><small>js/lib/</small>UTILS.js</a></p><div data-section-content class="content"><ul class="side-nav"><li><a href="../../../doc/js/lib/UTILS.js.html#UTILS">UTILS</a></li></ul></div></div></div></div><div class="small-12 large-9 columns"><article class="comment"><header></header><ul class="no-bullet tags"></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>globals QUnit, test, asyncTest</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">(function (global) {
+</style><script srr="http://cdnjs.cloudflare.com/ajax/libs/foundation/4.1.6/js/vendor/custom.modernizr.js"></script></head><body><div class="row"><div class="small-12 columns"><h1 class="page-title">monkeytestjs<small> js/lib/MonkeyTestJSRunner.js</small></h1></div></div><div class="row"><div id="nav" class="large-3 columns"><div data-section="accordian" data-options="" class="section-container accordian"><div class="section active"><p data-section-title class="title"><a href="../../../doc/js/lib/MonkeyTestJSRunner.js.html"><small>js/lib/</small>MonkeyTestJSRunner.js</a></p><div data-section-content class="content"><ul class="side-nav"><li><a href="../../../doc/js/lib/MonkeyTestJSRunner.js.html#MonkeyTestJS">MonkeyTestJS</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunner.js.html#setupTests">setupTests</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunner.js.html#addTest">addTest</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunner.js.html#getTest">getTest</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunner.js.html#loadNextTest">loadNextTest</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunner.js.html#registerTest">registerTest</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunner.js.html#loadTestsDone">loadTestsDone</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunner.js.html#startTests">startTests</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunner.js.html#nextPageTest">nextPageTest</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunner.js.html#start">start</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunner.js.html#onFinish">onFinish</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunner.js.html#__FINISH">__FINISH</a></li></ul></div></div><div class="section"><p data-section-title class="title"><a href="../../../doc/js/lib/MonkeyTestJSRunnerPage.js.html"><small>js/lib/</small>MonkeyTestJSRunnerPage.js</a></p><div data-section-content class="content"><ul class="side-nav"><li><a href="../../../doc/js/lib/MonkeyTestJSRunnerPage.js.html#MonkeyTestJSPage">MonkeyTestJSPage</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunnerPage.js.html#loadSource">loadSource</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunnerPage.js.html#runNextTest">runNextTest</a></li></ul></div></div><div class="section"><p data-section-title class="title"><a href="../../../doc/js/lib/MonkeyTestJSRunnerPageTest.js.html"><small>js/lib/</small>MonkeyTestJSRunnerPageTest.js</a></p><div data-section-content class="content"><ul class="side-nav"><li><a href="../../../doc/js/lib/MonkeyTestJSRunnerPageTest.js.html#MonkeyTestJSPageTest">MonkeyTestJSPageTest</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunnerPageTest.js.html#runTest">runTest</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunnerPageTest.js.html#start">start</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunnerPageTest.js.html#_next">_next</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunnerPageTest.js.html#loadPage">loadPage</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunnerPageTest.js.html#test">test</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunnerPageTest.js.html#wait">wait</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunnerPageTest.js.html#asyncTest">asyncTest</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunnerPageTest.js.html#asyncTestDone">asyncTestDone</a></li></ul></div></div><div class="section"><p data-section-title class="title"><a href="../../../doc/js/lib/MonkeyTestJSRunnerTest.js.html"><small>js/lib/</small>MonkeyTestJSRunnerTest.js</a></p><div data-section-content class="content"><ul class="side-nav"><li><a href="../../../doc/js/lib/MonkeyTestJSRunnerTest.js.html#MonkeyTestJSTest">MonkeyTestJSTest</a></li><li><a href="../../../doc/js/lib/MonkeyTestJSRunnerTest.js.html#load">load</a></li></ul></div></div><div class="section"><p data-section-title class="title"><a href="../../../doc/js/lib/UTILS.js.html"><small>js/lib/</small>UTILS.js</a></p><div data-section-content class="content"><ul class="side-nav"><li><a href="../../../doc/js/lib/UTILS.js.html#UTILS">UTILS</a></li></ul></div></div></div></div><div class="small-12 large-9 columns"><article class="comment"><header></header><ul class="no-bullet tags"></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>globals QUnit, test, asyncTest</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">(function (global) {
 
     // APP namespace
     var APP = global._MonkeyTestJS = global._MonkeyTestJS || {};</code></pre></div></div></div></article><article class="comment"><header><h1 id="MonkeyTestJS">MonkeyTestJS</h1><h5 class="subheader"><div class="label radius ctx-type">declaration</div>MonkeyTestJS</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@return: </span><span class="types">{Object}</span><span class="description">MonkeyTestJS instance.</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Constructor</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">var MonkeyTestJS = APP.MonkeyTestJS = function () {
@@ -241,8 +246,13 @@ code {
             // store runner reference
             page.runner = this;
 
+            // Add the actual name of the MonkeyTestJS
+            // dir to the URL
+            page.url = location.pathname + page.url;
+
+            // K 20130926: This is not being used afaik
             // add page to be tested
-            this.pagesToTest.push(this.config.pages[i].url);
+            this.pagesToTest.push(location.pathname + this.config.pages[i].url);
 
             // add global tests
             for (var j = 0, lenJ = globalTests.length; j &lt; lenJ; j++) {
@@ -288,7 +298,7 @@ code {
             };
 
         // load test or finish tests execution
-        lookUp[currentTest ? &quot;loadTest&quot; : &quot;finishTesting&quot;]();
+        lookUp[currentTest ? 'loadTest' : 'finishTesting']();
     };</code></pre></div></div></div></article><article class="comment"><header><h1 id="registerTest">registerTest</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>MonkeyTestJS.prototype.registerTest()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{String}</span><span class="name">name</span><span class="description">name of the test</span></li><li class="tag"><span class="type">@param: </span><span class="types">{Function}</span><span class="name">test</span><span class="description">function to be executed as the test</span></li><li class="tag"><span class="type">@memberOf: </span><span class="parent">MonkeyTestJS</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Adds name and function to testcase than get next one.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">MonkeyTestJS.prototype.registerTest = function (name, test) {
         this.loadingCurrentTest.test = test;
         this.loadingCurrentTest.name = name;
@@ -322,16 +332,45 @@ code {
     };</code></pre></div></div></div></article><article class="comment"><header><h1 id="start">start</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>MonkeyTestJS.prototype.start()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{Object}</span><span class="name">settings</span><span class="description">startup settings passed usually by config.json file</span></li><li class="tag"><span class="type">@memberOf: </span><span class="parent">MonkeyTestJS</span></li><li class="tag"><span class="type">@return: </span><span class="types">{Object}</span><span class="description">context for chaining</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Method to be called by tests running asyncTest once they are finished running.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">MonkeyTestJS.prototype.start = function (settings) {
 
         this.config = {
-            testsDir: '/tests/', // requires leading and trailing slash or just '/' if root of server
             pageTests: {},
             globalTests: []
         };
+
+        // K: Hack in a fix for the environment specific
+        // overrides in config.json
+        global.$$.each(settings, function (settingName, setting) {
+
+            if (setting.hasOwnProperty('env')) {
+
+                var envProps = setting;
+
+                var env = envProps.env;
+
+                global.$$.each(env, function (envKey, envString) {
+
+                    if (location.href.indexOf(envString) &gt;= 0) {
+
+                        global.$$.each(envProps, function (
+                            envPropName, envPropValue) {
+                            settings[envPropName] =
+                                envPropValue;
+                        });
+                    }
+
+                });
+
+                // K: For (probably misplaced) neatness,
+                // delete the environment setting
+                delete settings[settingName];
+            }
+
+        });
 
         APP.Utils.__extends(this.config, settings || {});
 
         // test specs
         this.testsUrl = /^[^\/]+:\/\/[^\/]+\//.exec(location.href)[0] +
-            this.config.testsDir + '/tests/';
+            location.pathname + '/tests/';
         this.workspace = this.config.workspace;
         this.jQuery = this.config.jQuery;
 
@@ -382,6 +421,6 @@ Prism.languages.scss=Prism.languages.extend("css",{comment:{pattern:/(^|[^\\])(\
   $(document).foundation();
 
   $(function(){
-    $('pre').addClass('language-javascript');
+    $('pre code').addClass('language-javascript');
   //   $('#nav > ul > li > a[href$="'+location.pathname.substring(location.pathname.lastIndexOf('/')+1, location.pathname.length)+'"]').parent().addClass('active');
   })</script></body></html>

@@ -28,8 +28,6 @@ registerTest ('Has a Facebook appID', {
                     //var facebookId = this.config().facebookId;
                     var facebookId = this.config.facebookId;
 
-                    console.log(this.config);
-
                     // Have we got a facebook id
                     notEqual(id[0],'','Has A Facebook ID');
 

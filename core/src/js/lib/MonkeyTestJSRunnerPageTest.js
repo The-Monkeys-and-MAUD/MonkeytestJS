@@ -16,7 +16,7 @@
         // K: This is probably not required. It doesn't seem to
         // be used in the tests
         this.runner = runner;
-        
+
         this.config = runner.config;
 
         this.chain = [];
@@ -95,7 +95,7 @@
 
         lookUp[pageActions ? 'callCurrentPageAction' : 'callNextPage']();
     };
-    
+
     /**
      * Loads a page into the iframe, also waits until page is loaded before moving to the next action in the chain. If you are
      * performing tests on an actual page, this will normally be the first call in a test chain.

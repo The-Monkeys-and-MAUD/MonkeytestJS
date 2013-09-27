@@ -99,7 +99,6 @@
      */
     MonkeyTestJS.prototype.getTest = function (src) {
 
-
         // return test or create one
         var test = this.tests[src] || this.addTest(src);
 
@@ -212,7 +211,7 @@
         // overrides in config.json
         global.$$.each(settings, function (settingName, setting) {
 
-            if(setting.hasOwnProperty('env')) {
+            if (setting.hasOwnProperty('env')) {
 
                 var envProps = setting;
 
@@ -222,11 +221,12 @@
 
                     if (location.href.indexOf(envString) >= 0) {
 
-                        global.$$.each(envProps, function (envPropName, envPropValue) {
-                            settings[envPropName] = envPropValue;
+                        global.$$.each(envProps, function (
+                            envPropName, envPropValue) {
+                            settings[envPropName] =
+                                envPropValue;
                         });
                     }
-
 
                 });
 
@@ -240,7 +240,8 @@
         APP.Utils.__extends(this.config, settings || {});
 
         // test specs
-        this.testsUrl = /^[^\/]+:\/\/[^\/]+\//.exec(location.href)[0] + location.pathname + '/tests/';
+        this.testsUrl = /^[^\/]+:\/\/[^\/]+\//.exec(location.href)[0] +
+            location.pathname + '/tests/';
         this.workspace = this.config.workspace;
         this.jQuery = this.config.jQuery;
 

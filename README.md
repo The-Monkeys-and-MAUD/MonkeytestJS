@@ -56,32 +56,10 @@ cd path/to/webroot
 git clone git@github.com:TheMonkeys/MonkeytestJS.git
 ```
 
-If you view the [MonkeyTestJS][1] directory now in a browser (as in go to "http://your-web-app.dev/[MonkeyTestJS][1]"), you'll
-see some default tests running on the demo HTML page
+If you view the [MonkeyTestJS][1] directory now in a browser (as in go to "http://your-web-app.dev/MonkeyTestJS"), you'll
+see some default tests running on your Home page and some demo pages.
 
-**Step 2**: Open up the config.json and find the "pages" section. At the top of the "pages" section, put in an entry
-for the Home page of your app, so that the `pages` section looks like this:
-
-```javascript
-
-    "pages": [
-        {
-            "url": "/"
-        },
-        {
-            "url": "/tests/core/demo/index.html"
-        },
-        {
-            "url": "/tests/core/demo/index.html?pretendIsAnotherPage=true",
-            "tests": [ "page/demo_page_test.js" ]
-        }
-    ]
-```
-
-If you go to http://your-web-app.dev/[MonkeyTestJS][1] now, you'll see some global tests being run on your Home page as
-well as the demo pages.
-
-**Step 3**: Optionally: Rename the directory to something more friendly (or, if you like, unique to your project), like "tests":
+**Optionally:** Rename the directory to something more friendly || unique || boring, like "tests":
 
 ```
 mv MonkeytestJS tests
@@ -98,10 +76,10 @@ The file **/config.json** is where you should put all your settings. Out of the 
 ```javascript
 
 {
-    "facebookId": "111111111111111",
+    "facebookId": "000000000000000",
 
     "local": {
-        "env": ["LOCAL URL OR PART OF"]
+        "env": ["DEV URL OR PART OF"]
     },
     "stage": {
         "env": ["STAGE URL OR PART OF"],
@@ -125,13 +103,17 @@ The file **/config.json** is where you should put all your settings. Out of the 
     ],
     "pages": [
         {
-            "url": "/tests/core/demo/index.html"
+            "url": "../"
         },
         {
-            "url": "/tests/core/demo/index.html?pretendIsAnotherPage=true",
+            "url": "core/demo/index.html"
+        },
+        {
+            "url": "core/demo/index.html?pretendIsAnotherPage=true",
             "tests": [ "page/demo_page_test.js" ]
         }
-    ]
+    ],
+    "proxyUrl": "core/proxy.php?url="
 }
 ```
 
@@ -168,25 +150,25 @@ if your development environment URL contians the string "localhost" and you have
 
  ```javascript
 
-    "facebookId": "111111111111111",
+    "facebookId": "000000000000000",
 
     "local": {
         "env": ["dev","localhost"],
-        "facebookId": "222222222222222222",
+        "facebookId": "88888888888888888",
     },
 ```
 
-then `this.config.facebookId` will have a value "222222222222222222".
+then `this.config.facebookId` will have a value "88888888888888888".
 
 You can setup as many environments as you wish. In the default **/config.json** file the `local` environment
 doesn't override the default `facebookId` value, effectively making `local` the default. 
 
  ```javascript
 
-    "facebookId": "111111111111111",
+    "facebookId": "000000000000000",
 
     "local": {
-        "env": ["LOCAL URL OR PART OF"],
+        "env": ["DEV URL OR PART OF"]
     },
     "stage": {
         "env": ["STAGE URL OR PART OF"],
@@ -207,7 +189,7 @@ doesn't override the default `facebookId` value, effectively making `local` the 
 
 ### `facebookId` - String
 
-Used in the demo tests to check the Facebook ID. This is overridden in the specific settings for each environment.
+Used in the demo **/tests/global/has_facebook_appid.js** test to check the Facebook ID. In the demo **config/json** file, this is set to "000000000000000" so that the demo tests pass and is 'overridden' in the specific settings for each environment.
 
 
 ### `globalTests` - Array
@@ -221,7 +203,7 @@ MonkeytestJS ships with four default tests:
 - **/tests/global/has_facebook_appid.js** ( check for the facebookAPP id based on the environment )
 - **/tests/global/has_google_analytics.js** ( check if we have google analytics setup )
 
-Removing** or adding a global test from the test suite is just a matter of deleting or adding a reference to it in the "globalTests" section:
+Removing or adding a global test from the test suite is just a matter of deleting or adding a reference to it in the "globalTests" section of the **/config.json** file:
 
 ```javascript
 
@@ -232,7 +214,7 @@ Removing** or adding a global test from the test suite is just a matter of delet
     ]
 ```
 
-Note that the path to the tests should be relative to the **/tests** directory.
+Urls for the global tests are relative to the **/tests** directory in the MonkeyTestJS directory.
 
 ***
 
@@ -240,7 +222,7 @@ Note that the path to the tests should be relative to the **/tests** directory.
 
 **`pages[].url` - String**
 
-URLs for the pages to be tested, relative to the webroot of the site.
+URLs for the pages to be tested, relative to the MonkeyTestJS directory.
 
 example:
 
@@ -248,16 +230,16 @@ example:
 
     "pages": [
         {
-            "url": "/MonkeytestJS/tests/core/demo/index.html"
+            "url": "core/demo/index.html"
         }
 ```
 
 
 **`pages[].tests` - Array**
 
-Assign custom tests for the page. Custom tests will be run on the page after the **global tests** have finished.
+Assign custom tests for the page. Custom tests will be run on the page after the global tests have finished.
 
-**Url for the tests are based on the `testsDir`**
+Urls for the page tests are relative to the **/tests** directory in the MonkeyTestJS directory.
 
 example:
 
@@ -265,13 +247,36 @@ example:
 
     "pages": [
         {
-            "url": "/MonkeytestJS/tests/core/demo/index.html",
+            "url": "core/demo/index.html",
             "tests": [
                 "page/demo_page_test.js"
         }
 
     ]
 ```
+
+***
+
+### `proxyUrl` - String
+
+Cross domain restricitons limit the scope of front end javascript. To help mitigate this, we recommend using a simple
+proxy when necessary.
+
+In the demo test **/tests/global/is_html_w3c_valid.js** we send the full page markup off to the W3C validator and get back the result.
+Because the W3C site is a different domain, we use the proxy.
+
+The URL for the proxy script is specified in the **/config.json** file and is relative to the MonkeyTestJS directory.
+
+example:
+
+```javascript
+
+    "proxyUrl": "core/proxy.php?url="
+```
+
+The proxy is [PHP][2]. If you're using another language on the server side, you can use your own proxy script and change the path
+in the **/config.json** file to reference it.
+
 
 MonkeytestJS API
 ----------------
@@ -363,3 +368,4 @@ Refer to example test on: **/tests/page/demo_page_test.js**
 ------------------------------------------------
 
 [1]: http://monkeytestjs.io/
+[2]: http://php.net/
