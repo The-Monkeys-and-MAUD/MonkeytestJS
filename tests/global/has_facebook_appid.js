@@ -3,13 +3,19 @@ registerTest ('Has a Facebook appID', {
             // Searches for:
             //   FB.init({
             //       appId      : '399677190122262'
+
+            'use strict';
+
             this.facebookMatchPattern = /FB.init\(\{([\s\n])*appId([\s\n])*:([\s\n])*([\'\"])*([0-9])*([\'\"])*/g;
             this.facebookMatchId =/([0-9])+/g;
             this.sourceCode = this.page.source;
         },
         load : function () {
+
+            'use strict';
+
             this
-            .test("Do we have a Facebook ID?", function() {
+            .test('Do we have a Facebook ID?', function() {
 
                 // Searches for:
                 //   FB.init({
@@ -18,20 +24,21 @@ registerTest ('Has a Facebook appID', {
 
                 if(facebookTag && facebookTag.length) { // we have a facebook tag
 
-                    var id = facebookTag[0].match(this.facebookMatchId),
-                        env = this.env(),
-                        facebookConfig = this.config().facebook || {ids: {}}, // to avoid errors from broken configs
-                        envFacebookId = facebookConfig.ids[env];
+                    var id = facebookTag[0].match(this.facebookMatchId);
+                    //var facebookId = this.config().facebookId;
+                    var facebookId = this.config.facebookId;
+
+                    console.log(this.config);
 
                     // Have we got a facebook id
-                    notEqual(id[0],"","Has A Facebook ID");
+                    notEqual(id[0],'','Has A Facebook ID');
 
                     // Is the facebook id that we have the correct for this environment
-                    equal(id[0],envFacebookId,"Facebook ID is "+envFacebookId);
+                    equal(facebookId,id[0],'Facebook ID is ' + facebookId);
 
 
                 } else { // no facebook tag found
-                    ok(false,"Facebook Tag not found on page");
+                    ok(false,'Facebook Tag not found on page');
                 }
             });
         }

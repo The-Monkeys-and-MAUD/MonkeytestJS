@@ -44,8 +44,13 @@
             // store runner reference
             page.runner = this;
 
+            // Add the actual name of the MonkeyTestJS
+            // dir to the URL
+            page.url = location.pathname + page.url;
+
+            // K 20130926: This is not being used afaik
             // add page to be tested
-            this.pagesToTest.push(this.config.pages[i].url);
+            this.pagesToTest.push(location.pathname + this.config.pages[i].url);
 
             // add global tests
             for (var j = 0, lenJ = globalTests.length; j < lenJ; j++) {
@@ -94,6 +99,7 @@
      */
     MonkeyTestJS.prototype.getTest = function (src) {
 
+
         // return test or create one
         var test = this.tests[src] || this.addTest(src);
 
@@ -120,7 +126,7 @@
             };
 
         // load test or finish tests execution
-        lookUp[currentTest ? "loadTest" : "finishTesting"]();
+        lookUp[currentTest ? 'loadTest' : 'finishTesting']();
     };
 
     /**
@@ -198,16 +204,43 @@
     MonkeyTestJS.prototype.start = function (settings) {
 
         this.config = {
-            testsDir: '/tests/', // requires leading and trailing slash or just '/' if root of server
             pageTests: {},
             globalTests: []
         };
 
+        // K: Hack in a fix for the environment specific
+        // overrides in config.json
+        global.$$.each(settings, function (settingName, setting) {
+
+            if(setting.hasOwnProperty('env')) {
+
+                var envProps = setting;
+
+                var env = envProps.env;
+
+                global.$$.each(env, function (envKey, envString) {
+
+                    if (location.href.indexOf(envString) >= 0) {
+
+                        global.$$.each(envProps, function (envPropName, envPropValue) {
+                            settings[envPropName] = envPropValue;
+                        });
+                    }
+
+
+                });
+
+                // K: For (probably misplaced) neatness,
+                // delete the environment setting
+                delete settings[settingName];
+            }
+
+        });
+
         APP.Utils.__extends(this.config, settings || {});
 
         // test specs
-        this.testsUrl = /^[^\/]+:\/\/[^\/]+\//.exec(location.href)[0] +
-            this.config.testsDir + '/tests/';
+        this.testsUrl = /^[^\/]+:\/\/[^\/]+\//.exec(location.href)[0] + location.pathname + '/tests/';
         this.workspace = this.config.workspace;
         this.jQuery = this.config.jQuery;
 

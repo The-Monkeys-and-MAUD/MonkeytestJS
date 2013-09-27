@@ -1,20 +1,22 @@
 {
-    "envs": {
-        "local": ["LOCAL URL OR PART OF"],
-        "stage": ["STAGE URL OR PART OF"],
-        "beta": ["BETA URL OR PART OF"],
-        "production": ["PRODUCTION URL OR PART OF"]
+    "facebookId": "000000000000000",
+
+    "local": {
+        "env": ["DEV URL OR PART OF"]
     },
-    "facebook": {
-        "ids": {
-            "local": "111111111111111",
-            "stage": "222222222222222",
-            "beta": "333333333333333",
-            "production": "444444444444444",
-            "default": "000000000000000"
-        }
+    "stage": {
+        "env": ["STAGE URL OR PART OF"],
+        "facebookId": "222222222222222"
     },
-    "testsDir": "tests",
+    "beta": {
+        "env": ["BETA URL OR PART OF"],
+        "facebookId": "33333333333333333"
+    },
+    "production": {
+        "env": ["PRODUCTION URL OR PART OF"],
+        "facebookId": "4444444444444444444"
+    },
+
     "globalTests": [
         "global/not_server_error.js",
         "global/is_html_w3c_valid.js",
@@ -24,10 +26,10 @@
     ],
     "pages": [
         {
-            "url": "/tests/core/demo/index.html"
+            "url": "/core/demo/index.html"
         },
         {
-            "url": "/tests/core/demo/index.html?pretendIsAnotherPage=true",
+            "url": "/core/demo/index.html?pretendIsAnotherPage=true",
             "tests": [ "page/demo_page_test.js" ]
         }
     ]

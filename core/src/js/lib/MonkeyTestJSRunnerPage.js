@@ -16,7 +16,7 @@
         config = config || {};
 
         APP.Utils.__extends(this, config);
-        this.source = "";
+        this.source = '';
         this.tests = [];
         this.currentTest = -1;
         this.runner = runner;
@@ -61,7 +61,7 @@
             ret = false;
 
         if (testSpec) {
-            var pageTest = new APP.MonkeyTestJSPageTest({}, this.runner);
+            var pageTest = new APP.MonkeyTestJSPageTest(this.runner);
 
             pageTest.testSpec = testSpec;
             pageTest.runner = this.runner;

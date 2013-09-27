@@ -44,8 +44,13 @@
             // store runner reference
             page.runner = this;
 
+            // Add the actual name of the MonkeyTestJS
+            // dir to the URL
+            page.url = location.pathname + page.url;
+
+            // K 20130926: This is not being used afaik
             // add page to be tested
-            this.pagesToTest.push(this.config.pages[i].url);
+            this.pagesToTest.push(location.pathname + this.config.pages[i].url);
 
             // add global tests
             for (var j = 0, lenJ = globalTests.length; j < lenJ; j++) {
@@ -94,6 +99,7 @@
      */
     MonkeyTestJS.prototype.getTest = function (src) {
 
+
         // return test or create one
         var test = this.tests[src] || this.addTest(src);
 
@@ -120,7 +126,7 @@
             };
 
         // load test or finish tests execution
-        lookUp[currentTest ? "loadTest" : "finishTesting"]();
+        lookUp[currentTest ? 'loadTest' : 'finishTesting']();
     };
 
     /**
@@ -198,16 +204,43 @@
     MonkeyTestJS.prototype.start = function (settings) {
 
         this.config = {
-            testsDir: '/tests/', // requires leading and trailing slash or just '/' if root of server
             pageTests: {},
             globalTests: []
         };
 
+        // K: Hack in a fix for the environment specific
+        // overrides in config.json
+        global.$$.each(settings, function (settingName, setting) {
+
+            if(setting.hasOwnProperty('env')) {
+
+                var envProps = setting;
+
+                var env = envProps.env;
+
+                global.$$.each(env, function (envKey, envString) {
+
+                    if (location.href.indexOf(envString) >= 0) {
+
+                        global.$$.each(envProps, function (envPropName, envPropValue) {
+                            settings[envPropName] = envPropValue;
+                        });
+                    }
+
+
+                });
+
+                // K: For (probably misplaced) neatness,
+                // delete the environment setting
+                delete settings[settingName];
+            }
+
+        });
+
         APP.Utils.__extends(this.config, settings || {});
 
         // test specs
-        this.testsUrl = /^[^\/]+:\/\/[^\/]+\//.exec(location.href)[0] +
-            this.config.testsDir + '/tests/';
+        this.testsUrl = /^[^\/]+:\/\/[^\/]+\//.exec(location.href)[0] + location.pathname + '/tests/';
         this.workspace = this.config.workspace;
         this.jQuery = this.config.jQuery;
 
@@ -276,7 +309,7 @@
         config = config || {};
 
         APP.Utils.__extends(this, config);
-        this.source = "";
+        this.source = '';
         this.tests = [];
         this.currentTest = -1;
         this.runner = runner;
@@ -321,7 +354,7 @@
             ret = false;
 
         if (testSpec) {
-            var pageTest = new APP.MonkeyTestJSPageTest({}, this.runner);
+            var pageTest = new APP.MonkeyTestJSPageTest(this.runner);
 
             pageTest.testSpec = testSpec;
             pageTest.runner = this.runner;
@@ -353,10 +386,13 @@
      * @return {Object} MonkeyTestJSPageTest instance.
      * @api public
      */
-    var MonkeyTestJSPageTest = APP.MonkeyTestJSPageTest = function (config) {
-        config = config || {};
+    var MonkeyTestJSPageTest = APP.MonkeyTestJSPageTest = function (runner) {
 
-        APP.Utils.__extends(this, config);
+        // K: This is probably not required. It doesn't seem to
+        // be used in the tests
+        this.runner = runner;
+        
+        this.config = runner.config;
 
         this.chain = [];
     };
@@ -372,7 +408,7 @@
         var self = this,
             cb = callback || function () {},
             callTest = function (f) {
-                if (f && typeof f === "function") {
+                if (f && typeof f === 'function') {
                     f.call(self, self.$);
                 }
             },
@@ -392,7 +428,7 @@
             this.loadPage();
         }
 
-        lookUp[typeof _test === "function" ? "isFunction" : "isObject"]();
+        lookUp[typeof _test === 'function' ? 'isFunction' : 'isObject']();
 
         QUnit.module('Testing ' + self.page.url);
 
@@ -432,58 +468,9 @@
                 }
             };
 
-        lookUp[pageActions ? "callCurrentPageAction" : "callNextPage"]();
+        lookUp[pageActions ? 'callCurrentPageAction' : 'callNextPage']();
     };
-
-    /**
-     * Returns the current environment - based on the url of the current page.
-     *
-     * Example:
-     *          MonkeyTestJSPageTest.env();
-     *          // => 'staging'
-     *
-     * @return {String} environment string
-     * @memberOf MonkeyTestJSPageTest
-     * @api public
-     */
-    MonkeyTestJSPageTest.prototype.env = function () {
-        var self = this,
-            envs = self.runner.config.envs,
-            _defaultEnv,
-            env;
-
-        env = _defaultEnv = "default";
-
-        this.runner.jQuery.each(envs, function (envKey, value) {
-            var envTests = envs[envKey];
-
-            self.runner.jQuery.each(envTests, function (key, value) {
-                if (self.runner.workspace.location.href.indexOf(
-                    value) >= 0) {
-                    env = envKey;
-                    return false;
-                }
-            });
-
-            if (env !== _defaultEnv) {
-                return false;
-            }
-        });
-
-        return env;
-    };
-
-    /**
-     * Returns the configuration used by the runner.
-     *
-     * @return {Object}
-     * @memberOf MonkeyTestJSPageTest
-     * @api public
-     */
-    MonkeyTestJSPageTest.prototype.config = function () {
-        return this.runner.config;
-    };
-
+    
     /**
      * Loads a page into the iframe, also waits until page is loaded before moving to the next action in the chain. If you are
      * performing tests on an actual page, this will normally be the first call in a test chain.
@@ -641,6 +628,7 @@
 
         APP.Utils.__extends(this, config);
         this.runner = runner;
+        this.config = runner.config;
     };
 
     /**
@@ -727,6 +715,8 @@
 /* globals QUnit, test, asyncTest */
 (function (global) {
 
+    'use strict';
+
     // block QUnit to try autostart without being ready
     global.QUnit.config.autostart = false;
 
@@ -744,7 +734,7 @@
             })
                 .fail(function () {
                     global.alert(
-                        "Failed to load config.json, please make sure this file exist and it is correctly formatted."
+                        'Failed to load config.json, please make sure this file exist and it is correctly formatted.'
                     );
                 });
 

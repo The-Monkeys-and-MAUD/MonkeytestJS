@@ -1,6 +1,8 @@
 /* globals QUnit, test, asyncTest */
 (function (global) {
 
+    'use strict';
+
     // block QUnit to try autostart without being ready
     global.QUnit.config.autostart = false;
 
@@ -18,7 +20,7 @@
             })
                 .fail(function () {
                     global.alert(
-                        "Failed to load config.json, please make sure this file exist and it is correctly formatted."
+                        'Failed to load config.json, please make sure this file exist and it is correctly formatted.'
                     );
                 });
 

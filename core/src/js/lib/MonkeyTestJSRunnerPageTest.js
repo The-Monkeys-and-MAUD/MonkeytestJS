@@ -11,10 +11,13 @@
      * @return {Object} MonkeyTestJSPageTest instance.
      * @api public
      */
-    var MonkeyTestJSPageTest = APP.MonkeyTestJSPageTest = function (config) {
-        config = config || {};
+    var MonkeyTestJSPageTest = APP.MonkeyTestJSPageTest = function (runner) {
 
-        APP.Utils.__extends(this, config);
+        // K: This is probably not required. It doesn't seem to
+        // be used in the tests
+        this.runner = runner;
+        
+        this.config = runner.config;
 
         this.chain = [];
     };
@@ -30,7 +33,7 @@
         var self = this,
             cb = callback || function () {},
             callTest = function (f) {
-                if (f && typeof f === "function") {
+                if (f && typeof f === 'function') {
                     f.call(self, self.$);
                 }
             },
@@ -50,7 +53,7 @@
             this.loadPage();
         }
 
-        lookUp[typeof _test === "function" ? "isFunction" : "isObject"]();
+        lookUp[typeof _test === 'function' ? 'isFunction' : 'isObject']();
 
         QUnit.module('Testing ' + self.page.url);
 
@@ -90,58 +93,9 @@
                 }
             };
 
-        lookUp[pageActions ? "callCurrentPageAction" : "callNextPage"]();
+        lookUp[pageActions ? 'callCurrentPageAction' : 'callNextPage']();
     };
-
-    /**
-     * Returns the current environment - based on the url of the current page.
-     *
-     * Example:
-     *          MonkeyTestJSPageTest.env();
-     *          // => 'staging'
-     *
-     * @return {String} environment string
-     * @memberOf MonkeyTestJSPageTest
-     * @api public
-     */
-    MonkeyTestJSPageTest.prototype.env = function () {
-        var self = this,
-            envs = self.runner.config.envs,
-            _defaultEnv,
-            env;
-
-        env = _defaultEnv = "default";
-
-        this.runner.jQuery.each(envs, function (envKey, value) {
-            var envTests = envs[envKey];
-
-            self.runner.jQuery.each(envTests, function (key, value) {
-                if (self.runner.workspace.location.href.indexOf(
-                    value) >= 0) {
-                    env = envKey;
-                    return false;
-                }
-            });
-
-            if (env !== _defaultEnv) {
-                return false;
-            }
-        });
-
-        return env;
-    };
-
-    /**
-     * Returns the configuration used by the runner.
-     *
-     * @return {Object}
-     * @memberOf MonkeyTestJSPageTest
-     * @api public
-     */
-    MonkeyTestJSPageTest.prototype.config = function () {
-        return this.runner.config;
-    };
-
+    
     /**
      * Loads a page into the iframe, also waits until page is loaded before moving to the next action in the chain. If you are
      * performing tests on an actual page, this will normally be the first call in a test chain.

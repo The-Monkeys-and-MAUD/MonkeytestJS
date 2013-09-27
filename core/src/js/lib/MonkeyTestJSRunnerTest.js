@@ -17,6 +17,7 @@
 
         APP.Utils.__extends(this, config);
         this.runner = runner;
+        this.config = runner.config;
     };
 
     /**

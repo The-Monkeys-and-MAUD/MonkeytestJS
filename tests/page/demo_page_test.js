@@ -34,7 +34,7 @@ registerTest ('Demo page test', {
             equal(this.containerElement.style.background, this.startBackground, 'Container background should now be set as its start value');
         })
 
-        .loadPage("/tests/core/demo/other.html") // load a different page into the frame
+        .loadPage(location.pathname + "core/demo/other.html") // load a different page into the frame
         .asyncTest ("Can we load some content into the page from openweathermap.org?",function($){
 
             this.workspace.document.getElementsByTagName("body")[0].style.background = self.otherColor;

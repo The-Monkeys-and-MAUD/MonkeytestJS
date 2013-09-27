@@ -3,52 +3,121 @@
 MonkeytestJS
 ============
 
-***Automated regression testing for front end web developers***
+***Automated functional testing for front end web developers***
 
-There are plenty of tools around for writing automated browser based tests (like [Selenium](#), [Sahi](http://sahi.co.in/w/), [eValid](http://www.e-valid.com/), [Watir](http://wtr.rubyforge.org/) and [Canoo](http://webtest.canoo.com/webtest/manual/WebTestHome.html)) but normal people don't use them. By "normal people" we mean front end developers.
+There are plenty of tools around for writing automated browser based tests (like [Selenium](#),
+[Sahi](http://sahi.co.in/w/), [eValid](http://www.e-valid.com/), [Watir](http://wtr.rubyforge.org/)
+and [Canoo](http://webtest.canoo.com/webtest/manual/WebTestHome.html)) but normal people don't use them.
+By "normal people" we mean front end developers.
 
-You might be writing unit tests ("might"), but unless a project is large enough to warrant a dedicated test team, the chances are that there won't be any automated top level testing of the interface. That's a shame because when something goes wrong, it's you they'll be looking at harshly.
+You might be writing unit tests, but unless a project is large enough to warrant a dedicated test team,
+the chances are that there won't be any automated top level testing of the interface. We find we get a
+lot of value for not much effort when we have at least a few high level funtional tests.
 
-MonkeyTestJS is great for building up a suite of regression tests while you're building the functionality of your project. You can write tests quickly using plain old client side javascript and then run them in a browser. 
+[MonkeyTestJS][1] is great for building up a suite of regression tests while you're building the functionality
+of your project. You can write tests quickly using straightforward client side javascript and then run
+them in a browser. 
 
-MonkeyTestJS is built on top of [QUnit](http://qunitjs.com/), the unit testing framework used by [JQuery](https://jquery.org/). However, instead of just testing javascript functions, MonkeyTestJS pulls whole web pages into an ifame and tests the DOM of the page. You write events to simulate user interaction and then check the DOM for the expected result.
+[MonkeyTestJS][1] is built on top of [QUnit](http://qunitjs.com/), the unit testing framework used by
+[JQuery](https://jquery.org/). However, instead of focusing on testing javascript functions,
+[MonkeyTestJS][1] pulls whole web pages into an ifame and tests the DOM of the page. Your tests trigger
+events to simulate user interaction and then check the DOM for expected results.
 
 Don't take our word for it, have a look:
 
 http://monkeytestjs.io/tests
 
-Because the test suite is run from a URL, it can be run in a browser tab while you're working. Or in a headless browser like [PhantomJS](http://phantomjs.org/) as part of coninuous integration (see [grunt-MonkeytestJS](https://github.com/TheMonkeys/grunt-MonkeytestJS)). Or across a suite of browsers using a service like [BrowserStack](http://www.browserstack.com/).
+Because the test suite is run from a URL, it can be run in a browser tab while you're working. Or in a
+headless browser like [PhantomJS](http://phantomjs.org/) as part of coninuous integration
+(see [grunt-MonkeytestJS](https://github.com/TheMonkeys/grunt-MonkeytestJS)). Or across a suite of browsers
+using a service like [BrowserStack](http://www.browserstack.com/).
 
-Tests can be asynchronous so it's good for AJAX and dynamically generated markup. MonkeyTestJS also comes with a  proxy (a PHP proxy and a NodeJS proxy actually) which seamlessly handles cross domain requests.
+Tests can be asynchronous so it's good for AJAX and dynamically generated markup. [MonkeyTestJS][1] also
+comes with a PHP proxy and a NodeJS proxy for those situations where you need cross domain requests. We use it to
+validate markup with the W3C Validator (see /tests/global/is_html_w3c_valid.js).
 
-Custom tests are quick to write, but it's also easy to re-use tests across pages. For example, just by adding a page to the test suite, you can automatically test things like HTML validation, Google Analytics, character encoding etc. without writing a test. Check out the /core/demo pages for some global tests you can apply out of the box.
+Custom tests are quick to write, but it's also easy to re-use tests across pages. Simply by adding a page
+of your site to the config.json file, you can automatically test things like HTML validation, Google Analytics,
+character encoding etc. without writing a test. Check out the /core/demo pages for some global tests you can
+apply out of the box.
 
+Installation
+-------------
+
+If you're using [MonkeyBones](http://monkeysbones.io) you can opt to have [MonkeyTestJS][1] installed as part of your
+project scaffold.
+
+Setting it up manually is almost as easy:
+
+**Step 1**: Clone (or download and unzip) the repo into the webroot of your project: eg:
+
+```
+cd path/to/webroot
+git clone git@github.com:TheMonkeys/MonkeytestJS.git
+```
+
+If you view the [MonkeyTestJS][1] directory now in a browser (as in go to "http://your-web-app.dev/[MonkeyTestJS][1]"), you'll
+see some default tests running on the demo HTML page
+
+**Step 2**: Open up the config.json and find the "pages" section. At the top of the "pages" section, put in an entry
+for the Home page of your app, so that the `pages` section looks like this:
+
+```javascript
+
+    "pages": [
+        {
+            "url": "/"
+        },
+        {
+            "url": "/tests/core/demo/index.html"
+        },
+        {
+            "url": "/tests/core/demo/index.html?pretendIsAnotherPage=true",
+            "tests": [ "page/demo_page_test.js" ]
+        }
+    ]
+```
+
+If you go to http://your-web-app.dev/[MonkeyTestJS][1] now, you'll see some global tests being run on your Home page as
+well as the demo pages.
+
+**Step 3**: Optionally: Rename the directory to something more friendly (or, if you like, unique to your project), like "tests":
+
+```
+mv MonkeytestJS tests
+```
+
+Then you can run them on that URL, eg "http://your-web-app.dev/tests/"
 
 
 Getting Started
 ---------------
 
-The file `config.json` include the **options** for the runner:
+The file **/config.json** is where you should put all your settings. Out of the box it looks like this:
 
 ```javascript
+
 {
-    "envs": {
-        "local": ["LOCAL URL OR PART OF"],
-        "stage": ["STAGE URL OR PART OF"],
-        "beta": ["BETA URL OR PART OF"],
-        "production": ["PRODUCTION URL OR PART OF"]
+    "facebookId": "111111111111111",
+
+    "local": {
+        "env": ["LOCAL URL OR PART OF"]
     },
-    "facebook": {
-        "ids": {
-            "local": "111111111111111",
-            "stage": "222222222222222",
-            "beta": "333333333333333",
-            "production": "444444444444444",
-            "default": "000000000000000"
-        }
+    "stage": {
+        "env": ["STAGE URL OR PART OF"],
+        "facebookId": "222222222222222"
     },
-    "testsDir": "tests",
+    "beta": {
+        "env": ["BETA URL OR PART OF"],
+        "facebookId": "33333333333333333"
+    },
+    "production": {
+        "env": ["PRODUCTION URL OR PART OF"],
+        "facebookId": "4444444444444444444"
+    },
+
     "globalTests": [
+        "global/not_server_error.js",
         "global/is_html_w3c_valid.js",
         "global/has_utf8_metatag.js",
         "global/has_facebook_appid.js",
@@ -59,63 +128,103 @@ The file `config.json` include the **options** for the runner:
             "url": "/tests/core/demo/index.html"
         },
         {
-            "url": "/tests/core/demo/index.html?anotherPageUrl=1",
+            "url": "/tests/core/demo/index.html?pretendIsAnotherPage=true",
             "tests": [ "page/demo_page_test.js" ]
         }
     ]
 }
+```
+
+In a test, the config settings are accessible through the `config` property. For example, this setting in **/config.json**
+
+```javascript
+
+    "facebookId": "111111111111111",
+```
+
+is referenced like this:
+
+```javascript
+
+this.config.facebookId
+```
+
+***
+
+### Setting environment specific (`env`) overrides
+
+Any property in **/config.json** is deemed to be an environment specific setting if it contains an `env` property,
+for example:
+
+```javascript
+
+    "local": {
+        "env": ["dev","localhost"],
+    },
+```
+In this case, if the string "dev" or "localhost" is part of the website URL, any other properties of "local"
+will be added to the `config` property, overriding any default of the same name that might be present. For example,
+if your development environment URL contians the string "localhost" and you have this in your **/config.json**:
+
+ ```javascript
+
+    "facebookId": "111111111111111",
+
+    "local": {
+        "env": ["dev","localhost"],
+        "facebookId": "222222222222222222",
+    },
+```
+
+then `this.config.facebookId` will have a value "222222222222222222".
+
+You can setup as many environments as you wish. In the default **/config.json** file the `local` environment
+doesn't override the default `facebookId` value, effectively making `local` the default. 
+
+ ```javascript
+
+    "facebookId": "111111111111111",
+
+    "local": {
+        "env": ["LOCAL URL OR PART OF"],
+    },
+    "stage": {
+        "env": ["STAGE URL OR PART OF"],
+        "facebookId": "222222222222222"
+    },
+    "beta": {
+        "env": ["BETA URL OR PART OF"],
+        "facebookId": "33333333333333333"
+    },
+    "production": {
+        "env": ["PRODUCTION URL OR PART OF"],
+        "facebookId": "4444444444444444444"
+    },
 
 ```
 
 ***
 
-### options.envs - Object
+### `facebookId` - String
 
-This is where your environment is declared, you can specify on the config urls to be matched to a specific environment.
+Used in the demo tests to check the Facebook ID. This is overridden in the specific settings for each environment.
 
-example:
 
-```javascript
+### `globalTests` - Array
 
-    "envs" : {
-        "production": ["mywebsite.com", "anotheralias"]
-    }
+The global tests will be run by [MonkeyTestJS][1] on all pages.
 
-```
+MonkeytestJS ships with four default tests:
 
-if the string "**mywebsite.com**" or "**anotheralias**" is part of the website URL than that environment name will be returned by the `.env()` (in this case "**production**") method call from a test page. if no environment is found the string "**default**" will be returned.
+- **/tests/global/is_html_w3c_valid.js** ( checks if the page is valid throught the w3c validator )
+- **/tests/global/has_utf8_metatag.js** ( check for a presence of a utf8 metatag )
+- **/tests/global/has_facebook_appid.js** ( check for the facebookAPP id based on the environment )
+- **/tests/global/has_google_analytics.js** ( check if we have google analytics setup )
 
-You can setup as many environments as you wish, bear in mind that if a match is not found "**default**" will be returned.
-
-***
-
-### options.testsDir - String
-
-This is the locations for MonkeytestJS **based on the root of the website**.
-
-example: **http://mywebsite.com/tests/**
+Removing** or adding a global test from the test suite is just a matter of deleting or adding a reference to it in the "globalTests" section:
 
 ```javascript
-"testsDir": "tests"
 
-```
-
-***
-
-### options.globalTests - Array
-
-Global tests are the tests that will be runned by all pages.
-
-By default MonkeytestJS include 4 default tests:
-
-     - is_html_w3c_valid ( checks if the page is valid throught the w3c validator )
-     - has_utf8_metatag ( check for a presence of a utf8 metatag )
-     - has_facebook_appid ( check for the facebookAPP id based on the environment )
-     - has_google_analytics ( check if we have google analytics setup )
-
-**Removing** or **adding** a test is just a matter of deleting or adding a reference to it:
-
-```javascript
     "globalTests": [
         "global/is_html_w3c_valid.js",
         "global/has_utf8_metatag.js",
@@ -123,42 +232,58 @@ By default MonkeytestJS include 4 default tests:
     ]
 ```
 
+Note that the path to the tests should be relative to the **/tests** directory.
+
 ***
 
-### options.pages - Object
+### `pages` - Object
 
-**options.pages.url - String**
+**`pages[].url` - String**
 
-Url for the page to be tested, based on the root.
+URLs for the pages to be tested, relative to the webroot of the site.
 
 example:
 
 ```javascript
-    "url": "/tests/core/demo/index.html"
+
+    "pages": [
+        {
+            "url": "/MonkeytestJS/tests/core/demo/index.html"
+        }
 ```
 
 
-**options.pages.tests - Array**
+**`pages[].tests` - Array**
 
-Assign custom tests for the page. Custom tests will be runned on the page after the **global tests** have finished.
+Assign custom tests for the page. Custom tests will be run on the page after the **global tests** have finished.
 
 **Url for the tests are based on the `testsDir`**
 
 example:
 
 ```javascript
-    "tests": [
-        "page/demo_page_test.js"
+
+    "pages": [
+        {
+            "url": "/MonkeytestJS/tests/core/demo/index.html",
+            "tests": [
+                "page/demo_page_test.js"
+        }
+
     ]
 ```
 
 MonkeytestJS API
 ----------------
 
-This methods are used on the test page.
+These methods are used on the test page.
 
 ### test (name, callback ($){})
 Runs a synchronous QUint test.
+
+example:
+
+
 
 ### asyncTest (name, callback ($){})
 Runs an asynchronous QUint test. Must call this.asyncTestDone when the test is complete. Only then will the next chain
@@ -174,22 +299,11 @@ performing tests on an actual page, this will normally be the first call in a te
 ### wait (function, timeout, throttle)
 Waits for expression to be evaluated to true or timeout to happen, keeps checking for experssion on throttle interval.
 
-### env ()
-Returns the current environment - based on the url of the current page. If not match is found it returns "default"
-
-### config ()
-Returns the config object passed into MonkeytestJS.
-
-
-**NOTE**
-
-`config()` and `env()` cant be used for chaining since they dont return **context**, they are meant to be used inside the
-`test()` or `asyncTest()`.
 
 Writing Tests
 -------------
 
-Add the path to the test script to either the options.globalTests[] array or for a specific page to the pages[].tests[]
+Add the path to the test script to either the `config.globalTests` array or, for a specific page, to the `config.pages[].tests`
 array.
 
 Create a test script file at the path entered above. At the most basic the test script should contain a call to the
@@ -222,10 +336,7 @@ registerTest ('Hello world test',
             this
             .test("Hello?",function($) {
 
-                var env = this.env(); // getting the environment
-                var config = this.config(); // getting the config
-
-                ok( config.foo[env].bar, "Accessing an item from config on a specific environment" );
+                ok( this.config.foo.bar, "Accessing an item from config on a specific environment" );
                 ok( true, "Hello world!");
             });
         }
@@ -233,7 +344,7 @@ registerTest ('Hello world test',
 );
 ```
 
-Refer to example test on: ```./tests/page/demo_page_test.js```
+Refer to example test on: **/tests/page/demo_page_test.js**
 
 ***
 
@@ -248,3 +359,7 @@ Refer to example test on: ```./tests/page/demo_page_test.js```
 **Change log**
 
    - **1.0.0** - Initial release.
+
+------------------------------------------------
+
+[1]: http://monkeytestjs.io/
