@@ -7,21 +7,21 @@ MonkeytestJS
 
 There are plenty of tools around for writing automated browser based tests (like [Selenium](#),
 [Sahi](http://sahi.co.in/w/), [eValid](http://www.e-valid.com/), [Watir](http://wtr.rubyforge.org/)
-and [Canoo](http://webtest.canoo.com/webtest/manual/WebTestHome.html)) but normal people don't use them.
-By "normal people" we mean front end developers.
+and [Canoo](http://webtest.canoo.com/webtest/manual/WebTestHome.html)) but front end developers rarely
+use them.
 
 You might be writing unit tests, but unless a project is large enough to warrant a dedicated test team,
 the chances are that there won't be any automated top level testing of the interface. We find we get a
 lot of value for not much effort when we have at least a few high level funtional tests.
 
-[MonkeyTestJS][1] is great for building up a suite of regression tests while you're building the functionality
-of your project. You can write tests quickly using straightforward client side javascript and then run
-them in a browser. 
+[MonkeyTestJS][1] is so quick and easy to use that we front end devs can build up a suite of regression tests
+while we're building the functionality of our project. We can write tests using straightforward client side
+javascript and then run them in a browser to see the result.
 
 [MonkeyTestJS][1] is built on top of [QUnit][3], the unit testing framework used by
 [JQuery](https://jquery.org/). However, instead of focusing on testing javascript functions,
-[MonkeyTestJS][1] pulls whole web pages into an ifame and tests the DOM of the page. Your tests trigger
-events to simulate user interaction and then check the DOM for expected results.
+[MonkeyTestJS][1] pulls whole web pages into an ifame and tests the DOM of the page. Using standard [QUnit][3]
+assertions, your tests simulate user interaction and then check the DOM for expected results.
 
 Don't take our word for it, have a look:
 
@@ -33,16 +33,13 @@ headless browser like [PhantomJS](http://phantomjs.org/) as part of coninuous in
 using a service like [BrowserStack](http://www.browserstack.com/).
 
 Tests can be asynchronous so it's good for AJAX and dynamically generated markup. [MonkeyTestJS][1] also
-comes with a PHP proxy and a NodeJS proxy for those situations where you need cross domain requests. We use it to
-validate markup with the W3C Validator (see /tests/global/is_html_w3c_valid.js).
+comes with a [PHP][2] proxy for those situations where you need cross domain requests.
 
-Custom tests are quick to write, but it's also easy to re-use tests across pages. Simply by adding a page
-of your site to the config.json file, you can automatically test things like HTML validation, Google Analytics,
-character encoding etc. without writing a test. Check out the /core/demo pages for some global tests you can
-apply out of the box.
+Custom tests are quick to write, but it's also easy to re-use tests across pages. You can test things like HTML validation, Google Analytics,
+character encoding etc. on all pages of your site without writing a test.
 
-Installation
--------------
+One minute Installation
+-----------------------
 
 If you're using [MonkeyBones](http://monkeysbones.io) you can opt to have [MonkeyTestJS][1] installed as part of your
 project scaffold.
@@ -56,10 +53,11 @@ cd path/to/webroot
 git clone git@github.com:TheMonkeys/MonkeytestJS.git
 ```
 
-If you view the [MonkeyTestJS][1] directory now in a browser (as in go to "http://your-web-app.dev/MonkeyTestJS"), you'll
-see some default tests running on your Home page and some demo pages.
+Assuming that you can already access your development site at a URL, eg: "http://your-web-app.dev", if you view the
+[MonkeyTestJS][1] directory now in a browser (as in go to "http://your-web-app.dev/MonkeyTestJS"), you'll see some default
+tests running on your Home page and some demo pages.
 
-**Optionally:** Rename the directory to something more friendly || unique || boring, like "tests":
+**Optionally:** Feel free to rename the directory to something more friendly || unique || boring, like "tests":
 
 ```
 mv MonkeytestJS tests
@@ -290,15 +288,15 @@ stuff is happening behind the scenes of [MonkeyTestJS][1].
 ### test (name, callback ($){})
 Runs a synchronous QUint test.
 
-Paramaters:
+Parameters:
 
-    name (String) - A nice human readable name for your test, like "Is there a page title?".
+**name (String)** - A nice human readable name for your test, like "Is there a page title?".
 
-    callback (Function) - A function containing your [QUnit][3] assertions.
+**callback (Function)** - A function containing your [QUnit][3] assertions.
 
 Returns:
 
-    An instance of ```MonkeyTestJSPageTest```, suitable for chaining JQuery stylee.
+An instance of ```MonkeyTestJSPageTest```, suitable for chaining JQuery stylee.
 
 Example:
 
@@ -319,11 +317,11 @@ Example:
 Runs an asynchronous [QUint][3] test. Must call this.asyncTestDone when the test is complete. Only then will the next chain
 action be called.
 
-Paramaters:
+Parameters:
 
-    name (String) - A nice human readable name for your test, like "Is there a page title?".
+**name (String)** - A nice human readable name for your test, like "Is there a page title?".
 
-    callback (Function) - A function containing your [QUnit][3] assertions.
+**callback (Function)** - A function containing your [QUnit][3] assertions.
 
 Returns:
 
@@ -373,13 +371,13 @@ Example: see above.
 Loads a page into the iframe, also waits until page is loaded before moving to the next action in the chain. If you are
 performing tests on an actual page, this will normally be the first call in a test chain.
 
-Paramaters:
+Parameters:
 
-    url (String) - A relative URL of an HTML page in your site, eg: "/about-us.html".
+**url (String)** - A relative URL of an HTML page in your site, eg: "/about-us.html".
 
 Returns:
 
-    An instance of ```MonkeyTestJSPageTest```, suitable for chaining JQuery stylee.
+An instance of ```MonkeyTestJSPageTest```, suitable for chaining JQuery stylee.
 
 Example:
 
@@ -403,17 +401,17 @@ Building on the example for test() above, we can load a second page and run furt
 ### wait (function, timeout, throttle)
 Waits for expression to be evaluated to true or timeout to happen, keeps checking for experssion on throttle interval.
 
-Paramaters:
+Parameters:
 
-    function (Function) - A function which performs a useful test, typically, returns true
+**function (Function)** - A function which performs a useful test, typically, returns true
 
-    timeout (Integer) - The maximum number of milliseconds for which you'd like to wait
+**timeout (Integer)** - The maximum number of milliseconds for which you'd like to wait
 
-    throttle (Integer) - The number of milliseconds to wait between tests
+**throttle (Integer)** - The number of milliseconds to wait between tests
 
 Returns:
 
-    An instance of `MonkeyTestJSPageTest`, suitable for chaining JQuery stylee.
+An instance of `MonkeyTestJSPageTest`, suitable for chaining JQuery stylee.
 
 Example:
 
