@@ -5,22 +5,26 @@ MonkeytestJS
 
 ***Automated functional testing for front end web developers***
 
-There are plenty of tools around for writing automated browser based tests (like [Selenium](#),
-[Sahi](http://sahi.co.in/w/), [eValid](http://www.e-valid.com/), [Watir](http://wtr.rubyforge.org/)
-and [Canoo](http://webtest.canoo.com/webtest/manual/WebTestHome.html)) but front end developers rarely
-use them.
-
 You might be writing unit tests, but unless a project is large enough to warrant a dedicated test team,
-the chances are that there won't be any automated top level testing of the interface. We find we get a
-lot of value for not much effort when we have at least a few high level funtional tests.
+there probably won't be any automated top level testing of the interface. This is sad because you get a
+lot of value from even a few high level funtional tests.
 
-[MonkeyTestJS][1] is so quick and easy to use that we front end devs can build up a suite of regression tests
-while we're building the functionality of our project. We can write tests using straightforward client side
-javascript and then run them in a browser to see the result.
+
+Why, when there are plenty of tools around for writing automated browser based tests (like [Selenium](#),
+[Sahi](http://sahi.co.in/w/), [eValid](http://www.e-valid.com/), [Watir](http://wtr.rubyforge.org/)
+and [Canoo](http://webtest.canoo.com/webtest/manual/WebTestHome.html)), do so few front end developers use them?
+We thought about it and decided that the existing tools just didn't suit how we worked. They're not
+hard to use exactly, but something about them just seem to take us too far out of the zone. Also, they're
+slow and there's never any budget for automated testing.
+
+
+So we made [MonkeyTestJS][1]. It's quick and easy to use, so we can build up a suite of regression tests
+while we're building the functionality of our project. We write tests using straightforward client side
+javascript and run them in a browser to see the result.
 
 [MonkeyTestJS][1] is built on top of [QUnit][3], the unit testing framework used by
 [JQuery](https://jquery.org/). However, instead of focusing on testing javascript functions,
-[MonkeyTestJS][1] pulls whole web pages into an ifame and tests the DOM of the page. Using standard [QUnit][3]
+[MonkeyTestJS][1] tests act on the actual DOM of your web app. Using standard [QUnit][3]
 assertions, your tests simulate user interaction and then check the DOM for expected results.
 
 Don't take our word for it, have a look:
@@ -33,7 +37,7 @@ headless browser like [PhantomJS](http://phantomjs.org/) as part of coninuous in
 using a service like [BrowserStack](http://www.browserstack.com/).
 
 Tests can be asynchronous so it's good for AJAX and dynamically generated markup. [MonkeyTestJS][1] also
-comes with a [PHP][2] proxy for those situations where you need cross domain requests.
+comes with a [PHP][2] proxy script for those situations where you need cross domain requests.
 
 Custom tests are quick to write, but it's also easy to re-use tests across pages. You can test things like HTML validation, Google Analytics,
 character encoding etc. on all pages of your site without writing a test.
@@ -54,7 +58,7 @@ git clone git@github.com:TheMonkeys/MonkeytestJS.git
 ```
 
 Assuming that you can already access your development site at a URL, eg: "http://your-web-app.dev", if you view the
-[MonkeyTestJS][1] directory now in a browser (as in go to "http://your-web-app.dev/MonkeyTestJS"), you'll see some default
+/MonkeyTestJS directory now in a browser (as in go to "http://your-web-app.dev/MonkeyTestJS"), you'll see some default
 tests running on your Home page and some demo pages.
 
 **Optionally:** Feel free to rename the directory to something more friendly || unique || boring, like "tests":
