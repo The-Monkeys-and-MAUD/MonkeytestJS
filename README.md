@@ -73,7 +73,7 @@ Then you can run them on that URL, eg "http://your-web-app.dev/tests/"
 Getting Started
 ---------------
 
-The file **/config.json** is where you should put all your settings. Out of the box it looks like this:
+The file **/config.json** is where you should put all your settings. It comes with some demo content and looks like this:
 
 ```javascript
 
@@ -100,7 +100,6 @@ The file **/config.json** is where you should put all your settings. Out of the 
         "global/not_server_error.js",
         "global/is_html_w3c_valid.js",
         "global/has_utf8_metatag.js",
-        "global/has_facebook_appid.js",
         "global/has_google_analytics.js"
     ],
     "pages": [
@@ -112,7 +111,7 @@ The file **/config.json** is where you should put all your settings. Out of the 
         },
         {
             "url": "core/demo/index.html?pretendIsAnotherPage=true",
-            "tests": [ "page/demo_page_test.js" ]
+            "tests": [ "page/demo_page_test.js","page/has_facebook_appid" ]
         }
     ],
     "proxyUrl": "core/proxy.php?url="
@@ -162,7 +161,7 @@ if your development environment URL contians the string "localhost" and you have
 
 then `this.config.facebookId` will have a value "88888888888888888".
 
-You can setup as many environments as you wish. In the default **/config.json** file the `local` environment
+You can setup as many environments as you need. In the default **/config.json** file the `local` environment
 doesn't override the default `facebookId` value, effectively making `local` the default. 
 
  ```javascript
@@ -198,11 +197,10 @@ Used in the demo **/tests/global/has_facebook_appid.js** test to check the Faceb
 
 The global tests will be run by [MonkeyTestJS][1] on all pages.
 
-MonkeytestJS ships with four default tests:
+MonkeytestJS ships with three default tests:
 
 - **/tests/global/is_html_w3c_valid.js** ( checks if the page is valid throught the w3c validator )
 - **/tests/global/has_utf8_metatag.js** ( check for a presence of a utf8 metatag )
-- **/tests/global/has_facebook_appid.js** ( check for the facebookAPP id based on the environment )
 - **/tests/global/has_google_analytics.js** ( check if we have google analytics setup )
 
 Removing or adding a global test from the test suite is just a matter of deleting or adding a reference to it in the "globalTests" section of the **/config.json** file:
@@ -329,7 +327,7 @@ Parameters:
 
 Returns:
 
-An instance of ```MonkeyTestJSPageTest```, suitable for chaining JQuery stylee.
+An instance of ```MonkeyTestJSPageTest```, suitable for chaining JQuery style.
 
 Example:
 
