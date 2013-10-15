@@ -5,22 +5,26 @@ MonkeytestJS
 
 ***Automated functional testing for front end web developers***
 
-There are plenty of tools around for writing automated browser based tests (like [Selenium](#),
-[Sahi](http://sahi.co.in/w/), [eValid](http://www.e-valid.com/), [Watir](http://wtr.rubyforge.org/)
-and [Canoo](http://webtest.canoo.com/webtest/manual/WebTestHome.html)) but front end developers rarely
-use them.
-
 You might be writing unit tests, but unless a project is large enough to warrant a dedicated test team,
-the chances are that there won't be any automated top level testing of the interface. We find we get a
-lot of value for not much effort when we have at least a few high level funtional tests.
+there probably won't be any automated top level testing of the interface. This is sad because you get a
+lot of value from even a few high level funtional tests.
 
-[MonkeyTestJS][1] is so quick and easy to use that we front end devs can build up a suite of regression tests
-while we're building the functionality of our project. We can write tests using straightforward client side
-javascript and then run them in a browser to see the result.
+
+Why, when there are plenty of tools around for writing automated browser based tests (like [Selenium](#),
+[Sahi](http://sahi.co.in/w/), [eValid](http://www.e-valid.com/), [Watir](http://wtr.rubyforge.org/)
+and [Canoo](http://webtest.canoo.com/webtest/manual/WebTestHome.html)), do so few front end developers use them?
+We thought about it and decided that the existing tools just didn't suit how we worked. They're not
+hard to use exactly, but something about them just seem to take us too far out of the zone. Also, they're
+slow and there's never any budget for automated testing.
+
+
+So we made [MonkeyTestJS][1]. It's quick and easy to use, so we can build up a suite of regression tests
+while we're building the functionality of our project. We write tests using straightforward client side
+javascript and run them in a browser to see the result.
 
 [MonkeyTestJS][1] is built on top of [QUnit][3], the unit testing framework used by
 [JQuery](https://jquery.org/). However, instead of focusing on testing javascript functions,
-[MonkeyTestJS][1] pulls whole web pages into an ifame and tests the DOM of the page. Using standard [QUnit][3]
+[MonkeyTestJS][1] tests act on the actual DOM of your web app. Using standard [QUnit][3]
 assertions, your tests simulate user interaction and then check the DOM for expected results.
 
 Don't take our word for it, have a look:
@@ -33,7 +37,7 @@ headless browser like [PhantomJS](http://phantomjs.org/) as part of coninuous in
 using a service like [BrowserStack](http://www.browserstack.com/).
 
 Tests can be asynchronous so it's good for AJAX and dynamically generated markup. [MonkeyTestJS][1] also
-comes with a [PHP][2] proxy for those situations where you need cross domain requests.
+comes with a [PHP][2] proxy script for those situations where you need cross domain requests.
 
 Custom tests are quick to write, but it's also easy to re-use tests across pages. You can test things like HTML validation, Google Analytics,
 character encoding etc. on all pages of your site without writing a test.
@@ -54,7 +58,7 @@ git clone git@github.com:TheMonkeys/MonkeytestJS.git
 ```
 
 Assuming that you can already access your development site at a URL, eg: "http://your-web-app.dev", if you view the
-[MonkeyTestJS][1] directory now in a browser (as in go to "http://your-web-app.dev/MonkeyTestJS"), you'll see some default
+/MonkeyTestJS directory now in a browser (as in go to "http://your-web-app.dev/MonkeyTestJS"), you'll see some default
 tests running on your Home page and some demo pages.
 
 **Optionally:** Feel free to rename the directory to something more friendly || unique || boring, like "tests":
@@ -69,7 +73,7 @@ Then you can run them on that URL, eg "http://your-web-app.dev/tests/"
 Getting Started
 ---------------
 
-The file **/config.json** is where you should put all your settings. Out of the box it looks like this:
+The file **/config.json** is where you should put all your settings. It comes with some demo content and looks like this:
 
 ```javascript
 
@@ -96,7 +100,6 @@ The file **/config.json** is where you should put all your settings. Out of the 
         "global/not_server_error.js",
         "global/is_html_w3c_valid.js",
         "global/has_utf8_metatag.js",
-        "global/has_facebook_appid.js",
         "global/has_google_analytics.js"
     ],
     "pages": [
@@ -108,7 +111,7 @@ The file **/config.json** is where you should put all your settings. Out of the 
         },
         {
             "url": "core/demo/index.html?pretendIsAnotherPage=true",
-            "tests": [ "page/demo_page_test.js" ]
+            "tests": [ "page/demo_page_test.js","page/has_facebook_appid" ]
         }
     ],
     "proxyUrl": "core/proxy.php?url="
@@ -158,7 +161,7 @@ if your development environment URL contians the string "localhost" and you have
 
 then `this.config.facebookId` will have a value "88888888888888888".
 
-You can setup as many environments as you wish. In the default **/config.json** file the `local` environment
+You can setup as many environments as you need. In the default **/config.json** file the `local` environment
 doesn't override the default `facebookId` value, effectively making `local` the default. 
 
  ```javascript
@@ -194,11 +197,10 @@ Used in the demo **/tests/global/has_facebook_appid.js** test to check the Faceb
 
 The global tests will be run by [MonkeyTestJS][1] on all pages.
 
-MonkeytestJS ships with four default tests:
+MonkeytestJS ships with three default tests:
 
 - **/tests/global/is_html_w3c_valid.js** ( checks if the page is valid throught the w3c validator )
 - **/tests/global/has_utf8_metatag.js** ( check for a presence of a utf8 metatag )
-- **/tests/global/has_facebook_appid.js** ( check for the facebookAPP id based on the environment )
 - **/tests/global/has_google_analytics.js** ( check if we have google analytics setup )
 
 Removing or adding a global test from the test suite is just a matter of deleting or adding a reference to it in the "globalTests" section of the **/config.json** file:
@@ -325,7 +327,7 @@ Parameters:
 
 Returns:
 
-An instance of ```MonkeyTestJSPageTest```, suitable for chaining JQuery stylee.
+An instance of ```MonkeyTestJSPageTest```, suitable for chaining JQuery style.
 
 Example:
 
