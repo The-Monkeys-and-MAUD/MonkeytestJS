@@ -449,9 +449,9 @@ Add the path to the test script to either the `config.globalTests` array or, for
 array.
 
 Create a test script file at the path entered above. At the most basic the test script should contain a call to the
-registerTest (name, spec) function. Where the spec object literal must contain at least a function callback. An object can
-be passed instead and an optional with a setup and load callback. The load callback is call in the scope of a MonkeytestJSPageTest object
-which methods that should be chained together to to perform test actions (see **MonkeytestJSPageTest** methods above):
+registerTest (name, spec) function. 
+
+The spec parameter is called in the scope of a MonkeytestJSPageTest object and should be a function contaning the test methods (see **MonkeytestJSPageTest** methods above): 
 
 ```javascript
 registerTest ('Hello world test', function () {
@@ -463,7 +463,7 @@ registerTest ('Hello world test', function () {
 );
 ```
 
-This can also be written as
+Alternatively an object can be passed as the spec parameter, containing setup and load methods:
 
 ```javascript
 
