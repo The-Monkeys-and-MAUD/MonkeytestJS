@@ -239,9 +239,18 @@
 
         APP.Utils.__extends(this.config, settings || {});
 
-        // test specs
-        this.testsUrl = /^[^\/]+:\/\/[^\/]+\//.exec(location.href)[0] +
-            location.pathname + '/tests/';
+        // fully-qualified base url of test specs directory
+        this.testsUrl = /^[^\/]+:\/\/[^\/]+\//.exec(location.href)[0] + // scheme + domain + /
+            (function() {
+                var l = location.pathname; // trim leading and trailing slashes from the current pathname
+                if (l.charAt('0') === '/') {
+                    l = l.substring(1);
+                }
+                if (l.charAt(l.length - 1) === '/') {
+                    l = l.substring(0, l.length - 1);
+                }
+                return l;
+            })() + '/tests/';
         this.workspace = this.config.workspace;
         this.jQuery = this.config.jQuery;
 

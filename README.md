@@ -7,7 +7,7 @@ MonkeytestJS
 
 You might be writing unit tests, but unless a project is large enough to warrant a dedicated test team,
 there probably won't be any automated top level testing of the interface. This is sad because you get a
-lot of value from even a few high level funtional tests.
+lot of value from even a few high level functional tests.
 
 
 Why, when there are plenty of tools around for writing automated browser based tests (like [Selenium](#),
@@ -32,15 +32,15 @@ Don't take our word for it, have a look:
 http://monkeytestjs.io/tests
 
 Because the test suite is run from a URL, it can be run in a browser tab while you're working. Or in a
-headless browser like [PhantomJS](http://phantomjs.org/) as part of coninuous integration
+headless browser like [PhantomJS](http://phantomjs.org/) as part of continuous integration
 (see [grunt-MonkeytestJS](https://github.com/TheMonkeys/grunt-MonkeytestJS)). Or across a suite of browsers
 using a service like [BrowserStack](http://www.browserstack.com/).
 
 Tests can be asynchronous so it's good for AJAX and dynamically generated markup. [MonkeyTestJS][1] also
 comes with a [PHP][2] proxy script for those situations where you need cross domain requests.
 
-Custom tests are quick to write, but it's also easy to re-use tests across pages. You can test things like HTML validation, Google Analytics,
-character encoding etc. on all pages of your site without writing a test.
+Custom tests are quick to write, but it's also easy to re-use tests across pages. You can test things like HTML
+validation, Google Analytics, character encoding etc. on all pages of your site without writing a test.
 
 One minute Installation
 -----------------------
@@ -281,7 +281,7 @@ in the **/config.json** file to reference it.
 MonkeytestJS API
 ----------------
 
-MonkeyTestJS is a warapper around QUnit, so at heart a MonkeyTest is a [QUnit][3] test. For documentation of the specific assertions,
+MonkeyTestJS is a wrapper around QUnit, so at heart a MonkeyTest is a [QUnit][3] test. For documentation of the specific assertions,
 refer to the [QUnit API assertion documentation][4]. However, you can safely ignore the rest of the [QUnit][3] documentation. All that
 stuff is happening behind the scenes of [MonkeyTestJS][1].
 

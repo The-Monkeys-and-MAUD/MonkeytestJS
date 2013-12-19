@@ -28,20 +28,10 @@
      */
     MonkeyTestJSTest.prototype.load = function () {
 
-        var self = this,
-            time = new Date();
-
-        global.$$.ajax({
-            url: self.runner.testsUrl + self.src,
-            success: function (data, textStatus) {
-                //global.log("Test ready on ", new Date(), " - loading on (ms): ", new Date() - time);
-            },
-            error: function (error) {
-                //global.log("Request to load " + src + " failed. ", error);
-            },
-            dataType: 'script',
-            async: false
-        });
+        var script, firstScript = document.getElementsByTagName('script')[0];
+        script = document.createElement('script');
+        script.src = this.runner.testsUrl + this.src;
+        firstScript.parentNode.insertBefore(script, firstScript);
 
         return true;
     };
