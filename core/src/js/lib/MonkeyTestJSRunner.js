@@ -28,7 +28,6 @@
 
         // pages
         this.pages = [];
-        this.pagesToTest = [];
 
         // tests scripts
         this.tests = {};
@@ -46,11 +45,10 @@
 
             // Add the actual name of the MonkeyTestJS
             // dir to the URL
-            page.url = location.pathname + page.url;
-
-            // K 20130926: This is not being used afaik
-            // add page to be tested
-            this.pagesToTest.push(location.pathname + this.config.pages[i].url);
+            page.uri = page.url;
+            if (page.url.charAt(0) !== '/') {
+                page.url = this.baseUrl + page.url;
+            }
 
             // add global tests
             for (var j = 0, lenJ = globalTests.length; j < lenJ; j++) {
@@ -203,6 +201,7 @@
     MonkeyTestJS.prototype.start = function (settings) {
 
         this.config = {
+            loadSources: true,
             pageTests: {},
             globalTests: []
         };
@@ -239,18 +238,20 @@
 
         APP.Utils.__extends(this.config, settings || {});
 
-        // fully-qualified base url of test specs directory
-        this.testsUrl = /^[^\/]+:\/\/[^\/]+\//.exec(location.href)[0] + // scheme + domain + /
-            (function() {
-                var l = location.pathname; // trim leading and trailing slashes from the current pathname
-                if (l.charAt('0') === '/') {
-                    l = l.substring(1);
-                }
-                if (l.charAt(l.length - 1) === '/') {
-                    l = l.substring(0, l.length - 1);
-                }
-                return l;
-            })() + '/tests/';
+        if (location.href.substr(0, 4) === 'file') {
+            if (typeof console !== 'undefined' && typeof console.log !== 'undefined') {
+                console.log('Running from local filesystem so disabling loading page sources');
+            }
+            this.config.loadSources = false;
+        }
+
+        // work out the fully-qualified base url of monkeytestjs (this.baseUrl)
+        // and our test specs directory (this.testsUrl)
+        // some examples and the desired results:
+        //   http://domain.com/tests/ -> no change
+        //   file:///path/to/tests/index.html -> file:///path/to/tests/
+        this.baseUrl = location.href.substr(0, location.href.lastIndexOf('/') + 1);
+        this.testsUrl = this.baseUrl + 'tests/';
         this.workspace = this.config.workspace;
         this.jQuery = this.config.jQuery;
 

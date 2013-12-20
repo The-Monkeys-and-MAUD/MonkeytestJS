@@ -28,7 +28,6 @@
 
         // pages
         this.pages = [];
-        this.pagesToTest = [];
 
         // tests scripts
         this.tests = {};
@@ -46,11 +45,10 @@
 
             // Add the actual name of the MonkeyTestJS
             // dir to the URL
-            page.url = location.pathname + page.url;
-
-            // K 20130926: This is not being used afaik
-            // add page to be tested
-            this.pagesToTest.push(location.pathname + this.config.pages[i].url);
+            page.uri = page.url;
+            if (page.url.charAt(0) !== '/') {
+                page.url = this.baseUrl + page.url;
+            }
 
             // add global tests
             for (var j = 0, lenJ = globalTests.length; j < lenJ; j++) {
@@ -203,6 +201,7 @@
     MonkeyTestJS.prototype.start = function (settings) {
 
         this.config = {
+            loadSources: true,
             pageTests: {},
             globalTests: []
         };
@@ -239,18 +238,20 @@
 
         APP.Utils.__extends(this.config, settings || {});
 
-        // fully-qualified base url of test specs directory
-        this.testsUrl = /^[^\/]+:\/\/[^\/]+\//.exec(location.href)[0] + // scheme + domain + /
-            (function() {
-                var l = location.pathname; // trim leading and trailing slashes from the current pathname
-                if (l.charAt('0') === '/') {
-                    l = l.substring(1);
-                }
-                if (l.charAt(l.length - 1) === '/') {
-                    l = l.substring(0, l.length - 1);
-                }
-                return l;
-            })() + '/tests/';
+        if (location.href.substr(0, 4) === 'file') {
+            if (typeof console !== 'undefined' && typeof console.log !== 'undefined') {
+                console.log('Running from local filesystem so disabling loading page sources');
+            }
+            this.config.loadSources = false;
+        }
+
+        // work out the fully-qualified base url of monkeytestjs (this.baseUrl)
+        // and our test specs directory (this.testsUrl)
+        // some examples and the desired results:
+        //   http://domain.com/tests/ -> no change
+        //   file:///path/to/tests/index.html -> file:///path/to/tests/
+        this.baseUrl = location.href.substr(0, location.href.lastIndexOf('/') + 1);
+        this.testsUrl = this.baseUrl + 'tests/';
         this.workspace = this.config.workspace;
         this.jQuery = this.config.jQuery;
 
@@ -440,7 +441,7 @@
 
         lookUp[typeof _test === 'function' ? 'isFunction' : 'isObject']();
 
-        QUnit.module('Testing ' + self.page.url);
+        QUnit.module('Testing ' + self.page.uri);
 
         self.start();
 
@@ -496,26 +497,53 @@
         var self = this,
             _timeout = timeout || 5000,
             url = targetUrl || this.page.url,
+            w = self.window,
+            ensureJQuery = function() {
+                if (w.jQuery) {
+                    self.$ = w.jQuery;
+                    loadFn();
+                } else {
+                    var src = self.runner.jQuery('script[src*=jquery]').attr('src');
+                    if (src.charAt(0) !== '/' && src.indexOf('//') !== 0 && src.indexOf('://') < 0) {
+                        src = self.runner.baseUrl + src;
+                    }
+                    var script, firstScript = w.document.getElementsByTagName('script')[0];
+                    script = w.document.createElement('script');
+                    script.src = src;
+                    if (firstScript) {
+                        firstScript.parentNode.insertBefore(script, firstScript);
+                    } else {
+                        var body = w.document.getElementsByTagName('body')[0];
+                        body.insertBefore(script, body.lastChild);
+                    }
+                    setTimeout(function() {
+                        self.$ = w.jQuery;
+                        loadFn();
+                    }, 10);
+                }
+            },
             callNext = function () {
                 clearTimeout(self._waitingTimer);
 
                 self._next();
                 self.runner.jQuery('#workspace')
-                    .off('load', loadFn);
+                    .off('load', ensureJQuery);
             },
-            loadFn = function () {
+            loadFn = callNext;
+        if (this.config.loadSources) {
+            loadFn = function() {
                 self._waitingTimer = setTimeout(callNext, _timeout);
                 self.page.loadSource(url, function () {
                     callNext();
                 });
-            },
-            fn = function () {
-                self.runner.jQuery('#workspace')
-                    .on('load', loadFn)
-                    .attr('src', url);
             };
+        }
 
-        this.chain.push(fn);
+        this.chain.push(function () {
+            self.runner.jQuery('#workspace')
+                .on('load', ensureJQuery)
+                .attr('src', url);
+        });
 
         return this; // chainable
     };
@@ -533,7 +561,7 @@
         var self = this;
         var fn = function () {
             test(name, function () {
-                testFN.call(self, self.workspace.window.$);
+                testFN.call(self, self.$);
             });
             self._next();
         };
@@ -721,26 +749,35 @@
     global.QUnit.config.autostart = false;
 
     var APP = global._MonkeyTestJS = global._MonkeyTestJS || {}, // APP namespace
-        $$ = global.$$ = global.jQuery.noConflict(true), // jquery no conflict 
-        monkeytestjs = global.monkeytestjs = new APP.MonkeyTestJS(), // create our singleton
-        START = function () {
-            // read configuration from a file called 'config.json'
-            $$.getJSON('config.json', function (data) {
+        $$ = global.$$ = global.jQuery.noConflict(true); // jquery no conflict
 
-                monkeytestjs.start($$.extend({}, {
-                    workspace: window.frames[0],
-                    jQuery: $$
-                }, data));
+    $$(function() {
+        // MonkeyTestJS can be configured by assigning the configuration object to a global variable monkeytestjs
+        // before this script loads. If no such variable has been defined, this script will attempt to load config.json
+        // (via ajax) from the server.
+        function configured(config) {
+            var monkeytestjs = global.monkeytestjs = new APP.MonkeyTestJS(); // create our singleton
+            monkeytestjs.start($$.extend({}, {
+                workspace: window.frames[0],
+                jQuery: $$
+            }, config));
+        }
+        if (typeof global.monkeytestjs === 'object') {
+            var config = global.monkeytestjs;
+            configured(config);
+        } else {
+            $$.getJSON('config.json', function (data) {
+                configured(data);
             })
                 .fail(function () {
                     global.alert(
-                        'Failed to load config.json, please make sure this file exist and it is correctly formatted.'
+                        'Failed to load config.json. Please make sure this file exists and it is correctly formatted.\n\n' +
+                        'Alternatively, configure MonkeyTestJS by defining a global variable before including the monkeytestjs script:\n\n' +
+                        '    var monkeytestjs = <contents of config.json>;'
                     );
                 });
+        }
 
-        };
-
-    // When dom is ready read 'config.json' file and kickstart application.
-    $$(START);
+    });
 
 }(this));

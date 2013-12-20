@@ -10,41 +10,44 @@ registerTest ('Has a Valid HTML According To W3C Validator', {
 
         'use strict';
 
-        this
-        .asyncTest('Is HTML Valid?',function() {
+        if (this.config.loadSources) {
+            this
+            .asyncTest('Is HTML Valid?',function() {
 
-            var self = this;
+                var self = this;
 
-            $$.post(this.config.proxyUrl + this.validatorUrl,{fragment:this.page.source})
-            .success(function(data) { // we got some validation results
+                $$.post(this.config.proxyUrl + this.validatorUrl,{fragment:this.page.source})
+                .success(function(data) { // we got some validation results
 
-                // images are not in the root so lets change them to the correct path
-                var doc = $$(data.contents.replace(/images\//g, self.imagesFolder)),
-                    errors = doc.find('li.msg_err'); // error messages
+                    // images are not in the root so lets change them to the correct path
+                    var doc = $$(data.contents.replace(/images\//g, self.imagesFolder)),
+                        errors = doc.find('li.msg_err'); // error messages
 
-                if (errors.length) { // invalid page, use the validator messages for the errors.
-                    
-                    errors.each(function(){
-                      var msg = $$(this).find('span.msg');
+                    if (errors.length) { // invalid page, use the validator messages for the errors.
 
-                      ok (false, msg.text());
-                    });
-                } else { // page is valid
+                        errors.each(function(){
+                          var msg = $$(this).find('span.msg');
 
-                    ok( true, 'HTML is valid' );
-                }
+                          ok (false, msg.text());
+                        });
+                    } else { // page is valid
 
-                // needs to be called upon assync tests
-                self.asyncTestDone();
-            })
-            .error(function() { // validation couldnt be performed.
+                        ok( true, 'HTML is valid' );
+                    }
 
-                ok( false, 'Unable to get validation results' );
+                    // needs to be called upon assync tests
+                    self.asyncTestDone();
+                })
+                .error(function() { // validation couldnt be performed.
 
-                // needs to be called upon assync tests
-                self.asyncTestDone();
+                    ok( false, 'Unable to get validation results' );
+
+                    // needs to be called upon assync tests
+                    self.asyncTestDone();
+                });
             });
-
-        });
+        } else {
+            console.warn('No page source to validate. Note that "loadSources" is set to false when running from the filesystem.');
+        }
     }
 });

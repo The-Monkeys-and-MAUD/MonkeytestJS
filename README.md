@@ -69,56 +69,86 @@ mv MonkeytestJS tests
 
 Then you can run them on that URL, eg "http://your-web-app.dev/tests/"
 
+Running without a web server
+----------------------------
+
+It is possible to run MonkeyTestJS without a webserver by opening the `index.html` file in your browser. However,
+modern browsers prevent javascript access between frames, and because the pages you'll be testing are loaded in an
+`iframe`, this prevents MonkeyTestJS from working. Some browsers may have a workaround for this though - for example:
+
+### Google Chrome
+
+Chrome allows you to specify a command-line parameter (when starting Chrome):
+
+```bash
+$ /path/to/chrome --allow-file-access-from-files
+```
+
+### Firefox
+
+Firefox has a preference called `security.fileuri.strict_origin_policy` which can be set to `false`.
 
 Getting Started
 ---------------
 
-The file **/config.json** is where you should put all your settings. It comes with some demo content and looks like this:
+The file **/config.js** is where you should put all your settings. It comes with some demo content and looks like this:
 
 ```javascript
+(function(global) {
+    global.monkeytestjs = {
+        "facebookId": "000000000000000",
 
-{
-    "facebookId": "000000000000000",
-
-    "local": {
-        "env": ["DEV URL OR PART OF"]
-    },
-    "stage": {
-        "env": ["STAGE URL OR PART OF"],
-        "facebookId": "222222222222222"
-    },
-    "beta": {
-        "env": ["BETA URL OR PART OF"],
-        "facebookId": "33333333333333333"
-    },
-    "production": {
-        "env": ["PRODUCTION URL OR PART OF"],
-        "facebookId": "4444444444444444444"
-    },
-
-    "globalTests": [
-        "global/not_server_error.js",
-        "global/is_html_w3c_valid.js",
-        "global/has_utf8_metatag.js",
-        "global/has_google_analytics.js"
-    ],
-    "pages": [
-        {
-            "url": "../"
+        "local": {
+            "env": ["DEV URL OR PART OF"]
         },
-        {
-            "url": "core/demo/index.html"
+        "stage": {
+            "env": ["STAGE URL OR PART OF"],
+            "facebookId": "222222222222222"
         },
-        {
-            "url": "core/demo/index.html?pretendIsAnotherPage=true",
-            "tests": [ "page/demo_page_test.js","page/has_facebook_appid" ]
-        }
-    ],
-    "proxyUrl": "core/proxy.php?url="
-}
+        "beta": {
+            "env": ["BETA URL OR PART OF"],
+            "facebookId": "33333333333333333"
+        },
+        "production": {
+            "env": ["PRODUCTION URL OR PART OF"],
+            "facebookId": "4444444444444444444"
+        },
+
+        "globalTests": [
+            "global/not_server_error.js",
+            "global/is_html_w3c_valid.js",
+            "global/has_utf8_metatag.js",
+            "global/has_google_analytics.js"
+        ],
+        "pages": [
+            {
+                "url": "../"
+            },
+            {
+                "url": "core/demo/index.html",
+                "tests": [ "page/has_facebook_appid.js" ]
+            },
+            {
+                "url": "core/demo/index.html?pretendIsAnotherPage=true",
+                "tests": [ "page/demo_page_test.js","page/has_facebook_appid.js" ]
+            }
+        ],
+        "proxyUrl": "core/proxy.php?url=",
+        "loadSources": true
+    };
+})(this);
 ```
 
-In a test, the config settings are accessible through the `config` property. For example, this setting in **/config.json**
+If desired, you may use a JSON file named `config.json` instead - to do this:
+
+1. Populate your `config.json` with content in the same structure as shown above but without the javascript wrapper.
+2. Delete the reference to `config.js` in the supplied `index.html` file.
+
+> **Note**: Using a JSON file has the drawback of not working from the local filesystem because it requires an AJAX
+> request to load the JSON file; therefore if you're not running your own local webserver for development then you'll
+> need to go with the default `config.js` approach.
+
+In a test, the config settings are accessible through the `config` property. For example, this setting in **/config.js**
 
 ```javascript
 
@@ -136,7 +166,7 @@ this.config.facebookId
 
 ### Setting environment specific (`env`) overrides
 
-Any property in **/config.json** is deemed to be an environment specific setting if it contains an `env` property,
+Any property in **/config.js** is deemed to be an environment specific setting if it contains an `env` property,
 for Example:
 
 ```javascript
@@ -147,7 +177,7 @@ for Example:
 ```
 In this case, if the string "dev" or "localhost" is part of the website URL, any other properties of "local"
 will be added to the `config` property, overriding any default of the same name that might be present. For example,
-if your development environment URL contians the string "localhost" and you have this in your **/config.json**:
+if your development environment URL contians the string "localhost" and you have this in your **/config.js**:
 
  ```javascript
 
@@ -161,7 +191,7 @@ if your development environment URL contians the string "localhost" and you have
 
 then `this.config.facebookId` will have a value "88888888888888888".
 
-You can setup as many environments as you need. In the default **/config.json** file the `local` environment
+You can setup as many environments as you need. In the default **/config.js** file the `local` environment
 doesn't override the default `facebookId` value, effectively making `local` the default. 
 
  ```javascript
@@ -203,7 +233,7 @@ MonkeytestJS ships with three default tests:
 - **/tests/global/has_utf8_metatag.js** ( check for a presence of a utf8 metatag )
 - **/tests/global/has_google_analytics.js** ( check if we have google analytics setup )
 
-Removing or adding a global test from the test suite is just a matter of deleting or adding a reference to it in the "globalTests" section of the **/config.json** file:
+Removing or adding a global test from the test suite is just a matter of deleting or adding a reference to it in the "globalTests" section of the **/config.js** file:
 
 ```javascript
 
@@ -265,7 +295,7 @@ proxy when necessary.
 In the demo test **/tests/global/is_html_w3c_valid.js** we send the full page markup off to the W3C validator and get back the result.
 Because the W3C site is a different domain, we use the proxy.
 
-The URL for the proxy script is specified in the **/config.json** file and is relative to the MonkeyTestJS directory.
+The URL for the proxy script is specified in the **/config.js** file and is relative to the MonkeyTestJS directory.
 
 Example:
 
@@ -275,7 +305,15 @@ Example:
 ```
 
 The proxy is [PHP][2]. If you're using another language on the server side, you can use your own proxy script and change the path
-in the **/config.json** file to reference it.
+in the **/config.js** file to reference it.
+
+### `loadSources` - Boolean
+
+If set to `true` (the default), MonkeyTestJS will fire off ajax requests to get the source code for your pages under
+test. This is available from within your test scripts via the property `this.page.source`.
+
+> **Note**: When running from the local filesystem (i.e. at a `file:` url, not via a web server), `loadSources` is
+> ignored and sources are not available.
 
 
 MonkeytestJS API

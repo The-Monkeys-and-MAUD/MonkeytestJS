@@ -55,7 +55,7 @@
 
         lookUp[typeof _test === 'function' ? 'isFunction' : 'isObject']();
 
-        QUnit.module('Testing ' + self.page.url);
+        QUnit.module('Testing ' + self.page.uri);
 
         self.start();
 
@@ -111,26 +111,53 @@
         var self = this,
             _timeout = timeout || 5000,
             url = targetUrl || this.page.url,
+            w = self.window,
+            ensureJQuery = function() {
+                if (w.jQuery) {
+                    self.$ = w.jQuery;
+                    loadFn();
+                } else {
+                    var src = self.runner.jQuery('script[src*=jquery]').attr('src');
+                    if (src.charAt(0) !== '/' && src.indexOf('//') !== 0 && src.indexOf('://') < 0) {
+                        src = self.runner.baseUrl + src;
+                    }
+                    var script, firstScript = w.document.getElementsByTagName('script')[0];
+                    script = w.document.createElement('script');
+                    script.src = src;
+                    if (firstScript) {
+                        firstScript.parentNode.insertBefore(script, firstScript);
+                    } else {
+                        var body = w.document.getElementsByTagName('body')[0];
+                        body.insertBefore(script, body.lastChild);
+                    }
+                    setTimeout(function() {
+                        self.$ = w.jQuery;
+                        loadFn();
+                    }, 10);
+                }
+            },
             callNext = function () {
                 clearTimeout(self._waitingTimer);
 
                 self._next();
                 self.runner.jQuery('#workspace')
-                    .off('load', loadFn);
+                    .off('load', ensureJQuery);
             },
-            loadFn = function () {
+            loadFn = callNext;
+        if (this.config.loadSources) {
+            loadFn = function() {
                 self._waitingTimer = setTimeout(callNext, _timeout);
                 self.page.loadSource(url, function () {
                     callNext();
                 });
-            },
-            fn = function () {
-                self.runner.jQuery('#workspace')
-                    .on('load', loadFn)
-                    .attr('src', url);
             };
+        }
 
-        this.chain.push(fn);
+        this.chain.push(function () {
+            self.runner.jQuery('#workspace')
+                .on('load', ensureJQuery)
+                .attr('src', url);
+        });
 
         return this; // chainable
     };
@@ -148,7 +175,7 @@
         var self = this;
         var fn = function () {
             test(name, function () {
-                testFN.call(self, self.workspace.window.$);
+                testFN.call(self, self.$);
             });
             self._next();
         };
