@@ -139,15 +139,6 @@ The file **/config.js** is where you should put all your settings. It comes with
 })(this);
 ```
 
-If desired, you may use a JSON file named `config.json` instead - to do this:
-
-1. Populate your `config.json` with content in the same structure as shown above but without the javascript wrapper.
-2. Delete the reference to `config.js` in the supplied `index.html` file.
-
-> **Note**: Using a JSON file has the drawback of not working from the local filesystem because it requires an AJAX
-> request to load the JSON file; therefore if you're not running your own local webserver for development then you'll
-> need to go with the default `config.js` approach.
-
 In a test, the config settings are accessible through the `config` property. For example, this setting in **/config.js**
 
 ```javascript
@@ -161,6 +152,15 @@ is referenced like this:
 
 this.config.facebookId
 ```
+
+> **Note**: We are using javascript rather than JSON for our config to make it easier to use MonkeyTestJS without having a webserver running. If you want, you can configure MonkeyTestJS to use a JSON file named `config.json` instead.
+
+> 1. Populate your `config.json` with content in the same structure as shown above but without the javascript wrapper.
+> 2. Delete the reference to `config.js` in the supplied `index.html` file.
+
+> Using a JSON file has the drawback of not working from the local filesystem because it requires an AJAX
+> request to load the JSON file; therefore if you're not running your own local webserver for development then you'll
+> need to go with the default `config.js` approach.
 
 ***
 
