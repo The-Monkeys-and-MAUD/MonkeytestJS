@@ -30,7 +30,7 @@
 
         var script, firstScript = document.getElementsByTagName('script')[0];
         script = document.createElement('script');
-        script.src = this.runner.testsUrl + this.src;
+        script.src = this.src.charAt(0) === '/' ? this.src : (this.runner.testsUrl + this.src);
         firstScript.parentNode.insertBefore(script, firstScript);
 
         return true;

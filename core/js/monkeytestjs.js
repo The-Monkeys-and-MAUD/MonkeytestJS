@@ -246,16 +246,27 @@
             this.config.loadSources = false;
         }
 
-        // sanitise the testsDir config - needs to start with no slash and end with a slash
-        this.config.testsDir = /^\/*(.*?)\/*$/.exec(this.config.testsDir)[1] + '/';
-
         // work out the fully-qualified base url of monkeytestjs (this.baseUrl)
         // and our test specs directory (this.testsUrl)
         // some examples and the desired results:
         //   http://domain.com/tests/ -> no change
         //   file:///path/to/tests/index.html -> file:///path/to/tests/
         this.baseUrl = location.href.substr(0, location.href.lastIndexOf('/') + 1);
-        this.testsUrl = this.baseUrl + this.config.testsDir;
+
+        // if the testsDir setting begins with a slash, it is considered to be absolute and so is not appended to the
+        // baseUrl. We want it to always end with a slash, unless it's an empty string which means to use the baseUrl
+        // as the testsDir
+        if (this.config.testsDir === '') {
+            this.testsUrl = this.baseUrl;
+        } else if (this.config.testsDir.charAt(0) === '/') {
+            this.testsUrl = this.config.testsDir;
+        } else {
+            this.testsUrl = this.baseUrl + this.config.testsDir;
+        }
+        if (this.testsUrl !== '' && this.testsUrl.charAt(this.testsUrl.length - 1) !== '/') {
+            this.testsUrl += '/';
+        }
+
         this.workspace = this.config.workspace;
         this.jQuery = this.config.jQuery;
 
@@ -683,7 +694,7 @@
 
         var script, firstScript = document.getElementsByTagName('script')[0];
         script = document.createElement('script');
-        script.src = this.runner.testsUrl + this.src;
+        script.src = this.src.charAt(0) === '/' ? this.src : (this.runner.testsUrl + this.src);
         firstScript.parentNode.insertBefore(script, firstScript);
 
         return true;

@@ -113,7 +113,7 @@ The file **/config.js** is where you should put all your settings. It comes with
             "env": ["PRODUCTION URL OR PART OF"],
             "facebookId": "4444444444444444444"
         },
-
+        "testsDir": "mytests",
         "globalTests": [
             "global/not_server_error.js",
             "global/is_html_w3c_valid.js",
@@ -220,8 +220,55 @@ doesn't override the default `facebookId` value, effectively making `local` the 
 
 ### `facebookId` - String
 
-Used in the demo **/tests/global/has_facebook_appid.js** test to check the Facebook ID. In the demo **config/json** file, this is set to "000000000000000" so that the demo tests pass and is 'overridden' in the specific settings for each environment.
+Used in the included test **global/has_facebook_appid.js** as the expected Facebook ID, and compared to the Facebook ID
+found within the tested page. In the demo **config/json** file, this is set to "000000000000000" so that the demo tests
+pass, and is 'overridden' in the specific settings for each environment.
 
+***
+
+### `testsDir` - String
+
+The directory where your test specs can be found, relative to the MonkeyTestJS base URL. For example, with the following
+configuration:
+
+```javascript
+    "testsDir": "mytests",
+    "globalTests": [
+        "global/is_html_w3c_valid.js"
+    ]
+```
+
+and the base URL `http://your-web-app.dev/MonkeyTestJS`, the path to the global test would become
+`http://your-web-app.dev/MonkeyTestJS/mytests/global/is_html_w3c_valid.js`.
+
+If you want to put your tests directly inside the MonkeyTestJS directory, you can set this setting to an empty string:
+
+```javascript
+    "testsDir": "",
+    "globalTests": [
+        "is_html_w3c_valid.js"
+    ]
+```
+
+then the test URL constructed will be `http://your-web-app.dev/MonkeyTestJS/is_html_w3c_valid.js`.
+
+If you want to put your tests outside of the MonkeyTestJS directory, thus minimising the changes you make to
+MonkeyTestJS (and therefore making it easier to update in future), you can specify a leading slash to indicate that the
+path is relative to the root:
+
+```javascript
+    "testsDir": "/mytests",
+    "globalTests": [
+        "global/is_html_w3c_valid.js"
+    ]
+```
+
+then the test URL constructed will be `http://your-web-app.dev/mytests/global/is_html_w3c_valid.js`
+
+> Note that in the above examples you will still run the tests by visiting `http://your-web-app.dev/MonkeyTestJS/`,
+  or whatever base path you selected.
+
+***
 
 ### `globalTests` - Array
 
@@ -229,9 +276,9 @@ The global tests will be run by [MonkeyTestJS][1] on all pages.
 
 MonkeytestJS ships with three default tests:
 
-- **/tests/global/is_html_w3c_valid.js** ( checks if the page is valid throught the w3c validator )
-- **/tests/global/has_utf8_metatag.js** ( check for a presence of a utf8 metatag )
-- **/tests/global/has_google_analytics.js** ( check if we have google analytics setup )
+- **global/is_html_w3c_valid.js** ( checks if the page is valid throught the w3c validator )
+- **global/has_utf8_metatag.js** ( check for a presence of a utf8 metatag )
+- **global/has_google_analytics.js** ( check if we have google analytics setup )
 
 Removing or adding a global test from the test suite is just a matter of deleting or adding a reference to it in the "globalTests" section of the **/config.js** file:
 
@@ -244,7 +291,8 @@ Removing or adding a global test from the test suite is just a matter of deletin
     ]
 ```
 
-Urls for the global tests are relative to the **/tests** directory in the MonkeyTestJS directory.
+Urls for all tests (including global tests) are relative to the directory configured in the `testsDir` setting, which
+defaults to `mytests`.
 
 ***
 
@@ -269,7 +317,8 @@ Example:
 
 Assign custom tests for the page. Custom tests will be run on the page after the global tests have finished.
 
-Urls for the page tests are relative to the **/tests** directory in the MonkeyTestJS directory.
+Urls for all tests (including page tests) are relative to the directory configured in the `testsDir` setting, which
+defaults to `mytests`.
 
 Example:
 
@@ -292,7 +341,7 @@ Example:
 Cross domain restricitons limit the scope of front end javascript. To help mitigate this, we recommend using a simple
 proxy when necessary.
 
-In the demo test **/tests/global/is_html_w3c_valid.js** we send the full page markup off to the W3C validator and get back the result.
+In the demo test **global/is_html_w3c_valid.js** we send the full page markup off to the W3C validator and get back the result.
 Because the W3C site is a different domain, we use the proxy.
 
 The URL for the proxy script is specified in the **/config.js** file and is relative to the MonkeyTestJS directory.
@@ -326,7 +375,7 @@ stuff is happening behind the scenes of [MonkeyTestJS][1].
 [MonkeyTestJS][1] gives you the following methods for defining tests:
 
 ### test (name, callback ($){})
-Runs a synchronous QUint test.
+Runs a synchronous QUnit test.
 
 Parameters:
 
@@ -354,7 +403,7 @@ Example:
 ```
 
 ### asyncTest (name, callback ($){})
-Runs an asynchronous [QUint][3] test. Must call this.asyncTestDone when the test is complete. Only then will the next chain
+Runs an asynchronous [QUnit][3] test. Must call this.asyncTestDone when the test is complete. Only then will the next chain
 action be called.
 
 Parameters:
@@ -369,7 +418,7 @@ An instance of ```MonkeyTestJSPageTest```, suitable for chaining JQuery style.
 
 Example:
 
-In this example from **/tests/global/is_html_w3c_valid.js**, we're sending the page source to the W3C
+In this example from **global/is_html_w3c_valid.js**, we're sending the page source to the W3C
 validator for checking, then doing some assertions with the returned page.
 
 ```javascript
@@ -383,14 +432,14 @@ validator for checking, then doing some assertions with the returned page.
             // Do some assertions on the returned markup, eg:
             //    ok( true, 'HTML is valid' );
 
-            // needs to be called upon assync tests
+            // needs to be called upon async tests
             self.asyncTestDone();
         })
         .error(function() { // validation couldnt be performed.
 
             ok( false, 'Unable to get validation results' );
 
-            // needs to be called upon assync tests
+            // needs to be called upon async tests
             self.asyncTestDone();
         });
 
@@ -484,7 +533,8 @@ Writing Tests
 -------------
 
 Add the path to the test script to either the `config.globalTests` array or, for a specific page, to the `config.pages[].tests`
-array.
+array. If the path starts with a slash (`/`) it will be interpreted as relative to the root; otherwise it will be taken as
+relative to the configured `testsDir`.
 
 Create a test script file at the path entered above. At the most basic the test script should contain a call to the
 registerTest (name, spec) function. 
@@ -526,7 +576,7 @@ registerTest ('Hello world test',
 
 ```
 
-Refer to example test on: **/tests/page/demo_page_test.js**
+Refer to example test **page/demo_page_test.js**
 
 ***
 
