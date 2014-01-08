@@ -17,7 +17,7 @@
             "env": ["PRODUCTION URL OR PART OF"],
             "facebookId": "4444444444444444444"
         },
-
+        "testsDir": "mytests",
         "globalTests": [
             "global/not_server_error.js",
             "global/is_html_w3c_valid.js",

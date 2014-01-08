@@ -201,6 +201,7 @@
     MonkeyTestJS.prototype.start = function (settings) {
 
         this.config = {
+            testsDir: 'mytests/',
             loadSources: true,
             pageTests: {},
             globalTests: []
@@ -245,13 +246,16 @@
             this.config.loadSources = false;
         }
 
+        // sanitise the testsDir config - needs to start with no slash and end with a slash
+        this.config.testsDir = /^\/*(.*?)\/*$/.exec(this.config.testsDir)[1] + '/';
+
         // work out the fully-qualified base url of monkeytestjs (this.baseUrl)
         // and our test specs directory (this.testsUrl)
         // some examples and the desired results:
         //   http://domain.com/tests/ -> no change
         //   file:///path/to/tests/index.html -> file:///path/to/tests/
         this.baseUrl = location.href.substr(0, location.href.lastIndexOf('/') + 1);
-        this.testsUrl = this.baseUrl + 'tests/';
+        this.testsUrl = this.baseUrl + this.config.testsDir;
         this.workspace = this.config.workspace;
         this.jQuery = this.config.jQuery;
 
