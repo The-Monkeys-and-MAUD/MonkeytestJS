@@ -221,7 +221,7 @@ doesn't override the default `facebookId` value, effectively making `local` the 
 ### `facebookId` - String
 
 Used in the included test **global/has_facebook_appid.js** as the expected Facebook ID, and compared to the Facebook ID
-found within the tested page. In the demo **config/json** file, this is set to "000000000000000" so that the demo tests
+found within the tested page. In the demo **config.js** file, this is set to "000000000000000" so that the demo tests
 pass, and is 'overridden' in the specific settings for each environment.
 
 ***
