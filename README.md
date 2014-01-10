@@ -133,7 +133,7 @@ The file **/config.js** is where you should put all your settings. It comes with
                 "tests": [ "page/demo_page_test.js","page/has_facebook_appid.js" ]
             }
         ],
-        "proxyUrl": "core/proxy.php?url=",
+        "proxyUrl": "core/proxy.php?mode=native&url=<%= url %>",
         "loadSources": true
     };
 })(this);
@@ -338,23 +338,26 @@ Example:
 
 ### `proxyUrl` - String
 
-Cross domain restricitons limit the scope of front end javascript. To help mitigate this, we recommend using a simple
-proxy when necessary.
+Cross domain restrictions limit the scope of front end javascript. To help mitigate this, we recommend using a simple
+proxy when it's necessary to access resources on other domains.
 
-In the demo test **global/is_html_w3c_valid.js** we send the full page markup off to the W3C validator and get back the result.
-Because the W3C site is a different domain, we use the proxy.
+In the demo test **global/is_html_w3c_valid.js** we send the full page markup off to the W3C validator and get back the
+result. Because the W3C site is a different domain, we use the proxy.
 
-The URL for the proxy script is specified in the **/config.js** file and is relative to the MonkeyTestJS directory.
+The URL for the proxy script is specified in the **/config.js** file and is relative to the MonkeyTestJS directory, and
+is parsed as an [EJS template](http://underscorejs.org/#template) with one variable, `url`, available for substitution.
 
 Example:
 
 ```javascript
 
-    "proxyUrl": "core/proxy.php?url="
+    "proxyUrl": "core/proxy.php?mode=native&url=<%= url %>"
 ```
 
-The proxy is [PHP][2]. If you're using another language on the server side, you can use your own proxy script and change the path
-in the **/config.js** file to reference it.
+The proxy provided with MonkeyTestJS is written in [PHP][2]. If you're using another language on the server side, you
+can use your own proxy script and change the path in the **/config.js** file to reference it.
+
+For details on how to use the proxy, see the section below titled "Cross-domain AJAX".
 
 ### `loadSources` - Boolean
 
@@ -426,7 +429,7 @@ validator for checking, then doing some assertions with the returned page.
    this
    .asyncTest('Is HTML Valid?',function() {
 
-        $$.post(this.config.proxyUrl + this.validatorUrl,{fragment:this.page.source})
+        this.post(this.validatorUrl, {fragment:this.page.source})
         .success(function(data) { // we got some validation results
 
             // Do some assertions on the returned markup, eg:
@@ -488,6 +491,7 @@ Building on the example for test() above, we can load a second page and run furt
 ```
 
 ### wait (function, timeout, throttle)
+
 Waits for expression to be evaluated to true or timeout to happen, keeps checking for experssion on throttle interval.
 
 Parameters:
@@ -528,6 +532,37 @@ Example:
     });
 
 ```
+
+### Cross-domain AJAX
+
+MonkeyTestJS comes with built-in wrappers around JQuery's AJAX methods `jQuery.ajax()`, `jQuery.post()` and
+`jQuery.get()`, which pass the request through a proxy on your server and thus allow you to access other domains from
+within your tests. One of the included tests, `global/is_html_w3c_valid.js` makes use of this to be able to submit the
+page source to the W3C validator as a cross-domain AJAX request:
+
+```javascript
+    this.post(this.validatorUrl, {fragment:this.page.source})
+```
+
+This call is identical to calling `jQuery.post()` with the same arguments, except that the URL is altered internally to
+use the server-side proxy configured via the configuration property `proxyUrl`.
+
+The `jQuery.get()` and `jQuery.ajax()` functions are wrapped in the same way. See the [jQuery API docs](http://api.jquery.com/category/ajax/)
+for details on these methods - just call the equivalent functions on your test context object (`this`).
+
+#### Using the included PHP proxy script
+
+The included PHP proxy script restricts access to whitelisted domains, so when you want to use it in your tests you'll
+probably need to add new domains to the whitelist. To do that, open the `proxy.php` in your editor and find the
+`$valid_url_regex` variable. By default it contains two domains:
+
+```php
+$valid_url_regex = '/^(validator.w3.org\/|api.openweathermap.org\/)/';
+```
+
+Just modify the regular expression to accept whatever domains you need it to. Avoid opening up the proxy too much -
+an open proxy on the internet can attract all kinds of uncool behaviour. If you're using your own proxy script, bear
+this in mind too.
 
 Writing Tests
 -------------

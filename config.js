@@ -37,7 +37,7 @@
                 "tests": [ "page/demo_page_test.js","page/has_facebook_appid.js" ]
             }
         ],
-        "proxyUrl": "core/proxy.php?url=",
+        "proxyUrl": "core/proxy.php?mode=native&url=<%= url %>",
         "loadSources": true
     };
 })(this);

@@ -270,6 +270,8 @@
         this.workspace = this.config.workspace;
         this.jQuery = this.config.jQuery;
 
+        this.setupProxy();
+
         // setup tests
         this.setupTests();
 
@@ -277,6 +279,57 @@
         this.loadNextTest();
 
         return this;
+    };
+
+
+    /**
+     * Parse the proxyUrl configuration option, and add ajax(), get() and post() methods to the MonkeyTestJS instance
+     * that wrap jquery's corresponding methods and proxy requests through a configured server-side proxy script to
+     * avoid cross-domain request restrictions.
+     */
+    MonkeyTestJS.prototype.setupProxy = function() {
+        var proxyUrl = this.config.proxyUrl, $ = global.$$, self = this, makeUrl;
+        if (proxyUrl.indexOf('<%') >= 0) {
+            // need to parse the url as an EJS template
+            var template = APP.template(proxyUrl);
+            makeUrl = function(proxiedUrl) {
+                return template({url: proxiedUrl});
+            };
+        } else {
+            // backward compatibility mode: append the requested URL to the end of the configured URL
+            makeUrl = function(proxiedUrl) {
+                return proxyUrl + proxiedUrl;
+            };
+        }
+
+        // wrap jQuery's $.ajax, $.get, $.post functions to proxy cross-domain requests
+        this.ajax = function(url, settings) {
+            if (typeof url === 'object') {
+                settings = url;
+                url = settings.url;
+            }
+            return $.ajax($.extend({}, settings, {
+                url: makeUrl(url)
+            }));
+        };
+        $.each( [ "get", "post" ], function( i, method ) {
+            self[ method ] = function( url, data, callback, type ) {
+                // shift arguments if data argument was omitted
+                if ( $.isFunction( data ) ) {
+                    type = type || callback;
+                    callback = data;
+                    data = undefined;
+                }
+
+                return self.ajax({
+                    url: url,
+                    type: method,
+                    dataType: type,
+                    data: data,
+                    success: callback
+                });
+            };
+        });
     };
 
     /**
@@ -414,11 +467,16 @@
      */
     var MonkeyTestJSPageTest = APP.MonkeyTestJSPageTest = function (runner) {
 
-        // K: This is probably not required. It doesn't seem to
-        // be used in the tests
         this.runner = runner;
-
         this.config = runner.config;
+
+        // copy the ajax methods from the runner to the test context
+        var self = this;
+        global.$$.each(['ajax', 'get', 'post'], function(i, method) {
+            self[method] = function() {
+                return runner[method].apply(runner, arguments);
+            };
+        });
 
         this.chain = [];
     };
@@ -755,6 +813,150 @@
 
 }(this));
 
+/**
+ * Adds the _MonkeyTestJS.template() function, which parses an EJS template (passed as text to the function) and returns
+ * a precompiled render function that accepts a model object and returns the rendered text.
+ *
+ * This code has been extracted from the underscore library:
+ *
+ * Underscore.js 1.5.2
+ * http://underscorejs.org
+ * (c) 2009-2013 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+ * Underscore may be freely distributed under the MIT license.
+ */
+(function(global) {
+    var _ = {},
+        ArrayProto = Array.prototype,
+        nativeKeys  = Object.keys,
+        nativeForEach = ArrayProto.forEach,
+        slice = ArrayProto.slice;
+
+    _.keys = nativeKeys || function(obj) {
+        if (obj !== Object(obj)) throw new TypeError('Invalid object');
+        var keys = [];
+        for (var key in obj) if (_.has(obj, key)) keys.push(key);
+        return keys;
+    };
+
+    var each = function(obj, iterator, context) {
+        if (obj == null) return;
+        if (nativeForEach && obj.forEach === nativeForEach) {
+            obj.forEach(iterator, context);
+        } else if (obj.length === +obj.length) {
+            for (var i = 0, length = obj.length; i < length; i++) {
+                if (iterator.call(context, obj[i], i, obj) === breaker) return;
+            }
+        } else {
+            var keys = _.keys(obj);
+            for (var i = 0, length = keys.length; i < length; i++) {
+                if (iterator.call(context, obj[keys[i]], keys[i], obj) === breaker) return;
+            }
+        }
+    };
+
+    _.defaults = function(obj) {
+        each(slice.call(arguments, 1), function(source) {
+            if (source) {
+                for (var prop in source) {
+                    if (obj[prop] === void 0) obj[prop] = source[prop];
+                }
+            }
+        });
+        return obj;
+    };
+
+
+    // By default, Underscore uses ERB-style template delimiters, change the
+    // following template settings to use alternative delimiters.
+    _.templateSettings = {
+        evaluate    : /<%([\s\S]+?)%>/g,
+        interpolate : /<%=([\s\S]+?)%>/g,
+        escape      : /<%-([\s\S]+?)%>/g
+    };
+
+    // When customizing `templateSettings`, if you don't want to define an
+    // interpolation, evaluation or escaping regex, we need one that is
+    // guaranteed not to match.
+    var noMatch = /(.)^/;
+
+    // Certain characters need to be escaped so that they can be put into a
+    // string literal.
+    var escapes = {
+        "'":      "'",
+        '\\':     '\\',
+        '\r':     'r',
+        '\n':     'n',
+        '\t':     't',
+        '\u2028': 'u2028',
+        '\u2029': 'u2029'
+    };
+
+    var escaper = /\\|'|\r|\n|\t|\u2028|\u2029/g;
+
+    // JavaScript micro-templating, similar to John Resig's implementation.
+    // Underscore templating handles arbitrary delimiters, preserves whitespace,
+    // and correctly escapes quotes within interpolated code.
+    _.template = function(text, data, settings) {
+        var render;
+        settings = _.defaults({}, settings, _.templateSettings);
+
+        // Combine delimiters into one regular expression via alternation.
+        var matcher = new RegExp([
+            (settings.escape || noMatch).source,
+            (settings.interpolate || noMatch).source,
+            (settings.evaluate || noMatch).source
+        ].join('|') + '|$', 'g');
+
+        // Compile the template source, escaping string literals appropriately.
+        var index = 0;
+        var source = "__p+='";
+        text.replace(matcher, function(match, escape, interpolate, evaluate, offset) {
+            source += text.slice(index, offset)
+                .replace(escaper, function(match) { return '\\' + escapes[match]; });
+
+            if (escape) {
+                source += "'+\n((__t=(" + escape + "))==null?'':_.escape(__t))+\n'";
+            }
+            if (interpolate) {
+                source += "'+\n((__t=(" + interpolate + "))==null?'':__t)+\n'";
+            }
+            if (evaluate) {
+                source += "';\n" + evaluate + "\n__p+='";
+            }
+            index = offset + match.length;
+            return match;
+        });
+        source += "';\n";
+
+        // If a variable is not specified, place data values in local scope.
+        if (!settings.variable) source = 'with(obj||{}){\n' + source + '}\n';
+
+        source = "var __t,__p='',__j=Array.prototype.join," +
+            "print=function(){__p+=__j.call(arguments,'');};\n" +
+            source + "return __p;\n";
+
+        try {
+            render = new Function(settings.variable || 'obj', '_', source);
+        } catch (e) {
+            e.source = source;
+            throw e;
+        }
+
+        if (data) return render(data, _);
+        var template = function(data) {
+            return render.call(this, data, _);
+        };
+
+        // Provide the compiled function source as a convenience for precompilation.
+        template.source = 'function(' + (settings.variable || 'obj') + '){\n' + source + '}';
+
+        return template;
+    };
+
+    var APP = global._MonkeyTestJS = global._MonkeyTestJS || {};
+    APP.template = _.template;
+
+})(this);
 /* globals QUnit, test, asyncTest */
 (function (global) {
 

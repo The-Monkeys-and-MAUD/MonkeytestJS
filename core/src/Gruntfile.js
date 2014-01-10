@@ -38,7 +38,7 @@ module.exports = function (grunt) {
                 src: 'Gruntfile.js'
             },
             lib_test: {
-                src:['Gruntfile.js', 'js/**/*.js' ]
+                src:['Gruntfile.js', 'js/**/*.js', '!js/lib/templates.js' ]
             }
         },
         watch:{

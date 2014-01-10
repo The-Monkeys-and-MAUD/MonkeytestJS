@@ -13,11 +13,16 @@
      */
     var MonkeyTestJSPageTest = APP.MonkeyTestJSPageTest = function (runner) {
 
-        // K: This is probably not required. It doesn't seem to
-        // be used in the tests
         this.runner = runner;
-
         this.config = runner.config;
+
+        // copy the ajax methods from the runner to the test context
+        var self = this;
+        global.$$.each(['ajax', 'get', 'post'], function(i, method) {
+            self[method] = function() {
+                return runner[method].apply(runner, arguments);
+            };
+        });
 
         this.chain = [];
     };

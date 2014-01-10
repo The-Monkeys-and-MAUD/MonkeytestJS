@@ -270,6 +270,8 @@
         this.workspace = this.config.workspace;
         this.jQuery = this.config.jQuery;
 
+        this.setupProxy();
+
         // setup tests
         this.setupTests();
 
@@ -277,6 +279,57 @@
         this.loadNextTest();
 
         return this;
+    };
+
+
+    /**
+     * Parse the proxyUrl configuration option, and add ajax(), get() and post() methods to the MonkeyTestJS instance
+     * that wrap jquery's corresponding methods and proxy requests through a configured server-side proxy script to
+     * avoid cross-domain request restrictions.
+     */
+    MonkeyTestJS.prototype.setupProxy = function() {
+        var proxyUrl = this.config.proxyUrl, $ = global.$$, self = this, makeUrl;
+        if (proxyUrl.indexOf('<%') >= 0) {
+            // need to parse the url as an EJS template
+            var template = APP.template(proxyUrl);
+            makeUrl = function(proxiedUrl) {
+                return template({url: proxiedUrl});
+            };
+        } else {
+            // backward compatibility mode: append the requested URL to the end of the configured URL
+            makeUrl = function(proxiedUrl) {
+                return proxyUrl + proxiedUrl;
+            };
+        }
+
+        // wrap jQuery's $.ajax, $.get, $.post functions to proxy cross-domain requests
+        this.ajax = function(url, settings) {
+            if (typeof url === 'object') {
+                settings = url;
+                url = settings.url;
+            }
+            return $.ajax($.extend({}, settings, {
+                url: makeUrl(url)
+            }));
+        };
+        $.each( [ "get", "post" ], function( i, method ) {
+            self[ method ] = function( url, data, callback, type ) {
+                // shift arguments if data argument was omitted
+                if ( $.isFunction( data ) ) {
+                    type = type || callback;
+                    callback = data;
+                    data = undefined;
+                }
+
+                return self.ajax({
+                    url: url,
+                    type: method,
+                    dataType: type,
+                    data: data,
+                    success: callback
+                });
+            };
+        });
     };
 
     /**

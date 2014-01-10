@@ -45,11 +45,11 @@ registerTest ('Demo page test', {
             var url = "api.openweathermap.org/data/2.5/weather?q=Sydney,au",
                 body = $("iframe").contents().find("body");
 
-            $.get(this.config.proxyUrl + url)
+            this.get(url)
             .success(function(data) { // we got some validation results
 
-                var cityName = data.contents.name,
-                    weather = data.contents.weather[0].description;
+                var cityName = data.name,
+                    weather = data.weather[0].description;
 
                 ok( true, 'We got a response from wheather website using an assyncTest.' );
 

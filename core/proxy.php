@@ -1,4 +1,4 @@
-<?PHP
+<?php
 
 // Script: Simple PHP Proxy: Get external HTML, JSON and more!
 //
@@ -137,8 +137,8 @@
 
 // Change these configuration options if needed, see above descriptions for info.
 $enable_jsonp    = false;
-$enable_native   = false;
-$valid_url_regex = '/.*/';
+$enable_native   = true;
+$valid_url_regex = '/^(validator.w3.org\/|api.openweathermap.org\/)/';
 
 // ############################################################################
 
@@ -182,9 +182,17 @@ if ( !$url ) {
   curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
   
   curl_setopt( $ch, CURLOPT_USERAGENT, isset($_GET['user_agent']) ? $_GET['user_agent'] : (isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '') );
-  
-  list( $header, $contents ) = preg_split( '/([\r\n][\r\n])\\1/', curl_exec( $ch ), 2 );
-  
+
+  $parts = preg_split( '/([\r\n][\r\n])\\1/', curl_exec( $ch ));
+  // find the first part that doesn't start with HTTP, in case of "HTTP/1.1 100 Continue" headers
+  foreach ($parts as $index => $part) {
+      if (strncmp($part, 'HTTP', 4) != 0) {
+          $contents = implode("", array_slice($parts, $index));
+          break;
+      }
+      $header = $part;
+  }
+
   $status = curl_getinfo( $ch );
   
   curl_close( $ch );
@@ -250,5 +258,3 @@ if ( isset($_GET['mode']) && $_GET['mode'] == 'native' ) {
   print $jsonp_callback ? "$jsonp_callback($json)" : $json;
   
 }
-
-?>
