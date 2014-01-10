@@ -118,6 +118,17 @@
             url = targetUrl || this.page.url,
             w = self.window,
             ensureJQuery = function() {
+                if (!self.loadSources) {
+                    var doctype = w.document.doctype;
+                    doctype = "<!DOCTYPE " +
+                        doctype.name +
+                        (doctype.publicId ? ' PUBLIC "' + doctype.publicId + '"' : '') +
+                        (!doctype.publicId && doctype.systemId ? ' SYSTEM' : '') +
+                        (doctype.systemId ? ' "' + doctype.systemId + '"' : '') +
+                        '>\n';
+                    self.page.source = doctype + w.document.documentElement.outerHTML;
+                }
+
                 if (w.jQuery) {
                     self.$ = w.jQuery;
                     loadFn();

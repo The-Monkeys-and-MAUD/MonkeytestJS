@@ -357,15 +357,19 @@ Example:
 The proxy provided with MonkeyTestJS is written in [PHP][2]. If you're using another language on the server side, you
 can use your own proxy script and change the path in the **/config.js** file to reference it.
 
-For details on how to use the proxy, see the section below titled "Cross-domain AJAX".
+For details on how to use the proxy, see the section below titled [Cross-domain AJAX](#cross-domain-ajax).
 
 ### `loadSources` - Boolean
 
 If set to `true` (the default), MonkeyTestJS will fire off ajax requests to get the source code for your pages under
 test. This is available from within your test scripts via the property `this.page.source`.
 
+If set to `false`, you can still obtain sources via `this.page.source` but they will be runtime sources, so they won't
+necessarily be the same as the source originally returned by the server. This can be bad for validation because some
+libraries (for example the Facebook Javascript SDK) insert invalid HTML into the DOM.
+
 > **Note**: When running from the local filesystem (i.e. at a `file:` url, not via a web server), `loadSources` is
-> ignored and sources are not available.
+> ignored and sources are always obtained from the DOM.
 
 
 MonkeytestJS API

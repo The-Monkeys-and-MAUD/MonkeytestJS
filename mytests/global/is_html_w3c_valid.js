@@ -10,7 +10,7 @@ registerTest ('Has a Valid HTML According To W3C Validator', {
 
         'use strict';
 
-        if (this.config.loadSources) {
+        if (this.runner.baseUrl.substr(0, 4) !== 'file') {
             this
             .asyncTest('Is HTML Valid?',function() {
 
@@ -47,7 +47,7 @@ registerTest ('Has a Valid HTML According To W3C Validator', {
                 });
             });
         } else {
-            console.warn('No page source to validate. Note that "loadSources" is set to false when running from the filesystem.');
+            console.warn('Cannot use AJAX to validate the page source because tests are running from the filesystem.');
         }
     }
 });

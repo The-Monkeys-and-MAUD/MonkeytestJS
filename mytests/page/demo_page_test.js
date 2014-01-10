@@ -48,16 +48,20 @@ registerTest ('Demo page test', {
             this.get(url)
             .success(function(data) { // we got some validation results
 
-                var cityName = data.name,
-                    weather = data.weather[0].description;
+                ok( typeof data === 'object', 'We got a JSON response' );
 
-                ok( true, 'We got a response from wheather website using an assyncTest.' );
+                if (typeof data === 'object') {
+                    var cityName = data.name,
+                        weather = data.weather[0].description;
 
-                // update the page just for the sake of displaying some visual info
-                body
-                .css({"background": "white"})
-                .find("h1")
-                .html(cityName + " weather now: " + weather);
+                    ok( true, 'We got a response from wheather website using an assyncTest.' );
+
+                    // update the page just for the sake of displaying some visual info
+                    body
+                    .css({"background": "white"})
+                    .find("h1")
+                    .html(cityName + " weather now: " + weather);
+                }
 
                 self.asyncTestDone();
             })
