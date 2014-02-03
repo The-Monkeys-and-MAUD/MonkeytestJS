@@ -199,6 +199,9 @@ this in your **/config.js**:
 
 then `this.config.facebookId` will have a value "88888888888888888".
 
+At runtime, the name of the detected environment is available via `this.config.environment`; for example, in the above
+example `this.config.environment` will have a value "local".
+
 You can setup as many environments as you need. In the default **/config.js** file the `local` environment
 doesn't override the default `facebookId` value, effectively making `local` the default. 
 

@@ -223,6 +223,7 @@
                     }
 
                     if (envRegExp.test(location.href)) {
+                        settings.environment = settingName;
 
                         global.$$.each(envProps, function (
                             envPropName, envPropValue) {
