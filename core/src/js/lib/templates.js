@@ -10,6 +10,9 @@
  * Underscore may be freely distributed under the MIT license.
  */
 (function(global) {
+    // Establish the object that gets returned to break out of a loop iteration.
+    var breaker = {};
+
     var _ = {},
         ArrayProto = Array.prototype,
         nativeKeys  = Object.keys,

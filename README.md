@@ -99,18 +99,18 @@ The file **/config.js** is where you should put all your settings. It comes with
         "facebookId": "000000000000000",
 
         "local": {
-            "env": ["DEV URL OR PART OF"]
+            "env": [/DEV URL OR PART OF/]
         },
         "stage": {
-            "env": ["STAGE URL OR PART OF"],
+            "env": [/STAGE URL OR PART OF/],
             "facebookId": "222222222222222"
         },
         "beta": {
-            "env": ["BETA URL OR PART OF"],
+            "env": [/BETA URL OR PART OF/],
             "facebookId": "33333333333333333"
         },
         "production": {
-            "env": ["PRODUCTION URL OR PART OF"],
+            "env": [/PRODUCTION URL OR PART OF/],
             "facebookId": "4444444444444444444"
         },
         "testsDir": "mytests",
@@ -166,25 +166,33 @@ this.config.facebookId
 
 ### Setting environment specific (`env`) overrides
 
-Any property in **/config.js** is deemed to be an environment specific setting if it contains an `env` property,
-for Example:
+Any property in **/config.js** is deemed to be an environment specific setting if it contains an `env` property. The
+`env` property should be set to an array whose members are either strings or regular expressions that will be matched
+against the URL being tested. Note that strings are treated as regular expressions, and are tested against the entire
+URL (including scheme, domain and pathname) so a string like "localhost" will match URLs like `localhost.subdomain.com`
+or even URLs like `somedomain.com/path/with/localhosts/within`. So if you need to be more precise you can use regular
+expression features, e.g. to test exclusively for the hostname you could use `/^https?\:\/\/localhost[\/:]/`.
+
+Example:
 
 ```javascript
 
     "local": {
-        "env": ["dev","localhost"],
+        "env": [/dev/,"localhost"],
     },
 ```
-In this case, if the string "dev" or "localhost" is part of the website URL, any other properties of "local"
-will be added to the `config` property, overriding any default of the same name that might be present. For example,
-if your development environment URL contians the string "localhost" and you have this in your **/config.js**:
 
- ```javascript
+In this case, if the regular expression "dev" matches the website URL, or the string "localhost" is part of the website
+URL, any other properties of "local" will be added to the `config` property, overriding any default of the same name
+that might be present. For example, if your development environment URL contains the string "localhost" and you have
+this in your **/config.js**:
+
+```javascript
 
     "facebookId": "000000000000000",
 
     "local": {
-        "env": ["dev","localhost"],
+        "env": [/dev/,"localhost"],
         "facebookId": "88888888888888888",
     },
 ```
@@ -194,23 +202,23 @@ then `this.config.facebookId` will have a value "88888888888888888".
 You can setup as many environments as you need. In the default **/config.js** file the `local` environment
 doesn't override the default `facebookId` value, effectively making `local` the default. 
 
- ```javascript
+```javascript
 
     "facebookId": "000000000000000",
 
     "local": {
-        "env": ["DEV URL OR PART OF"]
+        "env": [/DEV URL OR PART OF/]
     },
     "stage": {
-        "env": ["STAGE URL OR PART OF"],
+        "env": [/STAGE URL OR PART OF/],
         "facebookId": "222222222222222"
     },
     "beta": {
-        "env": ["BETA URL OR PART OF"],
+        "env": [/BETA URL OR PART OF/],
         "facebookId": "33333333333333333"
     },
     "production": {
-        "env": ["PRODUCTION URL OR PART OF"],
+        "env": [/PRODUCTION URL OR PART OF/],
         "facebookId": "4444444444444444444"
     },
 

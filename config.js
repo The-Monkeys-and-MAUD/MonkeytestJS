@@ -3,18 +3,18 @@
         "facebookId": "000000000000000",
 
         "local": {
-            "env": ["DEV URL OR PART OF"]
+            "env": [/DEV URL OR PART OF/]
         },
         "stage": {
-            "env": ["STAGE URL OR PART OF"],
+            "env": [/STAGE URL OR PART OF/],
             "facebookId": "222222222222222"
         },
         "beta": {
-            "env": ["BETA URL OR PART OF"],
+            "env": [/BETA URL OR PART OF/],
             "facebookId": "33333333333333333"
         },
         "production": {
-            "env": ["PRODUCTION URL OR PART OF"],
+            "env": [/PRODUCTION URL OR PART OF/],
             "facebookId": "4444444444444444444"
         },
         "testsDir": "mytests",

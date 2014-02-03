@@ -211,15 +211,18 @@
         // overrides in config.json
         global.$$.each(settings, function (settingName, setting) {
 
-            if (setting.hasOwnProperty('env')) {
+            if (setting.hasOwnProperty && setting.hasOwnProperty('env')) {
 
                 var envProps = setting;
 
                 var env = envProps.env;
 
-                global.$$.each(env, function (envKey, envString) {
+                global.$$.each(env, function (envKey, envRegExp) {
+                    if (!(envRegExp instanceof RegExp)) {
+                        envRegExp = new RegExp(envRegExp);
+                    }
 
-                    if (location.href.indexOf(envString) >= 0) {
+                    if (envRegExp.test(location.href)) {
 
                         global.$$.each(envProps, function (
                             envPropName, envPropValue) {

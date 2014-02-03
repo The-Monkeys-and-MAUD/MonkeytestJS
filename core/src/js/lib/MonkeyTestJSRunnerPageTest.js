@@ -119,7 +119,7 @@
             w = self.window,
             ensureJQuery = function() {
                 if (!self.loadSources) {
-                    var doctype = w.document.doctype;
+                    var doctype = w.document.doctype || {name: 'html'};
                     doctype = "<!DOCTYPE " +
                         doctype.name +
                         (doctype.publicId ? ' PUBLIC "' + doctype.publicId + '"' : '') +

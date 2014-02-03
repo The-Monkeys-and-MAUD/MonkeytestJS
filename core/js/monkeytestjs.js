@@ -211,15 +211,18 @@
         // overrides in config.json
         global.$$.each(settings, function (settingName, setting) {
 
-            if (setting.hasOwnProperty('env')) {
+            if (setting.hasOwnProperty && setting.hasOwnProperty('env')) {
 
                 var envProps = setting;
 
                 var env = envProps.env;
 
-                global.$$.each(env, function (envKey, envString) {
+                global.$$.each(env, function (envKey, envRegExp) {
+                    if (!(envRegExp instanceof RegExp)) {
+                        envRegExp = new RegExp(envRegExp);
+                    }
 
-                    if (location.href.indexOf(envString) >= 0) {
+                    if (envRegExp.test(location.href)) {
 
                         global.$$.each(envProps, function (
                             envPropName, envPropValue) {
@@ -573,7 +576,7 @@
             w = self.window,
             ensureJQuery = function() {
                 if (!self.loadSources) {
-                    var doctype = w.document.doctype;
+                    var doctype = w.document.doctype || {name: 'html'};
                     doctype = "<!DOCTYPE " +
                         doctype.name +
                         (doctype.publicId ? ' PUBLIC "' + doctype.publicId + '"' : '') +
@@ -836,6 +839,9 @@
  * Underscore may be freely distributed under the MIT license.
  */
 (function(global) {
+    // Establish the object that gets returned to break out of a loop iteration.
+    var breaker = {};
+
     var _ = {},
         ArrayProto = Array.prototype,
         nativeKeys  = Object.keys,
