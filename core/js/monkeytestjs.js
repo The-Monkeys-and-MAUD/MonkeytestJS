@@ -628,6 +628,9 @@
         }
 
         this.chain.push(function () {
+            if (typeof this.config.onLoadPage === 'function') {
+                self.config.onLoadPage.call(self, url);
+            }
             self.runner.jQuery('#workspace')
                 .on('load', ensureJQuery)
                 .attr('src', url);

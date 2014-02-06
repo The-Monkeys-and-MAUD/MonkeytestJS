@@ -382,6 +382,26 @@ libraries (for example the Facebook Javascript SDK) insert invalid HTML into the
 > **Note**: When running from the local filesystem (i.e. at a `file:` url, not via a web server), `loadSources` is
 > ignored and sources are always obtained from the DOM.
 
+### `onLoadPage` - Function
+
+If you need to perform some kind of global initialization before any tests are run on a page, then you can add an
+`onLoadPage` event handler function to your config. The function will be called before each item in your `pages` config
+is loaded into the iframe.
+
+The `onLoadPage` function, if specified, is called with a single parameter which is the `url` about to be loaded into
+the iframe; and it is executed in the same context as the tests will be executed (i.e. `this` refers to the
+`MonkeyTestJSPageTest` instance and has properties including `config` and `page`). For example:
+
+```javascript
+
+  onLoadPage: function(url) {
+    console.log('Now loading ' + url + ' in environment ' + this.config.environment);
+  },
+
+```
+
+> **Note**: this is impossible when using JSON config (`config.json`) - you must be using `config.js` to be able to
+> add Javascript code to your config.
 
 MonkeytestJS API
 ----------------
