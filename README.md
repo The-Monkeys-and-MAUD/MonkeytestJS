@@ -403,6 +403,22 @@ the iframe; and it is executed in the same context as the tests will be executed
 > **Note**: this is impossible when using JSON config (`config.json`) - you must be using `config.js` to be able to
 > add Javascript code to your config.
 
+### `onLoadPageAsync` - Function
+
+The same as the [onLoadPage](#loadsources---boolean) option, but for use when you need to perform asynchronous tasks
+prior to the page being loaded. Your function is passed a callback function as a second argument, which you should
+call when your asynchronous tasks have completed and the page can be loaded into the iframe. For example:
+
+```javascript
+
+  onLoadPage: function(url, done) {
+    console.log('Now loading ' + url + ' in environment ' + this.config.environment);
+    done();
+  },
+
+```
+
+
 MonkeytestJS API
 ----------------
 

@@ -170,12 +170,19 @@
         }
 
         this.chain.push(function () {
+            function doLoadPage() {
+                self.runner.jQuery('#workspace')
+                    .on('load', ensureJQuery)
+                    .attr('src', url);
+            }
             if (typeof this.config.onLoadPage === 'function') {
                 self.config.onLoadPage.call(self, url);
             }
-            self.runner.jQuery('#workspace')
-                .on('load', ensureJQuery)
-                .attr('src', url);
+            if (typeof this.config.onLoadPageAsync === 'function') {
+                self.config.onLoadPageAsync.call(self, url, doLoadPage);
+            } else {
+                doLoadPage();
+            }
         });
 
         return this; // chainable
