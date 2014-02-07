@@ -389,13 +389,14 @@ If you need to perform some kind of global initialization before any tests are r
 is loaded into the iframe.
 
 The `onLoadPage` function, if specified, is called with a single parameter which is the `url` about to be loaded into
-the iframe; and it is executed in the same context as the tests will be executed (i.e. `this` refers to the
-`MonkeyTestJSPageTest` instance and has properties including `config` and `page`). For example:
+the iframe; and it is executed in the context of (that is to say, the `this` variable refers to) the
+`MonkeyTestJSRunnerPage` object for the page about to be tested (the same object as is exposed as `this.page` within
+your tests). For example:
 
 ```javascript
 
   onLoadPage: function(url) {
-    console.log('Now loading ' + url + ' in environment ' + this.config.environment);
+    console.log('Now loading ' + url + ' in environment ' + this.runner.config.environment);
   },
 
 ```
@@ -405,14 +406,52 @@ the iframe; and it is executed in the same context as the tests will be executed
 
 ### `onLoadPageAsync` - Function
 
-The same as the [onLoadPage](#loadsources---boolean) option, but for use when you need to perform asynchronous tasks
+The same as the [onLoadPage](#onloadpage---function) option, but for use when you need to perform asynchronous tasks
 prior to the page being loaded. Your function is passed a callback function as a second argument, which you should
 call when your asynchronous tasks have completed and the page can be loaded into the iframe. For example:
 
 ```javascript
 
   onLoadPage: function(url, done) {
-    console.log('Now loading ' + url + ' in environment ' + this.config.environment);
+    console.log('Now loading ' + url + ' in environment ' + this.runner.config.environment);
+    done();
+  },
+
+```
+
+### `onPageTestsComplete` - Function
+
+The counterpart to `onLoadPage`. If you need to perform some kind of clean up after all tests have finished running for
+a page you can add an `onPageTestsComplete` event handler function to your config. The function will be called after
+the last test has completed for each page, and before the next page (if any) is loaded into the iframe.
+
+The `onPageTestsComplete` function, if specified, is called with a single parameter which is the `url` of the page that
+has been tested; and it is executed in the context of (that is to say, the `this` variable refers to) the
+`MonkeyTestJSRunnerPage` object for that page (the same object as is exposed as `this.page` within your tests). For
+example:
+
+```javascript
+
+  onPageTestsComplete: function(url) {
+    console.log('Finished testing ' + url + ' in environment ' + this.runner.config.environment);
+  },
+
+```
+
+> **Note**: this is impossible when using JSON config (`config.json`) - you must be using `config.js` to be able to
+> add Javascript code to your config.
+
+### `onPageTestsCompleteAsync` - Function
+
+The same as the [onPageTestsComplete](#onpagetestscomplete---function) option, but for use when you need to perform
+asynchronous tasks after the tests have completed. Your function is passed a callback function as a second argument,
+which you should call when your asynchronous tasks have completed and the next page can be loaded into the iframe.
+For example:
+
+```javascript
+
+  onPageTestsCompleteAsync: function(url, done) {
+    console.log('Finished testing ' + url + ' in environment ' + this.runner.config.environment);
     done();
   },
 

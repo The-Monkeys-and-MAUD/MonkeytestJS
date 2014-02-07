@@ -50,32 +50,57 @@
      * Run tests and return a boolean if there are still other tests.
      *
      * @memberOf MonkeyTestJSPage
-     * @return {Bool} return information if there is any other tests to be runned.
+     * @return {boolean} return information if there is any other tests to be runned.
      * @api public
      */
     MonkeyTestJSPage.prototype.runNextTest = function (callback) {
         var firstTime = this.totalTestsToBeRunned === this.tests.length,
             lastTime = this.tests.length === 1,
             cb = callback || function () {},
-            testSpec = this.tests.shift(),
-            ret = false;
+            testSpec = this.tests.shift();
 
         if (testSpec) {
-            var pageTest = new APP.MonkeyTestJSPageTest(this.runner);
+            var self = this;
+            var doRunTest = function() {
+                var pageTest = new APP.MonkeyTestJSPageTest(self.runner);
 
-            pageTest.testSpec = testSpec;
-            pageTest.runner = this.runner;
-            pageTest.page = this;
-            pageTest.window = pageTest.workspace = this.runner.workspace;
-            pageTest.$ = this.runner.workspace.jQuery || this.runner.jQuery;
-            pageTest.runTest(firstTime);
+                pageTest.testSpec = testSpec;
+                pageTest.runner = self.runner;
+                pageTest.page = self;
+                pageTest.window = pageTest.workspace = self.runner.workspace;
+                pageTest.$ = self.runner.workspace.jQuery || self.runner.jQuery;
+                pageTest.runTest(firstTime);
 
-            ret = true;
+                cb(true);
+            };
+            if (firstTime) {
+                if (typeof this.runner.config.onLoadPage === 'function') {
+                    this.runner.config.onLoadPage.call(this, this.url);
+                }
+                if (typeof this.runner.config.onLoadPageAsync === 'function') {
+                    this.runner.config.onLoadPageAsync.call(this, this.url, doRunTest);
+                } else {
+                    doRunTest();
+                }
+            } else {
+                doRunTest();
+            }
+
+        } else {
+            var done = function() {
+                cb(false);
+            };
+            if (typeof this.runner.config.onPageTestsComplete === 'function') {
+                this.runner.config.onPageTestsComplete.call(this);
+            }
+            if (typeof this.runner.config.onPageTestsCompleteAsync === 'function') {
+                this.runner.config.onPageTestsCompleteAsync.call(this, this.url, done);
+            } else {
+                done();
+            }
         }
 
-        cb(ret);
-
-        return ret;
+        return !!testSpec;
     };
 
 }(this));
