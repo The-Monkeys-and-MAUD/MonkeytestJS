@@ -34,7 +34,7 @@
             },
             {
                 "url": "core/demo/index.html?pretendIsAnotherPage=true",
-                "tests": [ "page/demo_page_test.js","page/has_facebook_appid.js" ]
+                "tests": [ "page/has_facebook_appid.js", "page/demo_page_test.js" ]
             }
         ],
         "proxyUrl": "core/proxy.php?mode=native&url=<%= url %>",

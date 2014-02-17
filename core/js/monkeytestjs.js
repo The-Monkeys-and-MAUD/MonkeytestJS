@@ -444,7 +444,6 @@
                 pageTest.runner = self.runner;
                 pageTest.page = self;
                 pageTest.window = pageTest.workspace = self.runner.workspace;
-                pageTest.$ = self.runner.workspace.jQuery || self.runner.jQuery;
                 pageTest.runTest(firstTime);
 
                 cb(true);
@@ -522,7 +521,7 @@
             cb = callback || function () {},
             callTest = function (f) {
                 if (f && typeof f === 'function') {
-                    f.call(self, self.$);
+                    f.call(self, self.getJQuery());
                 }
             },
             _test = self.testSpec.test,
@@ -613,7 +612,6 @@
                 }
 
                 if (w.jQuery) {
-                    self.$ = w.jQuery;
                     loadFn();
                 } else {
                     var src = self.runner.jQuery('script[src*=jquery]').attr('src');
@@ -630,7 +628,6 @@
                         body.insertBefore(script, body.lastChild);
                     }
                     setTimeout(function() {
-                        self.$ = w.jQuery;
                         loadFn();
                     }, 10);
                 }
@@ -674,7 +671,7 @@
         var self = this;
         var fn = function () {
             test(name, function () {
-                testFN.call(self, self.$);
+                testFN.call(self, self.getJQuery());
             });
             self._next();
         };
@@ -684,7 +681,17 @@
         return this; // chainable
     };
 
-    /* A conditonalExpression can be passed to pause execution until its evaluated to true or timesout.
+    /**
+     * Get a jQuery instance that operates on the content of the test iframe.
+     *
+     * @returns {Object} jQuery instance tied to the iframe test page's context
+     */
+    MonkeyTestJSPageTest.prototype.getJQuery = function() {
+        return this.runner.workspace.jQuery || this.runner.jQuery;
+    };
+
+
+    /* A conditionalExpression can be passed to pause execution until its evaluated to true or timesout.
      *
      * @param {Int} conditonalExpression this will be called on an interval until evaluates to true
      * @param {Int} timeout timeout in milliseconds when should wait timeout and continue execution
@@ -737,7 +744,7 @@
         var self = this;
         var fn = function () {
             asyncTest(name, function () {
-                testFN.call(self, self.$);
+                testFN.call(self, self.getJQuery());
             });
         };
 
