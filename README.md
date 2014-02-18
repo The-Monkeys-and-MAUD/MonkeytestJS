@@ -457,6 +457,19 @@ For example:
 
 ```
 
+### `onFinish` - Function
+
+Called when all tests have completed for all pages. Your function is called in the context of the MonkeyTestJS object.
+For example:
+
+```javascript
+
+  onFinish: function() {
+    console.log('Finished testing all pages in environment ' + this.config.environment);
+  },
+
+```
+
 
 MonkeytestJS API
 ----------------
@@ -580,9 +593,49 @@ Building on the example for test() above, we can load a second page and run furt
 
 ```
 
+### waitForPageLoadAfter (function ($){}, timeout[optional])
+
+Executes the given function and then waits until a new page is loaded into the testing iframe before moving to the next
+action in the chain. This can be useful if you need to trigger a page load and then run some tests, but you can't use
+`loadPage()` - for example, a common use case is that you want to submit a form and then test some assertions on the
+resultant page.
+
+Parameters:
+
+**toExecute (Function)** - A function to be called before waiting for a new page to load. The function will be called
+in the context of the current test, i.e. the same `this` object as within a `test()` call; and it will be passed a
+jQuery object bound to the page under test.
+
+**timeout (Number)** - The maximum number of milliseconds you'd like to wait before proceeding with the next action in
+the chain. Defaults to 5000 if unspecified.
+
+Returns:
+
+An instance of `MonkeyTestJSPageTest`, suitable for chaining JQuery stylee.
+
+Example:
+
+```javascript
+
+    this
+    .test ("Do we have a form in the page?", function($) {
+        equal($('form').length, 1, "A form exists in the page");
+
+        // submit empty form to get error messages
+        $('input,textarea,select').val('');
+    })
+    .waitForPageLoadAfter(function($) {
+        $('form').submit();
+    })
+    .test ("Submitting an empty form causes error messages", function($) {
+        equal($('input[name="first_name"]').parent().hasClass('error'), 1, "Firstname field has an error");
+    });
+
+```
+
 ### wait (function, timeout, throttle)
 
-Waits for expression to be evaluated to true or timeout to happen, keeps checking for experssion on throttle interval.
+Waits for expression to be evaluated to true or timeout to happen, keeps checking for expression on throttle interval.
 
 Parameters:
 

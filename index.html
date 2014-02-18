@@ -38,7 +38,9 @@
 
     <script src="core/js/vendor/jquery.js"></script>
     <script src="core/js/vendor/qunit.js"></script>
-    <script src="config.js"></script>
+    <script type="text/javascript">
+      document.write('\x3Cscript type="text/javascript" src="config.js?_=' + (Math.random()*10000000000000000) + '">\x3C/script>');
+    </script>
     <script src="core/js/monkeytestjs.js"></script>
 </body>
 

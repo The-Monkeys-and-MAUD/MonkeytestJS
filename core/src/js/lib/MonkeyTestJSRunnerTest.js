@@ -28,9 +28,10 @@
      */
     MonkeyTestJSTest.prototype.load = function () {
 
-        var script, firstScript = document.getElementsByTagName('script')[0];
+        var script, firstScript = document.getElementsByTagName('script')[0],
+            src = this.src.charAt(0) === '/' ? this.src : (this.runner.testsUrl + this.src);
         script = document.createElement('script');
-        script.src = this.src.charAt(0) === '/' ? this.src : (this.runner.testsUrl + this.src);
+        script.src = src + (src.indexOf('?')>=0 ? '&' : '?') + '_=' + (Math.random()*10000000000000000);
         firstScript.parentNode.insertBefore(script, firstScript);
 
         return true;

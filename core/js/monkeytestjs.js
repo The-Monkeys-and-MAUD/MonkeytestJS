@@ -207,8 +207,7 @@
             globalTests: []
         };
 
-        // K: Hack in a fix for the environment specific
-        // overrides in config.json
+        // override config settings with environment-specific settings for environments that match the current URL
         global.$$.each(settings, function (settingName, setting) {
 
             if (setting.hasOwnProperty && setting.hasOwnProperty('env')) {
@@ -234,8 +233,8 @@
 
                 });
 
-                // K: For (probably misplaced) neatness,
-                // delete the environment setting
+                // after processing the environment object, delete it from the config object so the resulting object
+                // will contain only the settings applicable to the detected environment
                 delete settings[settingName];
             }
 
@@ -248,6 +247,10 @@
                 console.log('Running from local filesystem so disabling loading page sources');
             }
             this.config.loadSources = false;
+        }
+
+        if (typeof this.config.onFinish === 'function') {
+            this.onFinish(this.config.onFinish);
         }
 
         // work out the fully-qualified base url of monkeytestjs (this.baseUrl)
@@ -366,7 +369,7 @@
             f, len;
 
         for (f = 0, len = funcArr.length; f < len; f++) {
-            funcArr[f]();
+            funcArr[f].call(this);
         }
 
         return true;
@@ -594,10 +597,21 @@
      * @api public
      */
     MonkeyTestJSPageTest.prototype.loadPage = function (targetUrl, timeout) {
+        var self = this, url = targetUrl || this.page.url;
+
+        return this.waitForPageLoadAfter(function () {
+            self.runner.jQuery('#workspace')
+                .attr('src', url);
+            // no need to call _next() because waitForPageLoad has installed an event handler that will do that
+        });
+
+    };
+
+
+    MonkeyTestJSPageTest.prototype.waitForPageLoadAfter = function (toExecute, timeout) {
 
         var self = this,
             _timeout = timeout || 5000,
-            url = targetUrl || this.page.url,
             w = self.window,
             ensureJQuery = function() {
                 if (!self.loadSources) {
@@ -643,7 +657,7 @@
         if (this.config.loadSources) {
             loadFn = function() {
                 self._waitingTimer = setTimeout(callNext, _timeout);
-                self.page.loadSource(url, function () {
+                self.page.loadSource(self.runner.jQuery('#workspace').attr('src'), function () {
                     callNext();
                 });
             };
@@ -651,8 +665,8 @@
 
         this.chain.push(function () {
             self.runner.jQuery('#workspace')
-                .on('load', ensureJQuery)
-                .attr('src', url);
+                .on('load', ensureJQuery);
+            toExecute.call(self, self.getJQuery());
         });
 
         return this; // chainable
@@ -797,9 +811,10 @@
      */
     MonkeyTestJSTest.prototype.load = function () {
 
-        var script, firstScript = document.getElementsByTagName('script')[0];
+        var script, firstScript = document.getElementsByTagName('script')[0],
+            src = this.src.charAt(0) === '/' ? this.src : (this.runner.testsUrl + this.src);
         script = document.createElement('script');
-        script.src = this.src.charAt(0) === '/' ? this.src : (this.runner.testsUrl + this.src);
+        script.src = src + (src.indexOf('?')>=0 ? '&' : '?') + '_=' + (Math.random()*10000000000000000);
         firstScript.parentNode.insertBefore(script, firstScript);
 
         return true;

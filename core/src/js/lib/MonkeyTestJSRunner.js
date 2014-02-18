@@ -207,8 +207,7 @@
             globalTests: []
         };
 
-        // K: Hack in a fix for the environment specific
-        // overrides in config.json
+        // override config settings with environment-specific settings for environments that match the current URL
         global.$$.each(settings, function (settingName, setting) {
 
             if (setting.hasOwnProperty && setting.hasOwnProperty('env')) {
@@ -234,8 +233,8 @@
 
                 });
 
-                // K: For (probably misplaced) neatness,
-                // delete the environment setting
+                // after processing the environment object, delete it from the config object so the resulting object
+                // will contain only the settings applicable to the detected environment
                 delete settings[settingName];
             }
 
@@ -248,6 +247,10 @@
                 console.log('Running from local filesystem so disabling loading page sources');
             }
             this.config.loadSources = false;
+        }
+
+        if (typeof this.config.onFinish === 'function') {
+            this.onFinish(this.config.onFinish);
         }
 
         // work out the fully-qualified base url of monkeytestjs (this.baseUrl)
@@ -366,7 +369,7 @@
             f, len;
 
         for (f = 0, len = funcArr.length; f < len; f++) {
-            funcArr[f]();
+            funcArr[f].call(this);
         }
 
         return true;

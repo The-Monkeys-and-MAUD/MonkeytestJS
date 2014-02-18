@@ -112,10 +112,21 @@
      * @api public
      */
     MonkeyTestJSPageTest.prototype.loadPage = function (targetUrl, timeout) {
+        var self = this, url = targetUrl || this.page.url;
+
+        return this.waitForPageLoadAfter(function () {
+            self.runner.jQuery('#workspace')
+                .attr('src', url);
+            // no need to call _next() because waitForPageLoad has installed an event handler that will do that
+        });
+
+    };
+
+
+    MonkeyTestJSPageTest.prototype.waitForPageLoadAfter = function (toExecute, timeout) {
 
         var self = this,
             _timeout = timeout || 5000,
-            url = targetUrl || this.page.url,
             w = self.window,
             ensureJQuery = function() {
                 if (!self.loadSources) {
@@ -161,7 +172,7 @@
         if (this.config.loadSources) {
             loadFn = function() {
                 self._waitingTimer = setTimeout(callNext, _timeout);
-                self.page.loadSource(url, function () {
+                self.page.loadSource(self.runner.jQuery('#workspace').attr('src'), function () {
                     callNext();
                 });
             };
@@ -169,8 +180,8 @@
 
         this.chain.push(function () {
             self.runner.jQuery('#workspace')
-                .on('load', ensureJQuery)
-                .attr('src', url);
+                .on('load', ensureJQuery);
+            toExecute.call(self, self.getJQuery());
         });
 
         return this; // chainable
