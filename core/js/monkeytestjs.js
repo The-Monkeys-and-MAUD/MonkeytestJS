@@ -545,7 +545,7 @@
 
         lookUp[typeof _test === 'function' ? 'isFunction' : 'isObject']();
 
-        QUnit.module('Testing ' + self.page.uri);
+        QUnit.module('Testing ' + self.page.uri + ' - ' + self.testSpec.name);
 
         self.start();
 
