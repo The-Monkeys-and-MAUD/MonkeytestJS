@@ -762,7 +762,7 @@ Refer to example test **page/demo_page_test.js**
 
    - Kynan Stewart Hughes - @k7n4n5t3w4rt
    - Thomas Garrood - @tgarrood
-   - Mitermayer Reis - @mitermayer
+   - Mitermayer Reis - @mitermayerreis
    - Peter Feltham  - @felthy
 
 
