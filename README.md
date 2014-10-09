@@ -760,10 +760,10 @@ Refer to example test **page/demo_page_test.js**
 
 ### Contributors
 
-   - Kynan Stewart Hughes - @k7n4n5t3w4rt
-   - Thomas Garrood - @tgarrood
-   - Mitermayer Reis - @mitermayerreis
-   - Peter Feltham  - @felthy
+   - [Kynan Stewart Hughes](https://github.com/k7n4n5t3w4rt) - twitter [@k7n4n5t3w4rt](https://twitter.com/k7n4n5t3w4rt)
+   - [Thomas Garrood](https://github.com/sandboxdigital) - twitter [@tgarrood](https://twitter.com/tgarrood)
+   - [Mitermayer Reis](https://github.com/mitermayer) - twitter [@mitermayerreis](https://twitter.com/mitermayerreis)
+   - [Peter Feltham](https://github.com/felthy) - twitter [@felthy](https://twitter.com/felthy)
 
 
 **Change log**
