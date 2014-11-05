@@ -28,9 +28,9 @@ registerTest ('Has a Valid HTML According To W3C Validator', {
                     if (errors.length) { // invalid page, use the validator messages for the errors.
 
                         errors.each(function(){
-                          var msg = $$(this).find('em').text() + ' \n '  + $$(this).find('span.msg');
+                          var msg = $$(this).find('em').text() + ' \n '  + $$(this).find('span.msg').text();
 
-                          ok (false, msg.text());
+                          ok (false, msg);
                         });
                     } else { // page is valid
 
