@@ -1,4 +1,12 @@
 registerTest ('Has Google Analytics', {
+    setup: function() {
+
+        // This is needed for all Asynchronous tests, to ensure that when running
+        // individual tests with the ?testNumber=x argument, it won't stop the runner.
+        // Reference Docs: http://api.qunitjs.com/QUnit.asyncTest/
+
+        this.start();
+    },
     load : function() {
         this
             .asyncTest('Do we have a valid GA ID (not UA-XXXXX-X)?',function($) {
