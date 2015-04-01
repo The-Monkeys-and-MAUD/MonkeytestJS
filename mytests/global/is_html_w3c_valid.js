@@ -13,9 +13,10 @@ registerTest ('Has a Valid HTML According To W3C Validator', {
 
         if (this.runner.baseUrl.substr(0, 4) !== 'file') {
             this
-            .asyncTest('Is HTML Valid?',function() {
+            .test('Is HTML Valid?', function(assert) {
 
                 var self = this;
+
 
                 this.post(this.validatorUrl, {fragment:this.page.source})
                 .success(function(data) { // we got some validation results
@@ -39,16 +40,17 @@ registerTest ('Has a Valid HTML According To W3C Validator', {
                     }
 
                     // needs to be called upon assync tests
-                    self.asyncTestDone();
+                    self.asyncTestDone(assert);
                 })
                 .error(function() { // validation couldnt be performed.
 
                     ok( false, 'Unable to get validation results' );
-
                     // needs to be called upon assync tests
                     self.asyncTestDone();
                 });
-            });
+            }, true); //Final argument "true" denotes that this test should run asynchronously
+
+
         } else {
             console.warn('Cannot use AJAX to validate the page source because tests are running from the filesystem.');
         }

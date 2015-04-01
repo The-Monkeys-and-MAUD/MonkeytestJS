@@ -4,7 +4,7 @@ registerTest ('Has Google Analytics', {
     },
     load : function() {
         this
-            .asyncTest('Do we have a valid GA ID (not UA-XXXXX-X)?',function($) {
+            .test('Do we have a valid GA ID (not UA-XXXXX-X)?',function($) {
                 var script = $('script[src*="/analytics.js"]'), universal = false, self = this, w = this.window;
                 if (script.length) {
                     ok(true, "Google Analytics script analytics.js present in page");
@@ -34,6 +34,6 @@ registerTest ('Has Google Analytics', {
                 } else {
                     self.asyncTestDone();
                 }
-            });
+            }, true); //Final argument "true" denotes that this test should run asynchronously
     }
 });

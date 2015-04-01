@@ -34,7 +34,7 @@ registerTest ('Demo page test', {
         })
 
         .loadPage(location.href.substr(0, location.href.lastIndexOf('/') + 1) + "core/demo/other.html") // load a different page into the frame
-        .asyncTest ("Can we load some content into the page from openweathermap.org?",function($){
+        .test ("Can we load some content into the page from openweathermap.org?",function($){
 
             this.workspace.document.getElementsByTagName("body")[0].style.background = self.otherColor;
 
@@ -72,6 +72,6 @@ registerTest ('Demo page test', {
                 // needs to be called upon assync tests
                 self.asyncTestDone();
             });
-        });
+        }, true);  //Final argument "true" denotes that this test should run asynchronously
     }
 });

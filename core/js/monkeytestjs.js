@@ -510,6 +510,8 @@
         });
 
         this.chain = [];
+
+        this.done = null;
     };
 
     /**
@@ -545,7 +547,7 @@
 
         lookUp[typeof _test === 'function' ? 'isFunction' : 'isObject']();
 
-        QUnit.module('Testing ' + self.page.uri + ' - ' + self.testSpec.name);
+        QUnit.module('Testing ' + self.page.uri);
 
         self.start();
 
@@ -677,17 +679,27 @@
      *
      * @param {String} name name of the test to be run.
      * @param {Function} testFN function to be tested.
+     * @param {Boolean} async flag, tells QUnit if it needs to run the test asynchronously
      * @memberOf MonkeyTestJSPageTest
      * @return {Object} context for chaining
      * @api public
      */
-    MonkeyTestJSPageTest.prototype.test = function (name, testFN) {
+    MonkeyTestJSPageTest.prototype.test = function (name, testFN, async) {
         var self = this;
+
         var fn = function () {
-            test(name, function () {
+                QUnit.test(name, function (assert) {
+
+                if(async) {
+                    //Store the async() var, to be called when ready
+                    self.done = assert.async();
+                }
+
                 testFN.call(self, self.getJQuery());
             });
+
             self._next();
+
         };
 
         this.chain.push(fn);
@@ -745,6 +757,9 @@
     };
 
     /**
+     *  DEPRECATED : START() AND STOP() WILL BE REMOVED FROM QUNIT 2.X
+        SEE MonkeyTestJSPageTest.prototype.test, which now accepts a 3rd param as a flag to run asynchronously
+
      * Runs an asynchronous QUint test. Must call this.asyncTestDone when the test is complete. Only then will the next chain
      * action be called.
      *
@@ -754,18 +769,19 @@
      * @return {Object} context for chaining
      * @api public
      */
-    MonkeyTestJSPageTest.prototype.asyncTest = function (name, testFN) {
-        var self = this;
-        var fn = function () {
-            asyncTest(name, function () {
-                testFN.call(self, self.getJQuery());
-            });
-        };
+    
+    // MonkeyTestJSPageTest.prototype.asyncTest = function (name, testFN) {
+    //     var self = this;
+    //     var fn = function () {
+    //         asyncTest(name, function () {
+    //             testFN.call(self, self.getJQuery());
+    //         });
+    //     };
 
-        this.chain.push(fn);
+    //     this.chain.push(fn);
 
-        return this; // chainable
-    };
+    //     return this; // chainable
+    // };
 
     /**
      * Method to be called by tests running asyncTest once they are finished running.
@@ -773,9 +789,13 @@
      * @memberOf MonkeyTestJSPageTest
      * @api public
      */
-    MonkeyTestJSPageTest.prototype.asyncTestDone = function () {
-        var self = this;
-        QUnit.start();
+    MonkeyTestJSPageTest.prototype.asyncTestDone = function(assert) {
+        var self = this;    
+
+        //New 2.x way of telling runner to resume (start() was deprecated)
+        self.done();
+
+        //Next test
         self._next();
     };
 

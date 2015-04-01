@@ -21,20 +21,16 @@
         "globalTests": [
             "global/not_server_error.js",
             "global/is_html_w3c_valid.js",
-            "global/has_utf8_metatag.js",
-            "global/has_google_analytics.js"
+            "global/has_utf8_metatag.js"
+            // "global/has_google_analytics.js"
         ],
         "pages": [
             {
-                "url": "../"
-            },
-            {
-                "url": "core/demo/index.html",
-                "tests": [ "page/has_facebook_appid.js" ]
+                "url": "core/demo/index.html"
             },
             {
                 "url": "core/demo/index.html?pretendIsAnotherPage=true",
-                "tests": [ "page/has_facebook_appid.js", "page/demo_page_test.js" ]
+                "tests": [ "page/demo_page_test.js" ]
             }
         ],
         "proxyUrl": "core/proxy.php?mode=native&url=<%= url %>",
