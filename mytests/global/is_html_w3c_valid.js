@@ -6,11 +6,6 @@ registerTest ('Has a Valid HTML According To W3C Validator', {
         this.validatorUrl = 'validator.w3.org/check';
         this.imagesFolder = 'core/images/';
 
-        // This is needed for all Asynchronous tests, to ensure that when running
-        // individual tests with the ?testNumber=x argument, it won't stop the runner.
-        // Reference Docs: http://api.qunitjs.com/QUnit.asyncTest/
-
-        this.start();
     },
     load : function () {
 
