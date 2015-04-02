@@ -26,6 +26,7 @@
 
         this.chain = [];
 
+        //Stores async state, so we can call it oncomplete.
         this.done = null;
     };
 
@@ -205,12 +206,23 @@
         var fn = function () {
                 QUnit.test(name, function (assert) {
 
-                if(async) {
-                    //Store the async() var, to be called when ready
-                    self.done = assert.async();
-                }
+                
+                var Assert = assert;
 
-                testFN.call(self, self.getJQuery());
+                // if(async) {
+                //     assert.expect( 1 );
+                //     //Store the async() var, to be called when ready
+                //     var done = assert.async();
+
+                //      setTimeout(function() {
+                //         testFN.call(self, self.getJQuery());
+                //         done();
+                //       }, 500 );
+                // } else {
+                    testFN.call(self, Assert, self.getJQuery());
+                //}
+
+                
             });
 
             self._next();
@@ -304,12 +316,16 @@
      * @memberOf MonkeyTestJSPageTest
      * @api public
      */
-    MonkeyTestJSPageTest.prototype.asyncTestDone = function(assert) {
+    MonkeyTestJSPageTest.prototype.asyncTestDone = function() {
         var self = this;    
 
         //New 2.x way of telling runner to resume (start() was deprecated)
-        self.done();
-
+        // if(self.done=null) {
+        //     self.done = null;
+        // } else {
+        //     self.done();
+        // }
+        
         //Next test
         self._next();
     };

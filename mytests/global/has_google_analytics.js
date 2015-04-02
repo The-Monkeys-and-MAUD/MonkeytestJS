@@ -4,22 +4,27 @@ registerTest ('Has Google Analytics', {
     },
     load : function() {
         this
-            .test('Do we have a valid GA ID (not UA-XXXXX-X)?',function($) {
+            .test('Do we have a valid GA ID (not UA-XXXXX-X)?',function(assert, $) {
                 var script = $('script[src*="/analytics.js"]'), universal = false, self = this, w = this.window;
+
+                //Make it asynchronus!
+                var done = assert.async();
+
                 if (script.length) {
-                    ok(true, "Google Analytics script analytics.js present in page");
-                    ok(!!w.ga, "ga object is present");
+                    assert.ok(true, "Google Analytics script analytics.js present in page");
+                    assert.ok(!!w.ga, "ga object is present");
                     universal = true;
                 } else {
                     script = $('script[src*="/ga.js"]');
-                    equal(1, script.length, "Google Analytics script ga.js present in page");
-                    ok(!!w._gaq, "_gaq object is present");
+                    assert.equal(1, script.length, "Google Analytics script ga.js present in page");
+                    assert.ok(!!w._gaq, "_gaq object is present");
                 }
 
                 function doTests(id) {
-                    equal('UA-', id.substr(0, 3), 'Google Analytics account ID should start with UA-');
-                    notEqual('UA-XXXXX-X', id, 'Google Analytics account ID should not be UA-XXXXX-X.');
-                    self.asyncTestDone();
+                    assert.equal('UA-', id.substr(0, 3), 'Google Analytics account ID should start with UA-');
+                    assert.notEqual('UA-XXXXX-X', id, 'Google Analytics account ID should not be UA-XXXXX-X.');
+                    // self.asyncTestDone();
+                    done();
                 }
 
                 if (universal && w.ga) {
@@ -32,8 +37,10 @@ registerTest ('Has Google Analytics', {
                         doTests(pageTracker._getAccount());
                     });
                 } else {
-                    self.asyncTestDone();
+                    //self.asyncTestDone();
+
+                    done();
                 }
-            }, true); //Final argument "true" denotes that this test should run asynchronously
+            });
     }
 });

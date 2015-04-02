@@ -17,6 +17,8 @@ registerTest ('Has a Valid HTML According To W3C Validator', {
 
                 var self = this;
 
+                //Make it asynchronus!
+                var done = assert.async();
 
                 this.post(this.validatorUrl, {fragment:this.page.source})
                 .success(function(data) { // we got some validation results
@@ -40,13 +42,16 @@ registerTest ('Has a Valid HTML According To W3C Validator', {
                     }
 
                     // needs to be called upon assync tests
-                    self.asyncTestDone(assert);
+                    //self.asyncTestDone();
+
+                    done();
+                    
                 })
                 .error(function() { // validation couldnt be performed.
 
                     ok( false, 'Unable to get validation results' );
                     // needs to be called upon assync tests
-                    self.asyncTestDone();
+                    //self.asyncTestDone();
                 });
             }, true); //Final argument "true" denotes that this test should run asynchronously
 

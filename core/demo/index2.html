@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Demo Page #2</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-size: 16px;
+      background: #ADA692;
+      color: #47423F;
+    }
+    #container {
+      background: #fff;
+      width: 74%;
+      margin: 20px auto;
+      border: 5px solid #47423F;
+      padding: 10px;
+      overflow: hidden;
+    }
+    h1 {
+      margin: 0;
+      text-align: center;
+      font-size: 4em; 
+      font-family: times, "Times new Roman", serif;
+      font-weight: 400;
+    }
+    h2 {
+      font-family: arial, helvetica, san-serif;
+      font-style: italic;
+      padding: 0 5%;
+      font-size: 3em;
+    }
+    p {
+      width: 40%;
+      padding: 0 5%;
+      float: left;
+      font-family: arial, helvetica, san-serif;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <h1>Demo page</h1> 
+
+    <hr />
+
+    <h2>Ipisum hazimelu</h2>
+
+    <div class="item">
+      <p><strong><em>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In eu fringilla urna. Aenean nec risus augue. Phasellus leo risus, convallis at accumsan sit amet, congue id neque. Etiam dapibus justo a vehicula pellentesque. Nam at justo a quam tincidunt venenatis. Fusce dui nibh, tempus id purus a, malesuada pulvinar lacus. Morbi consectetur blandit vulputate.</em></strong></p>
+      <p>Donec vitae tincidunt enim. Maecenas sit amet nunc vitae ante dapibus tincidunt. Sed sodales nec dolor et dapibus. Etiam leo tortor, congue sit amet ornare nec, malesuada in leo. Aenean imperdiet vestibulum fringilla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Quisque consectetur rhoncus rutrum. Pellentesque semper felis suscipit tellus adipiscing, vitae dignissim dolor ullamcorper. Praesent eleifend leo purus, vel pharetra risus</p>
+      <p>vestibulum non. Ut mattis elementum neque, vel pulvinar arcu hendrerit eu. Aliquam porta nulla mattis iaculis scelerisque. Nam varius porta mauris sit amet vestibulum.</p>
+    </div>
+
+    <div class="item">
+      <p>Cras non porttitor nisl, consectetur sollicitudin lorem. Phasellus lacinia tellus id lorem mattis consectetur at sit amet felis. Nam fermentum pulvinar turpis, eget gravida est ornare vitae. In quam metus, dictum ac velit at, ultrices ultricies dolor. Donec iaculis bibendum cursus. Curabitur hendrerit lacinia lectus, suscipit ultricies massa mattis porta. Fusce porttitor massa eget lectus suscipit molestie.</p>
+    </div>
+
+    <div class="item">
+      <p>Mauris leo metus, aliquet nec mattis a, accumsan quis sapien. Aliquam consequat nec metus a consequat. Curabitur volutpat nulla eget dolor interdum, vel hendrerit lorem laoreet. Nullam laoreet ornare eros in aliquet. Maecenas elementum eros ac nisi semper adipiscing vitae ut lorem. Vivamus vitae odio vitae lorem ultrices fringilla in eu diam. Ut molestie lacus quis placerat dignissim. Fusce laoreet a purus ac vehicula. Curabitur porta est dui, malesuada vulputate dolor tincidunt vel. Nunc</p>
+      <p>nec orci vel ipsum dignissim scelerisque id vel ante. Sed lobortis mattis quam, vel suscipit velit auctor quis. Nunc nec tristique quam, vel vestibulum diam.</p>
+      <p>Suspendisse ornare eget nulla id tincidunt. Mauris pretium, mauris quis pellentesque venenatis, magna lorem tristique ante, vitae iaculis quam metus vitae tellus. Integer ligula diam, eleifend sit amet cursus sit amet, mollis vel lacus. In orci felis, mollis et sapien at, eleifend consectetur tellus. Duis a pharetra erat, vitae euismod ante. Sed facilisis tortor non lobortis sagittis. In fringilla erat eget egestas vestibulum. Donec rutrum, odio in aliquam placerat, mauris dui ultrices ante,</p>
+      <p>in semper libero lorem vel urna.</p>
+    </div>
+  </div>
+    <div id="fb-root"></div>
+    <script>
+        window.fbAsyncInit = function() {
+            // init the FB JS SDK
+            FB.init({
+                    appId      : '000000000000000', // App ID from the App Dashboard
+                    status     : true, // check the login status upon init?
+                    cookie     : true, // set sessions cookies to allow your server to access the session?
+                    xfbml      : true  // parse XFBML tags on this page?
+            });
+
+            FB._https = window.location.protocol == 'https:' ? true : false;
+            FB.Canvas.setAutoGrow();
+        };
+
+        (function(d, debug){
+            var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement('script'); js.id = id; js.async = true;
+            js.src = "//connect.facebook.net/en_US/all" + (debug ? "/debug" : "") + ".js";
+            ref.parentNode.insertBefore(js, ref);
+        }(document, true));
+    </script>
+       <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-00000000-0']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+</body>
+</html>

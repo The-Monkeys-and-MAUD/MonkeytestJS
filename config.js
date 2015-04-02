@@ -21,8 +21,9 @@
         "globalTests": [
             "global/not_server_error.js",
             "global/is_html_w3c_valid.js",
-            "global/has_utf8_metatag.js"
-            // "global/has_google_analytics.js"
+            "global/has_dev_urls.js",
+            "global/has_utf8_metatag.js",
+            "global/has_google_analytics.js"
         ],
         "pages": [
             {
@@ -31,6 +32,10 @@
             {
                 "url": "core/demo/index.html?pretendIsAnotherPage=true",
                 "tests": [ "page/demo_page_test.js" ]
+            },
+            {
+                "url": "core/demo/index2.html",
+                "tests": [ "page/demo_2.js" ]
             }
         ],
         "proxyUrl": "core/proxy.php?mode=native&url=<%= url %>",
