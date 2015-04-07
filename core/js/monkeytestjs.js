@@ -685,7 +685,7 @@
      * @return {Object} context for chaining
      * @api public
      */
-    MonkeyTestJSPageTest.prototype.test = function (name, testFN, async) {
+    MonkeyTestJSPageTest.prototype.test = function (name, testFN) {
         var self = this;
 
         var fn = function () {

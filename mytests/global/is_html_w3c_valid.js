@@ -34,11 +34,11 @@ registerTest ('Has a Valid HTML According To W3C Validator', {
                         errors.each(function(){
                           var msg = $$(this).find('em').text() + ' \n '  + $$(this).find('span.msg');
 
-                          ok (false, msg.text());
+                          assert.ok (false, msg.text());
                         });
                     } else { // page is valid
 
-                        ok( true, 'HTML is valid' );
+                        assert.ok( true, 'HTML is valid' );
                     }
 
                     // needs to be called upon assync tests
@@ -49,11 +49,11 @@ registerTest ('Has a Valid HTML According To W3C Validator', {
                 })
                 .error(function() { // validation couldnt be performed.
 
-                    ok( false, 'Unable to get validation results' );
+                    assert.ok( false, 'Unable to get validation results' );
                     // needs to be called upon assync tests
                     //self.asyncTestDone();
                 });
-            }, true); //Final argument "true" denotes that this test should run asynchronously
+            }); //Final argument "true" denotes that this test should run asynchronously
 
 
         } else {
