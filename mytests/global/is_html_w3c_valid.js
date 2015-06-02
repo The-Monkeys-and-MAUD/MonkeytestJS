@@ -29,9 +29,10 @@ registerTest ('Has a Valid HTML According To W3C Validator', {
                     if (errors.length) { // invalid page, use the validator messages for the errors.
 
                         errors.each(function(){
-                          var msg = $$(this).find('em').text() + ' \n '  + $$(this).find('span.msg');
+                          var ref = $$(this).find('em').text();
+                          var msg = $$(this).find('span.msg').text();
 
-                          ok (false, msg.text());
+                          ok (false, ref + ' \n ' + msg);
                         });
                     } else { // page is valid
 
