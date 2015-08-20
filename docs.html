@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+
+
+
+        <meta charset="utf-8">
+        <title>	MonkeyTestJS
+</title>
+        <meta name="description" content="Automated functional testing for front-end web development">
+        <meta name="keywords" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="css/main-4c097a5e718d637e1af83e4eec41a11d.css">
+        <script src="js/vendor/modernizr-2.6.2.min-1737bc9d946f2beefe6b5b46fb3a8a9d.js.pagespeed.jm.54evPNSh9-.js"></script>
+
+            </head>
+    <body class="index">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+                <header id="banner">
+    <a href="index.html"><h1 class="sprite logo">MonkeyTestJS</h1></a>
+    <nav>
+        <ul>
+            <li><a href="docs.html">Docs</a></li>
+            <li><a href="philosophy.html">Philosophy</a></li>
+            <li><a href="projects.html">Other Projects</a></li>
+            <li><a href="https://github.com/TheMonkeys/MonkeytestJS/">GitHub</a></li>
+        </ul>
+    </nav>
+</header>
+        
+<div class="container">
+    <section id="main_content">
+
+        <section id="getStarted">
+
+            <section class="step">
+                <h1>Getting Started</h1>
+
+                <p>The file /config.js is where you should put all your settings. It comes with some demo content and looks like this:</p>
+
+                <div class="highlight">
+
+                    <pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">global</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">global</span><span class="p">.</span><span class="nx">monkeytestjs</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">"facebookId"</span><span class="o">:</span> <span class="s2">"000000000000000"</span><span class="p">,</span>
+
+        <span class="s2">"local"</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">"env"</span><span class="o">:</span> <span class="p">[</span><span class="sr">/DEV URL OR PART OF/</span><span class="p">]</span>
+        <span class="p">},</span>
+        <span class="s2">"stage"</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">"env"</span><span class="o">:</span> <span class="p">[</span><span class="sr">/STAGE URL OR PART OF/</span><span class="p">],</span>
+            <span class="s2">"facebookId"</span><span class="o">:</span> <span class="s2">"222222222222222"</span>
+        <span class="p">},</span>
+        <span class="s2">"beta"</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">"env"</span><span class="o">:</span> <span class="p">[</span><span class="sr">/BETA URL OR PART OF/</span><span class="p">],</span>
+            <span class="s2">"facebookId"</span><span class="o">:</span> <span class="s2">"33333333333333333"</span>
+        <span class="p">},</span>
+        <span class="s2">"production"</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">"env"</span><span class="o">:</span> <span class="p">[</span><span class="sr">/PRODUCTION URL OR PART OF/</span><span class="p">],</span>
+            <span class="s2">"facebookId"</span><span class="o">:</span> <span class="s2">"4444444444444444444"</span>
+        <span class="p">},</span>
+
+        <span class="s2">"testsDir"</span><span class="o">:</span> <span class="s2">"mytests"</span><span class="p">,</span>
+        <span class="s2">"globalTests"</span><span class="o">:</span> <span class="p">[</span>
+            <span class="s2">"global/not_server_error.js"</span><span class="p">,</span>
+            <span class="s2">"global/is_html_w3c_valid.js"</span><span class="p">,</span>
+            <span class="s2">"global/has_utf8_metatag.js"</span><span class="p">,</span>
+            <span class="s2">"global/has_google_analytics.js"</span>
+        <span class="p">],</span>
+        <span class="s2">"pages"</span><span class="o">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s2">"url"</span><span class="o">:</span> <span class="s2">"../"</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                    <span class="s2">"url"</span><span class="o">:</span> <span class="s2">"core/demo/index.html"</span><span class="p">,</span>
+                    <span class="s2">"tests"</span><span class="o">:</span> <span class="p">[</span> <span class="s2">"page/has_facebook_appid.js"</span> <span class="p">]</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="s2">"url"</span><span class="o">:</span> <span class="s2">"core/demo/index.html?pretendIsAnotherPage=true"</span><span class="p">,</span>
+                    <span class="s2">"tests"</span><span class="o">:</span> <span class="p">[</span> <span class="s2">"page/demo_page_test.js"</span><span class="p">,</span><span class="s2">"page/has_facebook_appid.js"</span> <span class="p">]</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="s2">"proxyUrl"</span><span class="o">:</span> <span class="s2">"core/proxy.php?mode=native&amp;url=&lt;%= url %&gt;"</span><span class="p">,</span>
+        <span class="s2">"loadSources"</span><span class="o">:</span> <span class="kc">true</span>
+    <span class="p">};</span>
+<span class="p">})(</span><span class="k">this</span><span class="p">);</span>
+</pre></div>
+
+            <p>In a test, the config settings are accessible through the <code class="javascript language-javascript" data-lang="javascript">config</code> property. For example, this setting in /config.js</p>
+
+            <div class="highlight">
+
+                <pre>
+    <span class="s2">"facebookId"</span><span class="o">:</span> <span class="s2">"111111111111111"</span><span class="p">,</span>
+</pre>
+            </div> 
+
+             <p>is referenced as <code class="javascript language-javascript" data-lang="javascript">this.config.facebookId</code> in a test.</p>
+
+            <blockquote>
+                <p>Note: We are using javascript rather than JSON for our config to make it easier to use MonkeyTestJS without having a webserver running. If you want, you can configure MonkeyTestJS to use a JSON file named <code>config.json</code> instead.</p>
+
+            <ol>
+                <li>Populate your <code>config.js</code> with content in the same structure as shown above but without the javascript wrapper.</li>
+                <li>Delete the reference to <code>config.js</code> in the supplied <code>index.html</code> file.</li>
+            </ol>
+
+            <p>Using a JSON file has the drawback of not working from the local filesystem because it requires an AJAX request to load the JSON file; therefore if you're not running your own local webserver for development then you'll need to go with the default config.js approach.</p>
+        </blockquote>
+
+        </section>
+
+            <section class="step">
+
+             <h1>Running MonkeyTestJS locally without a web server</h1>
+
+             <p>
+                It is possible to run MonkeyTestJS without a webserver by opening the `index.html` file in your browser. However,
+modern browsers prevent javascript access between frames, and because the pages you'll be testing are loaded in an
+`iframe`, this prevents MonkeyTestJS from working. Some browsers may have a workaround for this though - for example:
+             </p>
+
+             <h3>Google Chrome</h3>
+
+             <p>
+Chrome allows you to specify a command-line parameter (when starting Chrome):
+             </p>
+
+
+             <pre><span class="nv">$ </span>/path/to/chrome --allow-file-access-from-files</pre>
+             
+             <h3>Firefox</h3>
+
+            <p>Firefox has a preference called <code>security.fileuri.strict_origin_policy</code> which can be set to <code>false</code>.</p>
+
+        </section>
+
+        <section class="step">
+                <h1>Setting environment specific overrides</h1>
+
+                <p>Any property in <strong>/config.js</strong> is deemed to be an environment specific setting if it
+                    contains an <code>env</code> property. The <code>env</code> property should be set to an array whose
+                    members are either strings or regular expressions that will be matched against the URL being tested.
+                    Note that strings are treated as regular expressions, and are tested against the entire URL
+                    (including scheme, domain and pathname) so a string like "localhost" will match URLs like
+                    <code>localhost.subdomain.com</code> or even URLs like
+                    <code>somedomain.com/path/with/localhosts/within</code>. So if you need to be more precise you can
+                    use regular expression features, e.g. to test exclusively for the hostname you could use
+                    <code>/^https?\:\/\/localhost[\/:]/</code>.
+                </p>
+
+                <p>Example:</p>
+
+                <div class="highlight">
+
+                    <pre>
+    <span class="s2">"local"</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">"env"</span><span class="o">:</span> <span class="p">[</span><span class="sr">/dev/</span><span class="p">,</span><span class="s2">"localhost"</span><span class="p">],</span>
+    <span class="p">},</span>
+</pre>
+                </div>
+
+                <p>In this case, if the regular expression "dev" matches the website URL, or the string "localhost" is
+                    part of the website URL, any other properties of "local" will be added to the <code>config</code>
+                    property, overriding any default of the same name that might be present. For example, if your
+                    development environment URL contains the string "localhost" and you have this in your
+                    <strong>/config.js</strong>:</p>
+
+                <div class="highlight">
+
+                    <pre>
+    <span class="s2">"facebookId"</span><span class="o">:</span> <span class="s2">"000000000000000"</span><span class="p">,</span>
+
+    <span class="s2">"local"</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">"env"</span><span class="o">:</span> <span class="p">[</span><span class="sr">/dev/</span><span class="p">,</span><span class="s2">"localhost"</span><span class="p">],</span>
+        <span class="s2">"facebookId"</span><span class="o">:</span> <span class="s2">"88888888888888888"</span><span class="p">,</span>
+    <span class="p">},</span>
+</pre>
+                </div>
+
+                <p>then <code>this.config.facebookId</code> will have a value "88888888888888888".</p>
+
+                <p>At runtime, the name of the detected environment is available via <code>this.config.environment</code>; for example, in the above
+                    example <code>this.config.environment</code> will have a value "local".</p>
+
+<p>You can setup as many environments as you need. In the demo <strong>/config.js</strong> file the <code>local</code> environment
+doesn't override the default <code>facebookId</code> value, effectively making <code>local</code> the default. </p>
+
+                <div class="highlight">
+
+                    <pre>
+    <span class="s2">"facebookId"</span><span class="o">:</span> <span class="s2">"000000000000000"</span><span class="p">,</span>
+
+    <span class="s2">"local"</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">"env"</span><span class="o">:</span> <span class="p">[</span><span class="sr">/DEV URL OR PART OF/</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s2">"stage"</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">"env"</span><span class="o">:</span> <span class="p">[</span><span class="sr">/STAGE URL OR PART OF/</span><span class="p">],</span>
+        <span class="s2">"facebookId"</span><span class="o">:</span> <span class="s2">"222222222222222"</span>
+    <span class="p">},</span>
+    <span class="s2">"beta"</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">"env"</span><span class="o">:</span> <span class="p">[</span><span class="sr">/BETA URL OR PART OF/</span><span class="p">],</span>
+        <span class="s2">"facebookId"</span><span class="o">:</span> <span class="s2">"33333333333333333"</span>
+    <span class="p">},</span>
+    <span class="s2">"production"</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">"env"</span><span class="o">:</span> <span class="p">[</span><span class="sr">/PRODUCTION URL OR PART OF/</span><span class="p">],</span>
+        <span class="s2">"facebookId"</span><span class="o">:</span> <span class="s2">"4444444444444444444"</span>
+    <span class="p">},</span>
+
+</pre>
+                </div>
+
+                <hr><h3>
+                <a name="facebookid---string" class="anchor" href="docs.html#facebookid---string"><span class="octicon octicon-link"></span></a><code>facebookId</code> - String</h3>
+
+                <p>Used in the included test <strong>global/has_facebook_appid.js</strong> as the expected Facebook ID, and compared to the Facebook ID
+                found within the tested page. In the demo <strong>config.js</strong> file, this is set to "000000000000000" so that the demo tests
+                pass, and is 'overridden' in the specific settings for each environment.</p>
+
+                <hr><h3>
+                <a name="testsdir---string" class="anchor" href="docs.html#testsdir---string"><span class="octicon octicon-link"></span></a><code>testsDir</code> - String</h3>
+
+                <p>The directory where your test specs can be found, relative to the MonkeyTestJS base URL. For example, with the following
+                                configuration:</p>
+
+                <div class="highlight highlight-javascript"><pre>    <span class="s2">"testsDir"</span><span class="o">:</span> <span class="s2">"mytests"</span><span class="p">,</span>
+    <span class="s2">"globalTests"</span><span class="o">:</span> <span class="p">[</span>
+        <span class="s2">"global/is_html_w3c_valid.js"</span>
+    <span class="p">]</span></pre></div>
+
+                <p>and the base URL <code>http://your-web-app.dev/MonkeyTestJS</code>, the path to the global test would become
+                <code>http://your-web-app.dev/MonkeyTestJS/mytests/global/is_html_w3c_valid.js</code>.</p>
+
+                <p>If you want to put your tests directly inside the MonkeyTestJS directory, you can set this setting to an empty string:</p>
+
+                <div class="highlight highlight-javascript"><pre>    <span class="s2">"testsDir"</span><span class="o">:</span> <span class="s2">""</span><span class="p">,</span>
+    <span class="s2">"globalTests"</span><span class="o">:</span> <span class="p">[</span>
+        <span class="s2">"is_html_w3c_valid.js"</span>
+    <span class="p">]</span></pre></div>
+
+                <p>then the test URL constructed will be <code>http://your-web-app.dev/MonkeyTestJS/is_html_w3c_valid.js</code>.</p>
+
+                <p>If you want to put your tests outside of the MonkeyTestJS directory, thus minimising the changes you make to
+                                MonkeyTestJS (and therefore making it easier to update in future), you can specify a leading slash to indicate that the
+                                path is relative to the root:</p>
+
+                <div class="highlight highlight-javascript"><pre>    <span class="s2">"testsDir"</span><span class="o">:</span> <span class="s2">"/mytests"</span><span class="p">,</span>
+    <span class="s2">"globalTests"</span><span class="o">:</span> <span class="p">[</span>
+        <span class="s2">"global/is_html_w3c_valid.js"</span>
+    <span class="p">]</span></pre></div>
+
+                <p>then the test URL constructed will be <code>http://your-web-app.dev/mytests/global/is_html_w3c_valid.js</code>.</p>
+
+                <blockquote>
+                <p><strong>Note</strong> that in the above examples you will still run the tests by visiting <code>http://your-web-app.dev/MonkeyTestJS/</code>,
+                                or whatever base path you selected.</p>
+                </blockquote>
+
+
+                <hr>
+                <h3>
+                <a name="globaltests---array" class="anchor" href="docs.html#globaltests---array"><span class="octicon octicon-link"></span></a><code>globalTests</code> - Array</h3>
+
+                <p>The global tests will be run by MonkeyTestJS on all pages.</p>
+
+                <p>MonkeytestJS ships with three default tests:</p>
+
+                <ul>
+                <li>
+                <strong>global/is_html_w3c_valid.js</strong> ( checks if the page is valid throught the w3c validator )</li>
+                <li>
+                <strong>global/has_utf8_metatag.js</strong> ( check for a presence of a utf8 metatag )</li>
+                <li>
+                <strong>global/has_google_analytics.js</strong> ( check if we have google analytics setup )</li>
+                </ul><p>Removing or adding a global test from the test suite is just a matter of deleting or adding a reference to it in the "globalTests" section of the <strong>/config.js</strong> file:</p>
+
+                <div class="highlight highlight-javascript"><pre>   <span class="s2">"globalTests"</span><span class="o">:</span> <span class="p">[</span>
+        <span class="s2">"global/is_html_w3c_valid.js"</span><span class="p">,</span>
+        <span class="s2">"global/has_utf8_metatag.js"</span><span class="p">,</span>
+        <span class="s2">"global/another_test_i_just_created.js"</span>
+    <span class="p">]</span></pre></div>
+
+                <p>Urls for all tests (including global tests) are relative to the directory configured in the <code>testsDir</code> setting, which
+                                defaults to <code>mytests</code>.</p>
+
+                <hr><h3>
+                <a name="pages---object" class="anchor" href="docs.html#pages---object"><span class="octicon octicon-link"></span></a><code>pages</code> - Object</h3>
+
+                <p><strong><code>pages[].url</code> - String</strong></p>
+
+                <p>URLs for the pages to be tested, relative to the MonkeyTestJS directory.</p>
+
+                <p>Example:</p>
+
+                <div class="highlight highlight-javascript"><pre>
+    <span class="s2">"pages"</span><span class="o">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">"url"</span><span class="o">:</span> <span class="s2">"core/demo/index.html"</span>
+        <span class="p">}</span></pre></div>
+
+                <p><strong><code>pages[].tests</code> - Array</strong></p>
+
+                <p>Assign custom tests for the page. Custom tests will be run on the page after the global tests have finished.</p>
+
+                <p>Urls for the page tests are relative to the <strong>/tests</strong> directory in the MonkeyTestJS directory.</p>
+                <p>Urls for all tests (including page tests) are relative to the directory configured in the <code>testsDir</code> setting, which
+                                defaults to <code>mytests</code>.</p>
+
+                <p>Example:</p>
+
+                <div class="highlight highlight-javascript"><pre>
+    <span class="s2">"pages"</span><span class="o">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">"url"</span><span class="o">:</span> <span class="s2">"core/demo/index.html"</span><span class="p">,</span>
+            <span class="s2">"tests"</span><span class="o">:</span> <span class="p">[</span>
+                <span class="s2">"page/demo_page_test.js"</span>
+        <span class="p">}</span>
+
+    <span class="p">]</span></pre></div>
+
+                <hr><h3>
+                <a name="proxyurl---string" class="anchor" href="docs.html#proxyurl---string"><span class="octicon octicon-link"></span></a><code>proxyUrl</code> - String</h3>
+
+                <p>Cross domain restrictions limit the scope of front end javascript. To help mitigate this, we recommend using a simple
+                    proxy when it's necessary to access resources on other domains.</p>
+
+                <p>In the demo test <strong>global/is_html_w3c_valid.js</strong> we send the full page markup off to the W3C validator and get back the result.
+                Because the W3C site is a different domain, we use the proxy.</p>
+
+                <p>The URL for the proxy script is specified in the <strong>/config.js</strong> file and is relative to the MonkeyTestJS directory, and
+                is parsed as an <a href="http://underscorejs.org/#template">EJS template</a> with one variable, <code>url</code>, available for substitution.</p>
+
+                <p>Example:</p>
+
+                <div class="highlight highlight-javascript"><pre>
+    <span class="s2">"proxyUrl"</span><span class="o">:</span> <span class="s2">"core/proxy.php?mode=native&amp;url=&lt;%= url %&gt;"</span></pre></div>
+
+                <p>The proxy provided with MonkeyTestJS is written in <a href="http://php.net/">PHP</a>. If you're using another language on the server side, you
+                can use your own proxy script and change the path in the <strong>/config.js</strong> file to reference it.</p>
+
+                <p>For details on how to use the proxy, see the section below titled <a href="docs.html#cross-domain-ajax">Cross-domain
+                        AJAX</a>.</p>
+
+                <hr><h3>
+                    <a name="loadsources---boolean" class="anchor" href="docs.html#loadsources---boolean"><span class="octicon octicon-link"></span></a><code>loadSources</code> - Boolean</h3>
+
+                <p>If set to <code>true</code> (the default), MonkeyTestJS will fire off ajax requests to get the source code for your pages under
+                    test. This is available from within your test scripts via the property <code>this.page.source</code>.</p>
+
+                <p>If set to <code>false</code>, you can still obtain sources via <code>this.page.source</code> but they will be runtime sources, so they won't
+                    necessarily be the same as the source originally returned by the server. This can be bad for validation because some
+                    libraries (for example the Facebook Javascript SDK) insert invalid HTML into the DOM.</p>
+
+                <blockquote>
+                    <p><strong>Note</strong>: When running from the local filesystem (i.e. at a <code>file:</code> url, not via a web server), <code>loadSources</code> is
+                        ignored and sources are always obtained from the DOM.</p>
+                </blockquote>
+
+                <hr><h3>
+                    <a name="onloadpage---function" class="anchor" href="docs.html#onloadpage---function"><span class="octicon octicon-link"></span></a><code>onLoadPage</code> - Function</h3>
+
+                <p>If you need to perform some kind of global initialization before any tests are run on a page, then you can add an
+                    <code>onLoadPage</code> event handler function to your config. The function will be called before each item in your <code>pages</code> config
+                    is loaded into the iframe.</p>
+
+                <p>The <code>onLoadPage</code> function, if specified, is called with a single parameter which is the <code>url</code> about to be loaded into
+                    the iframe; and it is executed in the context of (that is to say, the <code>this</code> variable refers to) the
+                    <code>MonkeyTestJSRunnerPage</code> object for the page about to be tested (the same object as is exposed as <code>this.page</code> within
+                    your tests). For example:</p>
+
+                <div class="highlight highlight-javascript"><pre>
+  <span class="nx">onLoadPage</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">url</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Now loading '</span> <span class="o">+</span> <span class="nx">url</span> <span class="o">+</span> <span class="s1">' in environment '</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">runner</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">environment</span><span class="p">);</span>
+  <span class="p">},</span>
+
+</pre></div>
+
+                <blockquote>
+                    <p><strong>Note</strong>: this is impossible when using JSON config (<code>config.json</code>) - you must be using <code>config.js</code> to be able to
+                        add Javascript code to your config.</p>
+                </blockquote>
+
+                <hr><h3>
+                    <a name="onloadpageasync---function" class="anchor" href="docs.html#onloadpageasync---function"><span class="octicon octicon-link"></span></a><code>onLoadPageAsync</code> - Function</h3>
+
+                <p>The same as the <a href="docs.html#onloadpage---function">onLoadPage</a> option, but for use when you need to perform asynchronous tasks
+                    prior to the page being loaded. Your function is passed a callback function as a second argument, which you should
+                    call when your asynchronous tasks have completed and the page can be loaded into the iframe. For example:</p>
+
+                <div class="highlight highlight-javascript"><pre>
+  <span class="nx">onLoadPage</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="nx">done</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Now loading '</span> <span class="o">+</span> <span class="nx">url</span> <span class="o">+</span> <span class="s1">' in environment '</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">runner</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">environment</span><span class="p">);</span>
+    <span class="nx">done</span><span class="p">();</span>
+  <span class="p">},</span>
+
+</pre></div>
+
+                <hr><h3>
+                    <a name="onpagetestscomplete---function" class="anchor" href="docs.html#onpagetestscomplete---function"><span class="octicon octicon-link"></span></a><code>onPageTestsComplete</code> - Function</h3>
+
+                <p>The counterpart to <code>onLoadPage</code>. If you need to perform some kind of clean up after all tests have finished running for
+                    a page you can add an <code>onPageTestsComplete</code> event handler function to your config. The function will be called after
+                    the last test has completed for each page, and before the next page (if any) is loaded into the iframe.</p>
+
+                <p>The <code>onPageTestsComplete</code> function, if specified, is called with a single parameter which is the <code>url</code> of the page that
+                    has been tested; and it is executed in the context of (that is to say, the <code>this</code> variable refers to) the
+                    <code>MonkeyTestJSRunnerPage</code> object for that page (the same object as is exposed as <code>this.page</code> within your tests). For
+                    example:</p>
+
+                <div class="highlight highlight-javascript"><pre>
+  <span class="nx">onPageTestsComplete</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">url</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Finished testing '</span> <span class="o">+</span> <span class="nx">url</span> <span class="o">+</span> <span class="s1">' in environment '</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">runner</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">environment</span><span class="p">);</span>
+  <span class="p">},</span>
+
+</pre></div>
+
+                <blockquote>
+                    <p><strong>Note</strong>: this is impossible when using JSON config (<code>config.json</code>) - you must be using <code>config.js</code> to be able to
+                        add Javascript code to your config.</p>
+                </blockquote>
+
+                <hr><h3>
+                    <a name="onpagetestscompleteasync---function" class="anchor" href="docs.html#onpagetestscompleteasync---function"><span class="octicon octicon-link"></span></a><code>onPageTestsCompleteAsync</code> - Function</h3>
+
+                <p>The same as the <a href="docs.html#onpagetestscomplete---function">onPageTestsComplete</a> option, but for use when you need to perform
+                    asynchronous tasks after the tests have completed. Your function is passed a callback function as a second argument,
+                    which you should call when your asynchronous tasks have completed and the next page can be loaded into the iframe.
+                    For example:</p>
+
+                <div class="highlight highlight-javascript"><pre>
+  <span class="nx">onPageTestsCompleteAsync</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="nx">done</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Finished testing '</span> <span class="o">+</span> <span class="nx">url</span> <span class="o">+</span> <span class="s1">' in environment '</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">runner</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">environment</span><span class="p">);</span>
+    <span class="nx">done</span><span class="p">();</span>
+  <span class="p">},</span>
+
+</pre></div>
+
+
+
+        </section>
+
+            <section class="step">
+                <h1>MonkeytestJS API</h1>
+
+                <p>MonkeyTestJS is a wrapper around QUnit, so at heart a MonkeyTest is a <a href="http://qunitjs.com/">QUnit</a> test. For documentation of the specific assertions,
+                refer to the <a href="http://api.qunitjs.com/category/assert/">QUnit API assertion documentation</a>. However, you can safely ignore the rest of the <a href="http://qunitjs.com/">QUnit</a> documentation. All that
+                stuff is happening behind the scenes of MonkeyTestJS.</p>
+
+                <p>MonkeyTestJS gives you the following methods for defining tests:</p>
+
+                <h3>
+                <a name="test-name-callback-" class="anchor" href="docs.html#test-name-callback-"><span class="octicon octicon-link"></span></a>test (name, callback ($){})</h3>
+
+                <p>Runs a synchronous QUnit test.</p>
+
+                <p>Parameters:</p>
+
+                <p><strong>name (String)</strong> - A nice human readable name for your test, like "Is there a page title?".</p>
+
+                <p><strong>callback (Function)</strong> - A function containing your <a href="http://qunitjs.com/">QUnit</a> assertions.</p>
+
+                <p>Returns:</p>
+
+                <p>An instance of <code>MonkeyTestJSPageTest</code>, suitable for chaining JQuery style.</p>
+
+                <p>Example:</p>
+
+                <div class="highlight highlight-javascript"><pre>
+        <span class="k">this</span>
+        <span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">"Hello?"</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">ok</span><span class="p">(</span> <span class="kc">true</span><span class="p">,</span> <span class="s2">"Hello world!"</span><span class="p">);</span>
+        <span class="p">})</span>
+
+        <span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">"Hello again?"</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">ok</span><span class="p">(</span> <span class="kc">true</span><span class="p">,</span> <span class="s2">"Hello again!"</span><span class="p">);</span>
+        <span class="p">});</span>
+
+    </pre></div>
+
+                <h3>
+                <a name="asynctest-name-callback-" class="anchor" href="docs.html#asynctest-name-callback-"><span class="octicon octicon-link"></span></a>asyncTest (name, callback ($){})</h3>
+
+                <p>Runs an asynchronous <a href="http://qunitjs.com/">QUnit</a> test. Must call this.asyncTestDone when the test is complete. Only then will the next chain
+                action be called.</p>
+
+                <p>Parameters:</p>
+
+                <p><strong>name (String)</strong> - A nice human readable name for your test, like "Is there a page title?".</p>
+
+                <p><strong>callback (Function)</strong> - A function containing your <a href="http://qunitjs.com/">QUnit</a> assertions.</p>
+
+                <p>Returns:</p>
+
+                <p>An instance of <code>MonkeyTestJSPageTest</code>, suitable for chaining JQuery stylee.</p>
+
+                <p>Example:</p>
+
+                <p>In this example from <strong>global/is_html_w3c_valid.js</strong>, we're sending the page source to the W3C
+                validator for checking, then doing some assertions with the returned page.</p>
+
+                <div class="highlight highlight-javascript"><pre>
+       <span class="k">this</span>
+       <span class="p">.</span><span class="nx">asyncTest</span><span class="p">(</span><span class="s1">'Is HTML Valid?'</span><span class="p">,</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+            <span class="k">this</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">validatorUrl</span><span class="p">,{</span><span class="nx">fragment</span><span class="o">:</span><span class="k">this</span><span class="p">.</span><span class="nx">page</span><span class="p">.</span><span class="nx">source</span><span class="p">})</span>
+            <span class="p">.</span><span class="nx">success</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// we got some validation results</span>
+
+                <span class="c1">// Do some assertions on the returned markup, eg:</span>
+                <span class="c1">//    ok( true, 'HTML is valid' );</span>
+
+                <span class="c1">// needs to be called upon async tests</span>
+                <span class="nx">self</span><span class="p">.</span><span class="nx">asyncTestDone</span><span class="p">();</span>
+            <span class="p">})</span>
+            <span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="c1">// validation couldnt be performed.</span>
+
+                <span class="nx">ok</span><span class="p">(</span> <span class="kc">false</span><span class="p">,</span> <span class="s1">'Unable to get validation results'</span> <span class="p">);</span>
+
+                <span class="c1">// needs to be called upon async tests</span>
+                <span class="nx">self</span><span class="p">.</span><span class="nx">asyncTestDone</span><span class="p">();</span>
+            <span class="p">});</span>
+
+        <span class="p">})</span>
+
+        <span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">"Hello again?"</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">ok</span><span class="p">(</span> <span class="kc">true</span><span class="p">,</span> <span class="s2">"Hello again!"</span><span class="p">);</span>
+        <span class="p">});</span>
+
+    </pre></div>
+
+                <h3>
+                <a name="asynctestdone-" class="anchor" href="docs.html#asynctestdone-"><span class="octicon octicon-link"></span></a>asyncTestDone ()</h3>
+
+                <p>This needs to be called when an <code>asyncTest()</code> finishes.</p>
+
+                <p>Example: see above.</p>
+
+                <h3>
+                <a name="loadpage-urloptional" class="anchor" href="docs.html#loadpage-urloptional"><span class="octicon octicon-link"></span></a>loadPage (url[optional])</h3>
+
+                <p>Loads a page into the iframe, also waits until page is loaded before moving to the next action in the chain. If you are
+                performing tests on an actual page, this will normally be the first call in a test chain.</p>
+
+                <p>Parameters:</p>
+
+                <p><strong>url (String)</strong> - A relative URL of an HTML page in your site, eg: "/about-us.html".</p>
+
+                <p>Returns:</p>
+
+                <p>An instance of <code>MonkeyTestJSPageTest</code>, suitable for chaining JQuery stylee.</p>
+
+                <p>Example:</p>
+
+                <p>Building on the example for test() above, we can load a second page and run further tests on it.</p>
+
+                <div class="highlight highlight-javascript"><pre>
+        <span class="k">this</span>
+        <span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">"Hello?"</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">ok</span><span class="p">(</span> <span class="kc">true</span><span class="p">,</span> <span class="s2">"Hello world!"</span><span class="p">);</span>
+        <span class="p">})</span>
+
+        <span class="p">.</span><span class="nx">loadPage</span><span class="p">(</span><span class="s2">"/about-us.html"</span><span class="p">)</span> <span class="c1">// load a different page into the frame</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">"Hello again?"</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">ok</span><span class="p">(</span> <span class="kc">true</span><span class="p">,</span> <span class="s2">"Hello again!"</span><span class="p">);</span>
+        <span class="p">});</span>
+
+    </pre></div>
+
+                <h3>
+                <a name="wait-function-timeout-throttle" class="anchor" href="docs.html#wait-function-timeout-throttle"><span class="octicon octicon-link"></span></a>wait (function, timeout, throttle)</h3>
+
+                <p>Waits for expression to be evaluated to true or timeout to happen, keeps checking for experssion on throttle interval.</p>
+
+                <p>Parameters:</p>
+
+                <p><strong>function (Function)</strong> - A function which performs a useful test, typically, returns true</p>
+
+                <p><strong>timeout (Integer)</strong> - The maximum number of milliseconds for which you'd like to wait</p>
+
+                <p><strong>throttle (Integer)</strong> - The number of milliseconds to wait between tests</p>
+
+                <p>Returns:</p>
+
+                <p>An instance of <code>MonkeyTestJSPageTest</code>, suitable for chaining JQuery stylee.</p>
+
+                <p>Example:</p>
+
+                <div class="highlight highlight-javascript"><pre>
+        <span class="k">this</span><span class="p">.</span>
+        <span class="nx">test</span><span class="p">(</span><span class="s2">"Hello?"</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">ok</span><span class="p">(</span> <span class="kc">true</span><span class="p">,</span> <span class="s2">"Hello world!"</span><span class="p">);</span>
+
+            <span class="c1">// After this, we'll have to wait for the action page of the</span>
+            <span class="c1">// form to load</span>
+            <span class="nx">$</span><span class="p">(</span><span class="s1">'form'</span><span class="p">).</span><span class="nx">submit</span><span class="p">();</span>
+        <span class="p">})</span>
+
+        <span class="p">.</span><span class="nx">wait</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+            <span class="c1">// This will be called repeatedly until it returns true, killing the wait</span>
+            <span class="c1">// (hopefully long before the 10 seconds is up)</span>
+            <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">workspace</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">$</span><span class="p">(</span><span class="s1">'p:contains("Thank you!")'</span><span class="p">).</span><span class="nx">length</span><span class="p">;</span>
+
+        <span class="p">},</span> <span class="mi">10000</span><span class="p">)</span> <span class="c1">// wait max 10 seconds ( Pause execution of tests per duration )</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">"Hello again?"</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">ok</span><span class="p">(</span> <span class="kc">true</span><span class="p">,</span> <span class="s2">"Hello again!"</span><span class="p">);</span>
+        <span class="p">});</span>
+
+    </pre></div>
+
+                <h3>
+                <a name="cross-domain-ajax" class="anchor" href="docs.html#cross-domain-ajax"><span class="octicon octicon-link"></span></a>Cross-domain AJAX</h3>
+
+                <p>MonkeyTestJS comes with built-in wrappers around JQuery's AJAX methods <code>jQuery.ajax()</code>, <code>jQuery.post()</code> and
+                    <code>jQuery.get()</code>, which pass the request through a proxy on your server and thus allow you to access other domains from
+                    within your tests. One of the included tests, <code>global/is_html_w3c_valid.js</code> makes use of this to be able to submit the
+                    page source to the W3C validator as a cross-domain AJAX request:</p>
+
+                <div class="highlight highlight-javascript no-copy"><pre>    <span class="k">this</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">validatorUrl</span><span class="p">,</span> <span class="p">{</span><span class="nx">fragment</span><span class="o">:</span><span class="k">this</span><span class="p">.</span><span class="nx">page</span><span class="p">.</span><span class="nx">source</span><span class="p">})</span>
+</pre></div>
+
+                <p>This call is identical to calling <code>jQuery.post()</code> with the same arguments, except that the URL is altered internally to
+                    use the server-side proxy configured via the configuration property <code>proxyUrl</code>.</p>
+
+                <p>The <code>jQuery.get()</code> and <code>jQuery.ajax()</code> functions are wrapped in the same way. See the <a href="http://api.jquery.com/category/ajax/">jQuery API docs</a>
+                    for details on these methods - just call the equivalent functions on your test context object (<code>this</code>).</p>
+
+                <h4>
+                    <a name="using-the-included-php-proxy-script" class="anchor" href="docs.html#using-the-included-php-proxy-script"><span class="octicon octicon-link"></span></a>Using the included PHP proxy script</h4>
+
+                <p>The included PHP proxy script restricts access to whitelisted domains, so when you want to use it in your tests you'll
+                    probably need to add new domains to the whitelist. To do that, open the <code>proxy.php</code> in your editor and find the
+                    <code>$valid_url_regex</code> variable. By default it contains two domains:</p>
+
+                <div class="highlight highlight-php no-copy"><pre><span class="nv">$valid_url_regex</span> <span class="o">=</span> <span class="s1">'/^(validator.w3.org\/|api.openweathermap.org\/)/'</span><span class="p">;</span>
+</pre></div>
+
+                <p>Just modify the regular expression to accept whatever domains you need it to. Avoid opening up the proxy too much -
+                    an open proxy on the internet can attract all kinds of uncool behaviour. If you're using your own proxy script, bear
+                    this in mind too.</p>
+
+            </section>
+
+            <section class="step">
+                <h1>Writing Tests</h1>
+
+                <p>Add the path to the test script to either the <code>config.globalTests</code> array or, for a specific page, to the <code>config.pages[].tests</code>
+                array. If the path starts with a slash (<code>/</code>) it will be interpreted as relative to the root; otherwise it will be taken as
+                relative to the configured <code>testsDir</code>.</p>
+
+                <p>Create a test script file at the path entered above. At the most basic the test script should contain a call to the
+                registerTest (name, spec) function. Where the spec object literal must contain at least a function callback. An object can
+                be passed instead and an optional with a setup and load callback. The load callback is call in the scope of a MonkeytestJSPageTest object
+                which methods that should be chained together to to perform test actions (see <strong>MonkeytestJSPageTest</strong> methods above):</p>
+
+                <div class="highlight highlight-javascript"><pre>
+    <span class="nx">registerTest</span> <span class="p">(</span><span class="s1">'Hello world test'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// this is the test script</span>
+        <span class="k">this</span>
+        <span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">"Hello?"</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">ok</span><span class="p">(</span> <span class="kc">true</span><span class="p">,</span> <span class="s2">"Hello world!"</span><span class="p">);</span>
+        <span class="p">});</span>
+    <span class="p">);</span>
+    </pre></div>
+
+                <p>If you need to do some setup for your test, you can register your test with a setup function:</p>
+
+                <div class="highlight highlight-javascript"><pre>
+    <span class="nx">registerTest</span> <span class="p">(</span><span class="s1">'Hello world test'</span><span class="p">,</span>
+        <span class="p">{</span>
+            <span class="nx">setup</span><span class="o">:</span><span class="kd">function</span> <span class="p">(</span><span class="nx">container</span><span class="p">)</span> <span class="p">{</span>
+                <span class="c1">// this is run before the test</span>
+                <span class="c1">// use it to do things like clear cookies or assign helpers</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">myhelper</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">doSomething</span><span class="p">()</span> <span class="p">{};</span>
+            <span class="p">}</span>
+            <span class="p">,</span><span class="nx">load</span> <span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                <span class="c1">// this is the test script</span>
+                <span class="k">this</span>
+                <span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="s2">"Hello?"</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">ok</span><span class="p">(</span> <span class="kc">true</span><span class="p">,</span> <span class="s2">"Hello world!"</span><span class="p">);</span>
+                <span class="p">});</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">);</span>
+
+    </pre></div>
+
+                <p>Refer to example test on: <strong>page/demo_page_test.js</strong></p>
+
+            </section>
+
+        </section>
+
+
+    </section>
+</div>
+
+
+        <footer id="credits">
+    <h3><a href="http://www.themonkeys.com.au/" class="sprite monkeys">The Monkeys</a></h3>
+    <p>MonkeyTestJS is created and maintained by <a href="http://www.themonkeys.com.au/">The Monkeys</a>.</p>
+</footer>
+        <script src="js/main-4b2c5b387d93d72e005e6227f3c73ec4.js.pagespeed.jm.ZLPhqo0FxD.js"></script>
+
+        <script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-29339220-3','monkeytestjs.io');ga('send','pageview');</script>
+    </body>
+</html>

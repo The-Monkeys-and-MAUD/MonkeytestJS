@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>The Monkeys Acceptance Tests</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link type="text/css" href="core/css/vendor/qunit.css" rel="stylesheet" />
+    <link type="text/css" href="core/css/styles.css" rel="stylesheet" />
+</head>
+
+<body>
+
+    <div id="container">
+        <div id="viewport" class="box">
+            <iframe id="workspace" width="100%" height="95%" src="about:blank"></iframe>
+        </div>
+
+        <div id="testResults" class="box">
+          <div id="header">
+            <a href="../index.html" title="MonkeyTestJS website" target="_blank"><img src="core/images/logo.png" id="logo" alt="logo" /></a>
+            <h2 id="qunit-banner"></h2>
+            <h1>Integration Tests</h1>
+          </div>
+
+            <div id="qunit-testrunner-toolbar"></div>
+
+            <h2 id="qunit-userAgent"></h2>
+            <ol id="qunit-tests"></ol>
+            <div id="qunit-fixture">test markup, will be hidden</div>
+        </div>
+
+    </div>
+
+    <script src="core/js/vendor/jquery.js"></script>
+    <script src="core/js/vendor/qunit.js"></script>
+    <script src="config.js"></script>
+    <script src="core/js/monkeytestjs.js"></script>
+</body>
+
+</html>

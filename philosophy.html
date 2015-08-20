@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+
+
+
+        <meta charset="utf-8">
+        <title>	MonkeyTestJS
+</title>
+        <meta name="description" content="Automated functional testing for front-end web development">
+        <meta name="keywords" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="css/main-4c097a5e718d637e1af83e4eec41a11d.css">
+        <script src="js/vendor/modernizr-2.6.2.min-1737bc9d946f2beefe6b5b46fb3a8a9d.js.pagespeed.jm.54evPNSh9-.js"></script>
+
+            </head>
+    <body class="index">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+                <header id="banner">
+    <a href="index.html"><h1 class="sprite logo">MonkeyTestJS</h1></a>
+    <nav>
+        <ul>
+            <li><a href="docs.html">Docs</a></li>
+            <li><a href="philosophy.html">Philosophy</a></li>
+            <li><a href="projects.html">Other Projects</a></li>
+            <li><a href="https://github.com/TheMonkeys/MonkeytestJS/">GitHub</a></li>
+        </ul>
+    </nav>
+</header>
+        
+<div class="container">
+    <section id="main_content">
+
+
+        <section id="philosophy">
+
+            <header>
+                <h1>Philosophy</h1>
+            </header>
+
+            <p>You might be writing unit tests, but unless a project is large enough to warrant a dedicated test team,
+there probably won't be any automated top level testing of the interface. This is sad because you get a
+lot of value from even a few high level functional tests.</p>
+
+<p>Why, when there are plenty of tools around for writing automated browser based tests (like <a href="philosophy.html#">Selenium</a>,
+<a href="http://sahi.co.in/w/">Sahi</a>, <a href="http://www.e-valid.com/">eValid</a>, <a href="http://wtr.rubyforge.org/">Watir</a>
+and <a href="http://webtest.canoo.com/webtest/manual/WebTestHome.html">Canoo</a>), do so few front end developers use them?
+We thought about it and decided that the existing tools just didn't suit how we worked. They're not
+hard to use exactly, but something about them just seems to take us too far out of the zone. Also, they're
+slow and there's never any budget for automated testing.</p>
+
+<p>So we made <a href="index.html">MonkeyTestJS</a>. It's quick and easy to use, so we can build up a suite of regression tests
+while we're building the functionality of our project. We write tests using straightforward client side
+javascript and run them in a browser to see the result.</p>
+
+<p><a href="index.html">MonkeyTestJS</a> is built on top of <a href="http://qunitjs.com/">QUnit</a>, the unit testing framework used by
+<a href="https://jquery.org/">JQuery</a>. However, instead of focusing on testing javascript functions,
+<a href="index.html">MonkeyTestJS</a> tests act on the actual DOM of your web page. Using standard <a href="http://qunitjs.com/">QUnit</a>
+assertions, your tests simulate user interaction and then check the DOM for expected results.</p>
+
+<p>Don't take our word for it, have a look:</p>
+
+<p><a href="tests/index.html">http://monkeytestjs.io/tests</a></p>
+
+<p>Because the test suite is run from a URL, it can be run in a browser tab while you're working. Or in a
+headless browser like <a href="http://phantomjs.org/">PhantomJS</a> as part of continuous integration
+(see <a href="https://github.com/TheMonkeys/grunt-MonkeytestJS">grunt-MonkeytestJS</a>). Or across a suite of browsers
+using a service like <a href="http://www.browserstack.com/">BrowserStack</a>.</p>
+
+<p>Tests can be asynchronous so it's good for AJAX and dynamically generated markup. <a href="index.html">MonkeyTestJS</a> also
+comes with a <a href="http://php.net/">PHP</a> proxy script for those situations where you need cross domain requests.</p>
+
+<p>Custom tests are quick to write, but it's also easy to re-use tests across pages. You can test things like HTML validation, Google Analytics,
+character encoding etc. on all pages of your site without writing a test.</p>
+
+
+        </section>
+
+    </section>
+</div>
+
+
+        <footer id="credits">
+    <h3><a href="http://www.themonkeys.com.au/" class="sprite monkeys">The Monkeys</a></h3>
+    <p>MonkeyTestJS is created and maintained by <a href="http://www.themonkeys.com.au/">The Monkeys</a>.</p>
+</footer>
+        <script src="js/main-4b2c5b387d93d72e005e6227f3c73ec4.js.pagespeed.jm.ZLPhqo0FxD.js"></script>
+
+        <script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-29339220-3','monkeytestjs.io');ga('send','pageview');</script>
+    </body>
+</html>
